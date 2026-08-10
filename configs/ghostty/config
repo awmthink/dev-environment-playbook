@@ -1,0 +1,38 @@
+# ===== 字体 =====
+font-family = "Maple Mono NF CN"
+font-feature = calt
+adjust-cell-height = 2
+font-size = 14
+
+# ===== 主题 =====
+theme = Aura
+
+# ===== 窗口 =====
+window-padding-x = 12
+window-padding-y = 12
+window-padding-balance = true
+window-decoration = true
+macos-titlebar-style = transparent
+background-opacity = 0.96
+background-blur = true
+window-colorspace = display-p3
+window-save-state = always
+
+# ===== 光标 =====
+cursor-style = block
+cursor-style-blink = false
+
+# ===== 滚动 =====
+scrollback-limit = 100000
+
+# ===== Shell 集成 =====
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# ===== 行为 =====
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+resize-overlay = never
+
+# ===== 应用 =====
+auto-update = off

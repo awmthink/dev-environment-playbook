@@ -16,7 +16,7 @@
 |------|------|------|
 | Shell | zsh（macOS 主力）/ bash（Linux 服务器） | macOS 默认、生态成熟；服务器照旧 bash 兼容 |
 | 编辑器 | Zed · Cursor · Neovim · VS Code（按场景切换） | 建议分工：Zed 日常主力、Cursor 大仓库 / 重 agent、Neovim 远程服务器、VS Code 仅需扩展时 fallback |
-| 终端 | iTerm2（macOS） | 功能成熟稳定、生态匹配好 |
+| 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm | 快、省磁盘、严格 |
 | Python 包管理 | uv | 极快，统一 toolchain |
 | 系统包管理 | macOS: Homebrew；Linux: 发行版自带（apt/dnf/…） | 各平台原生方案优先 |
@@ -28,7 +28,7 @@
 
 > 这些是「正在尝试或候选」的工具，状态偏流动，配置上先轻量化、易回退；不替换主力。
 
-- 探索中：Nushell（shell，担心太新 / 生态不匹配）、Ghostty（terminal，同上）
+- 探索中：Nushell（shell，担心太新 / 生态不匹配）
 - 候选待试：Starship（提示符，跨 shell 显示多语言版本上下文）、Zellij（多路复用，GPU 服务器长会话）
 
 ## 工作流约定

@@ -17,7 +17,8 @@
 | Go | `go.md` | 已写 |
 | Rust | `rust.md` | 已写 |
 | C/C++ + CUDA | `c-cpp.md` | 已写 |
-| iTerm2 | — | 待写 |
+| Ghostty | `ghostty.md` | 已写（macOS 主力终端） |
+| iTerm2 | — | 备选 / 待写 |
 | 编辑器 (Zed/Cursor/Neovim/VSCode) | — | 待写（部分与 `agents/` 交叉） |
 | Docker | — | 待写 |
 | lazygit / Starship / Zellij | — | 待评估（见 `profile.md`） |
