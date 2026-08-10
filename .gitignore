@@ -1,0 +1,13 @@
+# 备份文件
+*.bak
+*.orig
+
+# 本地敏感信息（切勿提交）
+.env
+.env.*
+secrets/
+*.pem
+*.key
+
+# 系统
+.DS_Store
