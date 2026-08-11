@@ -1,7 +1,7 @@
 // Zed settings（参考实物）
 // 真实文件：~/.config/zed/settings.json（不软链；agent 按本文件思路生成）
-// 本模板只含跨机器通用的外观 / 布局 / 编辑器偏好；
-// agent 模式、agent_servers、language_models、ssh_connections 等个人化配置不进模板，由本机自行维护。
+// 本模板含跨机器通用的外观 / 布局 / 编辑器偏好 + LLM provider 结构配置（key 走环境变量，见 agents/zed.md）；
+// agent 模式、agent_servers、ssh_connections 等个人化配置不进模板，由本机自行维护。
 // 配置思路见 agents/zed.md
 {
   // ===== 外观（对齐 profile：Aura Dark）=====
@@ -20,5 +20,34 @@
   "diff_view_style": "unified",
   "git": {
     "inline_blame": { "enabled": false }
+  },
+
+  // ===== LLM provider（结构配置入库；API key 走环境变量，绝不写进这里）=====
+  "language_models": {
+    "opencode": {
+      "show_free_models": false,
+      "show_zen_models": false
+    },
+    "openai_compatible": {
+      "zai-coding": {
+        "api_url": "https://open.bigmodel.cn/api/coding/paas/v4",
+        "available_models": [
+          {
+            "name": "glm-5.2",
+            "max_tokens": 1000000,
+            "max_output_tokens": 131072,
+            "max_completion_tokens": 131072,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": false,
+              "chat_completions": true,
+              "interleaved_reasoning": false
+            }
+          }
+        ]
+      }
+    }
   }
 }

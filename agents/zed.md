@@ -21,12 +21,12 @@
 ## 配置位置
 - 设置：`~/.config/zed/settings.json`
 - keymap：`~/.config/zed/keymap.json`
-- 扩展：Zed 内安装；自定义 provider（若用）在 settings 的 `language_models` 声明，本模板暂不配置
+- 扩展：Zed 内安装；LLM provider 在 `language_models` 声明（结构入模板、key 走环境变量，见下「LLM provider」）
 - prompts：`~/.config/zed/prompts/`（自定义 agent prompt）
 - AGENTS.md：`~/.config/zed/AGENTS.md` 软链到 `~/.agents/AGENTS.md`（与其它 agent 共享同一份仓库级指令）
 
 ## 配置思路
-> `configs/zed/settings.json` **只固化跨机器通用的外观 / 布局 / 编辑器偏好**。Agent 模式、provider、远程连接等个人化、流动的配置不进模板，由本机 `~/.config/zed/settings.json` 自行维护；以下分项记录思路。
+> `configs/zed/settings.json` 固化跨机器通用的**外观 / 布局 / 编辑器偏好 + LLM provider 结构配置**。Agent 模式、agent_servers、ssh_connections 等个人化、流动的配置不进模板，由本机自行维护。
 
 ### 外观（对齐 profile）
 - `theme = "Aura Dark"`（静态，非 dynamic）：固定 Aura Dark，不走 `{mode, light, dark}` 深浅自动切换——profile 长时间用眼偏好深色，无需浅色 fallback。
@@ -35,16 +35,27 @@
 - `icon_theme = "Base Charmed Icons"`：与 Aura 配色协调的图标集。
 - **buffer font 用 Zed 默认 `.zedMono`**：不设 `buffer_font_family`。Zed 自家代码字体专为代码渲染优化、观感优于手设；代码区字体不与终端强求一致（终端用 Maple Mono NF CN 是为 Nerd Font 图标，编辑器无此需求）。
 
+### LLM provider（key 走环境变量）
+> provider 的**结构配置**（api_url / 模型能力 / 上下文窗口）入 `configs/zed/settings.json`；**API key 绝不写进 settings.json**，通过环境变量注入。
+
+- Zed 读 provider 特定的环境变量，**优先级高于系统 keychain**。
+- 内置 provider 用固定变量名：`OPENCODE_API_KEY`、`ANTHROPIC_API_KEY`、`OPENAI_API_KEY` 等。
+- `openai_compatible` 自定义 provider 的变量名由 provider ID 生成：`UPPER_SNAKE(provider_id) + _API_KEY`。
+  - 例：provider ID `zai-coding` → `ZAI_CODING_API_KEY`。
+  - provider ID 用**小写连字符**（如 `zai-coding`），变量名才清晰；避免带空格 / 大小写混合的 ID。
+- key 放 `~/.config/shell/secrets.env`（见 `tools/shell.md`），由 `.zshrc` 幂等 source。
+- **⚠️ 启动方式**：Zed 从「进程环境」读变量——**终端 `zed` 启动**才继承 shell 环境（secrets.env 生效）；从 Dock/Finder 启动不读 `.zshrc`。若需 Dock 启动，用 `launchctl setenv <VAR> <VALUE>`（或 LaunchAgent 持久化）。
+- 自定义 headers：`language_models.<provider>.custom_headers` 可附加企业代理 / 观测头（`Authorization` 等 Zed 管理的 header 不可覆盖）。
+
 ### Agent 模式（不写入模板，仅记思路）
 > 模型 / 后端选择偏个人化、流动，固化价值低；以下供将来固化或新机器恢复时参考。
 
 - `agent.default_profile = "write"`：默认可写权限（信任 agent 落地代码）。
 - `agent.default_model`：主力 `opencode` provider 的 `go/deepseek-v4-flash`（thinking on, effort max）——快 + 推理强，日常默认。
-- `agent.favorite_models`：收藏备选（含 Zhipu `glm-5.2` 等），按任务切换。
+- `agent.favorite_models`：收藏备选（含 `glm-5.2` 等），按任务切换。
 - `agent.dock = "left"` + `thinking_display = "preview"`：agent 面板常驻左侧，思考过程折叠预览减少干扰。
 - `agent.tool_permissions.terminal.default = "allow"`：终端命令默认放行（个人机、信任环境）。
 - `agent_servers`：可挂接多个 coding agent 后端（opencode / claude-acp / cursor-registry），按任务选不同 agent，不绑死单一后端。
-- `language_models.openai_compatible`：接入第三方 OpenAI 兼容网关时声明 provider 与模型能力。
 
 ### 远程开发
 - 用 Zed Remote 直连 GPU 服务器（远程训练机），省去 Neovim + tmux 往返。
@@ -58,7 +69,7 @@
 - `collaboration_panel.button = false`：隐藏协作按钮（单人用）。
 
 ## 参考
-- `configs/zed/settings.json`（只含外观 / 布局 / 编辑器偏好的通用模板）
+- `configs/zed/settings.json`（外观 / 布局 / 编辑器偏好 + LLM provider 结构配置；key 走环境变量）
 
 ## 验证
 ```sh
