@@ -21,7 +21,7 @@
 | Ghostty | `ghostty.md` | 已写（macOS 主力终端） |
 | iTerm2 | — | 备选 / 待写 |
 | Zed（GUI 主力） | `zed.md` | 已写 |
-| Neovim（terminal 主力） | — | 待写 |
+| Neovim（terminal 主力） | `neovim.md` | 已写 |
 | Docker | — | 待写 |
 | lazygit / Zellij | — | 待评估（见 `profile.md`） |
 
