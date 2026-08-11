@@ -20,7 +20,8 @@
 | C/C++ + CUDA | `c-cpp.md` | 已写 |
 | Ghostty | `ghostty.md` | 已写（macOS 主力终端） |
 | iTerm2 | — | 备选 / 待写 |
-| 编辑器 (Zed/Cursor/Neovim/VSCode) | — | 待写（部分与 `agents/` 交叉） |
+| Zed（纯 editor） | `zed.md` | 已写（macOS 主力编辑器） |
+| 编辑器 (Cursor/Neovim/VSCode) | — | 待写 |
 | Docker | — | 待写 |
 | lazygit / Zellij | — | 待评估（见 `profile.md`） |
 

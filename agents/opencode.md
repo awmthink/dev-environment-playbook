@@ -36,9 +36,7 @@
 - config 支持 `{env:VAR}` 和 `{file:path}` 插值（**不是** shell 的 `${VAR}`）。
 
 ### MCP
-- 结构在 `opencode.json` 的 `mcp` 字段；**key 走 `{env:VAR}`，不写明文**。
-- local MCP：`command`（字符串数组）+ `environment`（值可 `{env:VAR}` 映射）。
-- remote MCP：`url` + `headers`（值可 `{env:VAR}`，如 `"Authorization": "Bearer {env:VAR}"`）。
+> MCP server 定义集中放 `configs/mcp/`（跨 agent 共享，见 `agents/README.md`），含 opencode 的 `mcp` 字段格式 + server 清单。本机 `opencode.json` 含 `mcp` 字段（运行需要）；key 走 `{env:VAR}`，不写明文。
 
 ### 环境变量映射（汇总）
 | 用途 | 变量名 | 注入点 |
@@ -50,7 +48,8 @@
 > 这些变量放 `~/.config/shell/secrets.env`（见 `tools/shell.md`），由 `.zshrc` 幂等 source。opencode 从终端启动即继承 shell 环境（不像 Zed 的 Dock 启动需 launchctl）。
 
 ## 参考
-- `configs/opencode/opencode.json`（provider 结构 + MCP；key 全走 `{env:VAR}`，无明文）
+- `configs/opencode/opencode.json`（provider 结构；key 走环境变量）
+- `configs/mcp/`（MCP servers 共享参考，opencode + Zed 两种格式）
 
 ## 验证
 ```sh

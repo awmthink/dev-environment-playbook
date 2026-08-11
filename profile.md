@@ -16,7 +16,8 @@
 |------|------|------|
 | Shell | zsh（macOS 主力）/ bash（Linux 服务器） | macOS 默认、生态成熟；服务器照旧 bash 兼容 |
 | 提示符 | Starship | 跨 shell（zsh/bash）统一、自动显示 git/语言版本上下文；替代手写 prompt 与 oh-my-zsh 主题 |
-| 编辑器 | Zed · Cursor · Neovim · VS Code（按场景切换） | 建议分工：Zed 日常主力、Cursor 大仓库 / 重 agent、Neovim 远程服务器、VS Code 仅需扩展时 fallback |
+| 编辑器 | Zed（纯 editor，日常主力）· Cursor · Neovim · VS Code | Zed 不带 agent、只做编辑；Cursor 大仓库；Neovim 远程服务器；VS Code 仅需扩展时 fallback |
+| Coding agent | opencode · claude-code · codex · qoder-cli | agent 与 editor 职责分离——编辑用 Zed，agent 用专用工具（终端 / CLI） |
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |

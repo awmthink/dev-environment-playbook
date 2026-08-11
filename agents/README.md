@@ -12,9 +12,8 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | Claude Code | `CLAUDE.md` / `~/.claude/` | `claude-code.md` |
 | Codex (OpenAI) | `AGENTS.md` / `~/.codex/` | `codex.md` |
 | Cursor | `.cursor/rules` / settings.json | `cursor.md` |
-| Zed | `~/.config/zed/settings.json` | `zed.md` |
 | Zcode | <!-- 待补充 --> | `zcode.md` |
 | Qoder | <!-- 待补充 --> | `qoder.md` |
 
 ## 共享：MCP servers
-<!-- 多个 agent 共用的 MCP server 配置集中记录，避免重复。如需可创建 mcp.md -->
+> 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（含 opencode / Zed 两种格式 + 差异速查）。各 agent 从自己配置文件读（opencode `mcp` 字段、Zed `context_servers` 字段），key 统一走 `{env:ZAI_CODING_API_KEY}`，放 `~/.config/shell/secrets.env`。
