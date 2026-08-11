@@ -9,7 +9,7 @@
 
 | 语言 | server | 安装 | 备注 |
 |------|--------|------|------|
-| Python | pyright | `brew install pyright` | 类型 / 定义 / 引用 |
+| Python | pyright | `npm install -g pyright` | 类型 / 定义 / 引用（npm 装，避免 brew 拉 node 依赖；见 `node.md`） |
 | C/C++ | clangd | macOS 自带（Xcode CLT，`/usr/bin/clangd`）；Linux `brew install llvm` | |
 | Go | gopls | `brew install gopls` | |
 | Rust | rust-analyzer | `brew install rust-analyzer` | |

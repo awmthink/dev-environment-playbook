@@ -36,5 +36,5 @@
 ## 工作流约定
 
 - 借助 coding agent 推进项目；重复性的环境配置 / 同步也交给 agent（见 `README.md` 两类场景）。
-- 语言版本管理：**node → mise**、**python → uv**；go / rust 暂用 brew 直装（按需转 mise）。不混用多个管理器。
+- 语言版本管理：**node → brew（单 LTS，不切版本）**、**python → uv**；go / rust 暂用 brew / rustup 直装（go 多版本走原生 `GOTOOLCHAIN`）。不混用多个管理器。
 - <!-- 待补充：项目目录约定（如 ~/Workspace）、git 提交信息风格等 -->
