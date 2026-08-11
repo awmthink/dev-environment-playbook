@@ -23,7 +23,7 @@
 - `pull.rebase`：默认 false（merge）；若偏好线性历史可设 true（待定）
 - `core.editor`：指向当前主力编辑器（见 `profile.md`）
 - `credential.helper`：macOS 用 `osxkeychain`；Linux 用 `cache` 或 libsecret
-- 常用别名：`co/br/ci/st/lg`（`lg` = 带图的历史）
+- **不设别名**：习惯原生命令（与 `shell.md` 「不用 git 别名」一致）
 
 ## 参考
 - `configs/git/.gitconfig`（实物，待补充）
