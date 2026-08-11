@@ -1,21 +1,61 @@
 # agent: opencode
 
+> 终端 AI coding agent（TUI），coding agent 协作主力之一。全局配置 `~/.config/opencode/opencode.json`，credentials 走 auth.json 或环境变量。
+
+## 为什么用
+终端原生、启动快、支持 75+ LLM provider（via models.dev）、MCP 生态完整；项目级 `.opencode/` 可定制 agent/command/skill；与 Zed/Cursor 等 IDE 的 agent 互补（终端 / 脚本 / 远程服务器场景）。
+
+## 版本约束
+- 版本：latest
+
+## 安装
+
+| 平台 | 方式 |
+|------|------|
+| macOS / Linux | 官方脚本 `curl -fsSL https://opencode.ai/install \| bash`，装到 `~/.opencode/`（user-local，无 sudo） |
+
+> shell 钩子：`.zshrc` 里 `export PATH="$HOME/.opencode/bin:$PATH"`（机器特定，不入 configs 模板）。
+
 ## 配置位置
-- 全局：`~/.config/opencode/opencode.json`（或 `opencode.jsonc`）
+- 全局配置：`~/.config/opencode/opencode.json`（**注意：不是 `~/.opencode/`**——那是安装目录）
+- credentials：`~/.local/share/opencode/auth.json`（`/connect` 交互存的 key，权限 600）
 - 项目级：仓库根 `opencode.json` / `.opencode/`
-- 指令文件：仓库内 `AGENTS.md`（与其它 agent 共用）+ 本专属文件
+- 指令文件：`AGENTS.md`（与其它 agent 共用，`~/.config/opencode/AGENTS.md` 软链到 `~/.agents/AGENTS.md`）
+- agents/commands/skills：`.opencode/agent(s)/`、`.opencode/command(s)/`、`.opencode/skill(s)/`
 
-## 我的配置思路
-<!-- 记录：模型选择、权限规则、自定义命令 / skill、MCP server 等 -->
+## 配置思路
 
-## 关键设置
-<!-- 例如默认模型、autoupdate、permission 规则 -->
+### Provider 与 key 注入
+> **key 绝不写进 opencode.json 明文**。两条注入路径：
+
+- **内置 provider + models.dev 声明的环境变量**：opencode 启动时自动读环境变量（非空则识别为连接）。`opencode auth list` 的 Environment 段列出各 provider 的变量名。
+  - OpenCode Go / Zen → `OPENCODE_API_KEY`
+- **`provider.{id}.options.apiKey = "{env:VAR}"`**：对未声明环境变量的内置 provider（如 Zhipu），在 opencode.json 显式注入。
+  - 例：`zhipuai-coding-plan` 未声明环境变量，用 `options.apiKey = "{env:ZAI_CODING_API_KEY}"`。
+- `/connect` 存的 key 在 auth.json（明文）；环境变量 / options.apiKey 生效后 auth.json 冗余，可 `opencode auth logout` 清除。
+- config 支持 `{env:VAR}` 和 `{file:path}` 插值（**不是** shell 的 `${VAR}`）。
+
+### MCP
+- 结构在 `opencode.json` 的 `mcp` 字段；**key 走 `{env:VAR}`，不写明文**。
+- local MCP：`command`（字符串数组）+ `environment`（值可 `{env:VAR}` 映射）。
+- remote MCP：`url` + `headers`（值可 `{env:VAR}`，如 `"Authorization": "Bearer {env:VAR}"`）。
+
+### 环境变量映射（汇总）
+| 用途 | 变量名 | 注入点 |
+|------|--------|--------|
+| OpenCode Go / Zen provider | `OPENCODE_API_KEY` | opencode 自动读（models.dev 声明） |
+| Zhipu (zhipuai-coding-plan) | `ZAI_CODING_API_KEY` | `provider.options.apiKey` |
+| MCP（web-search / web-reader / zai-mcp） | `ZAI_CODING_API_KEY` | headers / environment |
+
+> 这些变量放 `~/.config/shell/secrets.env`（见 `tools/shell.md`），由 `.zshrc` 幂等 source。opencode 从终端启动即继承 shell 环境（不像 Zed 的 Dock 启动需 launchctl）。
 
 ## 参考
-- `configs/opencode.json`（实物）
+- `configs/opencode/opencode.json`（provider 结构 + MCP；key 全走 `{env:VAR}`，无明文）
 
 ## 验证
 ```sh
 opencode --version
-# 启动后确认配置已加载
+opencode auth list      # 看 provider 连接状态 + 环境变量识别
+opencode models         # 确认可用模型
+opencode mcp list       # 确认 MCP server 连接
 ```
