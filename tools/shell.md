@@ -29,7 +29,7 @@ zsh：macOS 默认、生态成熟、补全强；bash：服务器普遍、脚本�
 服务器端 `.bashrc` 为精简版：基础别名 + 历史 + 共用 env。
 
 ## 参考
-- `configs/shell/env.sh`（实物）；`configs/zsh/.zshrc`、`configs/bash/.bashrc`（实物，待补充）；脱敏模板：`configs/shell/secrets.env.example`、`configs/shell/proxy.env.example`
+- `configs/zsh/.zshrc`、`configs/shell/env.sh`（实物）；`configs/bash/.bashrc`（服务器端，待补充）；脱敏模板：`configs/shell/secrets.env.example`、`configs/shell/proxy.env.example`
 
 ## 验证
 ```sh
