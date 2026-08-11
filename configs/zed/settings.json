@@ -1,0 +1,24 @@
+// Zed settings（参考实物）
+// 真实文件：~/.config/zed/settings.json（不软链；agent 按本文件思路生成）
+// 本模板只含跨机器通用的外观 / 布局 / 编辑器偏好；
+// agent 模式、agent_servers、language_models、ssh_connections 等个人化配置不进模板，由本机自行维护。
+// 配置思路见 agents/zed.md
+{
+  // ===== 外观（对齐 profile：Aura Dark）=====
+  "theme": "Aura Dark",
+  "theme_overrides": {
+    "Aura Dark": { "panel.focused_border": "#4E466E" }
+  },
+  "icon_theme": "Base Charmed Icons",
+
+  // ===== 布局 =====
+  "project_panel": { "dock": "right" },
+  "git_panel": { "dock": "right", "fallback_branch_name": "main" },
+  "collaboration_panel": { "button": false },
+
+  // ===== 编辑器行为 =====
+  "diff_view_style": "unified",
+  "git": {
+    "inline_blame": { "enabled": false }
+  }
+}
