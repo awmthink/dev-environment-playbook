@@ -11,8 +11,9 @@
 | Homebrew | `homebrew.md` | 已写 |
 | Git | `git.md` | 已写 |
 | Shell (zsh/bash) | `shell.md` | 已写 |
+| Starship | `starship.md` | 已写（提示符） |
 | 网络代理 | `proxy.md` | 已写 |
-| Node.js + pnpm | `node.md` | 已写（版本管理器待定 mise/fnm） |
+| Node.js + pnpm | `node.md` | 已写（mise + corepack） |
 | Python + uv | `python.md` | 已写 |
 | Go | `go.md` | 已写 |
 | Rust | `rust.md` | 已写 |
@@ -21,7 +22,7 @@
 | iTerm2 | — | 备选 / 待写 |
 | 编辑器 (Zed/Cursor/Neovim/VSCode) | — | 待写（部分与 `agents/` 交叉） |
 | Docker | — | 待写 |
-| lazygit / Starship / Zellij | — | 待评估（见 `profile.md`） |
+| lazygit / Zellij | — | 待评估（见 `profile.md`） |
 
 ## 写作要点（给人和 agent）
 - 写**意图与理由**，不是只贴 dotfile。

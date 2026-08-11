@@ -15,9 +15,10 @@
 | 维度 | 偏好 | 理由 |
 |------|------|------|
 | Shell | zsh（macOS 主力）/ bash（Linux 服务器） | macOS 默认、生态成熟；服务器照旧 bash 兼容 |
+| 提示符 | Starship | 跨 shell（zsh/bash）统一、自动显示 git/语言版本上下文；替代手写 prompt 与 oh-my-zsh 主题 |
 | 编辑器 | Zed · Cursor · Neovim · VS Code（按场景切换） | 建议分工：Zed 日常主力、Cursor 大仓库 / 重 agent、Neovim 远程服务器、VS Code 仅需扩展时 fallback |
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
-| Node 包管理 | pnpm | 快、省磁盘、严格 |
+| Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |
 | 系统包管理 | macOS: Homebrew；Linux: 发行版自带（apt/dnf/…） | 各平台原生方案优先 |
 | 主题 | Aura Dark | 长时间用眼偏好；指定 Aura Dark 配色 |
@@ -29,9 +30,10 @@
 > 这些是「正在尝试或候选」的工具，状态偏流动，配置上先轻量化、易回退；不替换主力。
 
 - 探索中：Nushell（shell，担心太新 / 生态不匹配）
-- 候选待试：Starship（提示符，跨 shell 显示多语言版本上下文）、Zellij（多路复用，GPU 服务器长会话）
+- 候选待试：Zellij（多路复用，GPU 服务器长会话）
 
 ## 工作流约定
 
 - 借助 coding agent 推进项目；重复性的环境配置 / 同步也交给 agent（见 `README.md` 两类场景）。
-- <!-- 待补充：项目目录约定（如 ~/Workspace）、git 提交信息风格、语言版本管理器（pyenv/nvm/rustup/…）等 -->
+- 语言版本管理：**node → mise**、**python → uv**；go / rust 暂用 brew 直装（按需转 mise）。不混用多个管理器。
+- <!-- 待补充：项目目录约定（如 ~/Workspace）、git 提交信息风格等 -->

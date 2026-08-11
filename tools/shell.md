@@ -22,7 +22,7 @@ zsh：macOS 默认、生态成熟、补全强；bash：服务器普遍、脚本�
 - **本地配置统一放 `~/.config/shell/`**（仓库外、不提交）：`env.sh`（共用环境变量，zsh / bash 都 source）、`proxy.env`（代理，见 `proxy.md`）、`secrets.env`（API key / token，`chmod 600`）。`.zshrc` 幂等 source：`[ -f ~/.config/shell/secrets.env ] && source ~/.config/shell/secrets.env`；脱敏模板见 `configs/shell/secrets.env.example`。
 - 历史：`HISTFILE` / `HISTSIZE` / `SAVEHIST`、`setopt SHARE_HISTORY` 共享历史。
 - 补全：启用 `compinit`；按需补全脚本放 `~/.config/zsh/completions`。
-- 别名：少量高频（`ll/gst/gd`），其余交给工具。
+- 别名：少量高频（`ll`）；不用 git 别名（习惯原生命令），其余交给工具。
 - **各语言环境按需 source**：node/python/go/rust 的 PATH 由各自工具(mise/uv/rustup)注入，rc 里只负责调用它们的初始化钩子。
 - **user-local bin 进 PATH**：Linux 下优先 `~/.local/bin`（详见 `platforms/linux.md` 的安装目录约定），加上 `~/.cargo/bin`、`~/go/bin` 等；macOS 下 Homebrew 路径由 brew 处理。
 
