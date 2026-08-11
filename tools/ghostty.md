@@ -15,6 +15,8 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 | macOS | `brew install --cask ghostty` |
 | Linux | 官方 AppImage / 源码构建（较新，按需） |
 
+> macOS 已知：该 cask **只装 `Ghostty.app`，不往全局 PATH 链 `ghostty` CLI**（只链了 manpage / shell completion）。但 **Ghostty 启动的 shell 会自动把 `/Applications/Ghostty.app/Contents/MacOS` 注入 PATH**（即 `TERM_PROGRAM=ghostty` 时）——所以在 Ghostty 窗口内裸 `ghostty` 直接可用；只有从 iTerm / Terminal.app 等**别的终端**调用时才需要完整路径。无需为此建软链。
+
 ## 配置思路
 配置文件：`~/.config/ghostty/config`（`key = value`，单文件）。整份参考见 `configs/ghostty/config`，关键项与理由：
 
@@ -37,6 +39,8 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 - `configs/ghostty/config`（只读实物；本机落地在 `~/.config/ghostty/config`）
 
 ## 验证
+> 在 **Ghostty 窗口内**运行（Ghostty 会把自身注入 PATH，裸 `ghostty` 可用）；从其它终端（iTerm 等）跑需换成完整路径 `/Applications/Ghostty.app/Contents/MacOS/ghostty`。
+
 ```sh
 ghostty --version                       # 期望：>= 1.3（stable）
 ghostty +list-themes | grep -i aura     # 期望：列出 Aura
