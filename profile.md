@@ -20,7 +20,7 @@
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |
-| 系统包管理 | macOS: Homebrew；Linux: 发行版自带（apt/dnf/…） | 各平台原生方案优先 |
+| 系统包管理 | macOS: Homebrew；Linux: 开发工具优先 user-local（Linuxbrew + mise/uv/rustup），发行版源仅作系统基础 | Linux 发行版版本偏旧，开发工具自行管理版本更可控 |
 | 主题 | Aura Dark | 长时间用眼偏好；指定 Aura Dark 配色 |
 | 字体 | 主力 **Maple Mono NF CN**；备选 **JetBrainsMono Nerd Font**（看腻时切换） | 主力：中英混排对齐、覆盖图标 / 连字 / CJK；备选：经典方正、纯 ASCII 区最稳 |
 | 键位 | 不改键位，保持系统默认 | 跨机器无需额外配置 |

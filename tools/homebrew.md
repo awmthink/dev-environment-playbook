@@ -13,7 +13,9 @@
 | 平台 | 方式 |
 |------|------|
 | macOS | 官方一键脚本（见 brew.sh） |
-| Linux | 可选 Linuxbrew；优先发行版自带包管理器 |
+| Linux | Linuxbrew（无 sudo，装用户目录）；开发工具首选，见下 |
+
+> **Linux 策略**：发行版 apt/dnf/yum 的工具版本普遍偏旧，**开发工具优先用 Linuxbrew 装到用户目录自管**（无 sudo）。装到 `/home/linuxbrew/.linuxbrew`（多用户共享）或 `~/.homebrew`（纯用户隔离），shell rc 加 `eval "$(<brew-prefix>/bin/brew shellenv)"`。与 macOS 同一份 Brewfile 复现。
 
 ## 配置思路
 - 用 **Brewfile** 维护装机清单（CLI + cask），放 `configs/Brewfile`。

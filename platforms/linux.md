@@ -13,7 +13,8 @@
 | Fedora | dnf | |
 
 ## 通用约定
-- 优先发行版自带包管理器；版本过旧时再用官方安装器 / 版本管理器（见各 `tools/*.md`）。
+- **开发工具优先 user-local 自管**：发行版 apt/dnf/yum 版本普遍偏旧，开发工具（git/node/go/rust/uv 等）不依赖系统源，装到用户目录自行管理版本（见下方「user-local 包管理」与各 `tools/*.md`）。
+- 发行版包管理器仅用于：系统基础库、服务、无法 user-local 的底层依赖。
 - 默认 shell 多为 bash；切换：`chsh -s <shell>`。
 
 ## 安装目录约定（user-local，优先）
@@ -26,6 +27,13 @@
   - `~/.local/share/mise/shims`（若用 mise）
 - 安装脚本默认目标为 `/usr/local/bin` 时，能加 `--prefix` / `-b` 等参数就改到 `~/.local`。
 - `~/.local/bin` 要在 PATH **靠前**，避免被系统旧版本覆盖；`.profile` 默认会自动加，确认即可。
+
+## user-local 包管理（开发工具）
+> Linux 发行版源版本偏旧，开发工具用以下方式装到用户目录、自行管理版本。
+
+- **Linuxbrew**：Homebrew 的 Linux 支持，无 sudo、装用户目录，用法与 macOS 完全一致。作为开发工具的统一入口（见 `tools/homebrew.md`）。装到 `/home/linuxbrew/.linuxbrew`（多用户共享）或 `~/.homebrew`（纯用户隔离）。
+- **语言运行时**：mise（node/go 等）、uv（python）、rustup（rust）——都比发行版新，user-local。
+- **单文件 CLI**：`cargo install` / `go install` / `uv tool install`，产物进对应 bin 目录。
 
 ## 常用探测命令
 - 发行版：`cat /etc/os-release`
