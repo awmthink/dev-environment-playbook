@@ -22,8 +22,16 @@
 | iTerm2 | — | 备选 / 待写 |
 | Zed（GUI 主力） | `zed.md` | 已写 |
 | Neovim（terminal 主力） | `neovim.md` | 已写 |
+| LSP servers（跨编辑器） | `lsp.md` | 已写（pyright/clangd/gopls/rust-analyzer/vtsls） |
 | Docker | — | 待写 |
 | lazygit / Zellij | — | 待评估（见 `profile.md`） |
+
+## 基础 CLI 工具（装即用，无独立 playbook）
+
+| 工具 | 装法 | 用途 |
+|------|------|------|
+| ripgrep (rg) | `brew install ripgrep` | 全文搜索（nvim `:grep` / shell） |
+| jq | macOS 自带；`brew install jq` | JSON 处理 |
 
 ## 写作要点（给人和 agent）
 - 写**意图与理由**，不是只贴 dotfile。
