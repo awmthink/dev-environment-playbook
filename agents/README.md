@@ -11,7 +11,6 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | opencode | `opencode.json` / `.opencode/` / 仓库内 `AGENTS.md` | `opencode.md` |
 | Claude Code | `CLAUDE.md` / `~/.claude/` | `claude-code.md` |
 | Codex (OpenAI) | `AGENTS.md` / `~/.codex/` | `codex.md` |
-| Cursor | `.cursor/rules` / settings.json | `cursor.md` |
 | Zcode | <!-- 待补充 --> | `zcode.md` |
 | Qoder | <!-- 待补充 --> | `qoder.md` |
 
