@@ -14,7 +14,7 @@
 
 | 维度 | 偏好 | 理由 |
 |------|------|------|
-| Shell | zsh（macOS 主力）/ bash（Linux 服务器） | macOS 默认、生态成熟；服务器照旧 bash 兼容 |
+| Shell | zsh（macOS + Linux 全平台统一） | 跨平台一致；bash 兼容性不再是问题（脚本走 shebang，与登录 shell 无关） |
 | 提示符 | Starship | 跨 shell（zsh/bash）统一、自动显示 git/语言版本上下文；替代手写 prompt 与 oh-my-zsh 主题 |
 | 编辑器 | Zed（GUI 主力）· Neovim（terminal 主力） | Zed 不带 agent、只做编辑；Neovim 用于终端 / 远程服务器场景 |
 | Coding agent | opencode · claude-code · codex · qoder-cli | agent 与 editor 职责分离——编辑用 Zed，agent 用专用工具（终端 / CLI） |

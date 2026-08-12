@@ -1,20 +1,21 @@
 # tool: shell
 
-> zsh 为 macOS 主力，bash 为 Linux 服务器主力。rc 思路在此统一，平台差异交给 agent。
+> zsh 全平台统一（macOS + Linux），rc 思路一致。
 
 ## 为什么用
-zsh：macOS 默认、生态成熟、补全强；bash：服务器普遍、脚本兼容性最好。
+zsh：补全强、生态成熟、跨平台一份 rc；bash 兼容性不再构成约束（脚本走自身 shebang，与登录 shell 解耦）。
 
 ## 版本约束
-- zsh：>= 5.8（macOS 自带 / brew）
-- bash：>= 5（Linux 服务器自带）
+- zsh：>= 5.5（macOS 自带 / brew / Linux `dnf install zsh`；CentOS 8 dnf 版 5.5.1 够用）
 
 ## 安装
 
 | 平台 | 方式 |
 |------|------|
 | macOS | 系统自带 zsh；`brew install zsh` 取新版；`chsh -s /bin/zsh` |
-| Linux | `apt install zsh` / `dnf install zsh`；`chsh -s /usr/bin/zsh` |
+| Linux | `dnf install zsh`（系统级，进 `/usr/bin/zsh` + `/etc/shells`，可 chsh）；`chsh -s /usr/bin/zsh` |
+
+> Linux 上 zsh 必须是系统级（`/usr/bin/zsh`，在 `/etc/shells`）才能 `chsh`。用户级路径（如 `~/.local/bin/zsh`）做 login shell 不可靠（依赖挂载）。
 
 ## 配置思路
 - **不依赖重框架**（不用 oh-my-zsh），保持启动快、配置可读；手写 `.zshrc`。
