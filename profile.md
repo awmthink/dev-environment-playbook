@@ -21,7 +21,7 @@
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |
-| 系统包管理 | macOS: Homebrew；Linux: 开发工具优先 user-local（Linuxbrew + uv/rustup，node 用 nvm/fnm、go 用 `GOTOOLCHAIN`），发行版源仅作系统基础 | Linux 发行版版本偏旧，开发工具自行管理版本更可控 |
+| 系统包管理 | **mise**（跨平台 peer：runtime + CLI + build 工具）+ **brew**（macOS peer：GUI app + 字体）；编译器平台原生（mac=Xcode CLT，linux=per-user llvm 预编译）；CUDA/TensorRT 走外部 | mise 声明式、per-user、mac/linux 一份配置；brew 退守 macOS 不可替代的 cask；编译器因 mise 走源码编译太慢/无插件而留平台原生 |
 | 主题 | Aura Dark | 长时间用眼偏好；指定 Aura Dark 配色 |
 | 字体 | 主力 **Maple Mono NF CN**；备选 **JetBrainsMono Nerd Font**（看腻时切换） | 主力：中英混排对齐、覆盖图标 / 连字 / CJK；备选：经典方正、纯 ASCII 区最稳 |
 | 键位 | 不改键位，保持系统默认 | 跨机器无需额外配置 |
@@ -36,5 +36,5 @@
 ## 工作流约定
 
 - 借助 coding agent 推进项目；重复性的环境配置 / 同步也交给 agent（见 `README.md` 两类场景）。
-- 语言版本管理：**node → brew（单 LTS，不切版本）**、**python → uv**；go / rust 暂用 brew / rustup 直装（go 多版本走原生 `GOTOOLCHAIN`）。不混用多个管理器。
+- 语言版本管理：**统一归 mise**（node/python/go/rust 声明在 `configs/mise/config.toml`；python 的 venv/依赖用 **uv** 作 engine、rust 用 **rustup** 作 engine，mise 只声明版本）。不再用 brew/nvm 管运行时；编译器（clang）+ git 不进 mise（见各 `tools/*.md`）。
 - <!-- 待补充：项目目录约定（如 ~/Workspace）、git 提交信息风格等 -->

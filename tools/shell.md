@@ -23,8 +23,11 @@ zsh：macOS 默认、生态成熟、补全强；bash：服务器普遍、脚本�
 - 历史：`HISTFILE` / `HISTSIZE` / `SAVEHIST`、`setopt SHARE_HISTORY` 共享历史。
 - 补全：启用 `compinit`；按需补全脚本放 `~/.config/zsh/completions`。
 - 别名：少量高频（`ll`、`vim=nvim`）；不用 git 别名（习惯原生命令），其余交给工具。
-- **各语言环境按需 source**：node 由 brew force-link 进 `/opt/homebrew/bin`（node@24，不用版本管理器）；python → uv、rust → rustup（`~/.cargo/bin`，env.sh 已覆盖）、go → brew（多版本走 `GOTOOLCHAIN`）。rc 不再为版本管理器写 init 钩子（弃用 mise）。
-- **user-local bin 进 PATH**：Linux 下优先 `~/.local/bin`（详见 `platforms/linux.md` 的安装目录约定），加上 `~/.cargo/bin`、`~/go/bin` 等；macOS 下 Homebrew 路径由 brew 处理。
+- **语言运行时统一归 mise**：node/python/go/rust 的版本与 PATH 由 mise 管，rc 里只加**一个** init 钩子（幂等）：
+  - `.zshrc`：`eval "$(mise activate zsh)"`
+  - `.bashrc`：`eval "$(mise activate bash)"`
+  不再为各语言单独写 init（nvm/conda-init/rustup init 都不再需要）；uv/rustup 作 mise 的 engine 透明运行。
+- **user-local bin 进 PATH**：`~/.local/bin`（per-user llvm 预编译/git/tmux 等装这里，Linux 编译器 `~/.local/llvm-18.1.8/bin` 也前置）、`~/.cargo/bin`、`~/go/bin`；macOS 下 Homebrew 路径由 brew 处理。详见 `configs/shell/env.sh`。
 
 服务器端 `.bashrc` 为精简版：基础别名 + 历史 + 共用 env。
 

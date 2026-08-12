@@ -9,10 +9,15 @@
 
 ## 版本约束
 - 版本：>= 0.11（当前 **0.12.4**）
-- 安装：macOS `brew install neovim`；Linux 用官方 AppImage / 预编译二进制（无需编译）
+- 安装：**不进 mise**（见下"为什么不在 mise"），由 `scripts/bootstrap.sh` 装：
+  - 现代 glibc（>=2.32）/ macOS：拉官方预编译二进制 → `~/.local/bin/nvim`
+  - 老 glibc（<2.32，如 CentOS 8）：**源码编译** → `~/.local/bin/nvim`（链系统 glibc，能跑）
+
+## 为什么不在 mise
+mise 拉的 neovim 是官方 glibc 动态链接版，**min glibc 2.32+**，老 distro（如 CentOS 8 的 2.28）跑不了；rg/jq/tmux 有 musl 静态版所以能跑，neovim 没有。故 neovim 与 git/llvm 同属"官方二进制不够通用"，归 `bootstrap.sh` 按 glibc 分流。
 
 ## 依赖
-- **ripgrep**：`:grep` 全文搜索 → `brew install ripgrep`（macOS）
+- **ripgrep**：`:grep` 全文搜索 → mise 管（见 `configs/mise/config.toml`）
 - **不依赖**：LSP server（导航交 agent）、任何插件管理器 / Mason、tree-sitter CLI
 
 ## 配置位置

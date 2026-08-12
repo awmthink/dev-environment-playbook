@@ -15,8 +15,7 @@
 
 | 平台 | 方式 |
 |------|------|
-| macOS | `brew install starship` |
-| Linux | `curl -sS https://starship.rs/install.sh \| sh` |
+| macOS / Linux | 都走 **mise**：`starship = "latest"` 在 `configs/mise/config.toml` |
 
 ## 配置思路
 - **钩子**：shell rc 末尾 `eval "$(starship init <shell>)"`（zsh 加到 `.zshrc`，bash 加到 `.bashrc`；见 `shell.md`）。幂等，无副作用。

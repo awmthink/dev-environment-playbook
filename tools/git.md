@@ -10,10 +10,15 @@
 
 ## 安装
 
+> git **不进 mise**（上游只发源码、无预编译二进制）。**两端都源码编译进 `~/.local`**，由 `scripts/bootstrap.sh` 完成（含依赖检测：make / autoconf / zlib-devel / libcurl-devel 等）。
+>
+> 构建：`make configure && ./configure --prefix=... CC=clang && make NO_ICONV=YesPlease all && make install`。`NO_ICONV=YesPlease` 规避某些 distro 的 iconv 链接问题（仅禁用字符集转换，**不影响 `text`/`eol` 行尾规范化**）。依赖不全时脚本退出并打印 dnf/apt 命令；缺依赖期间可用**系统 git 兜底**。
+
 | 平台 | 方式 |
 |------|------|
-| macOS | `brew install git`（系统自带版可能偏旧，用 brew 覆盖） |
-| Linux | `apt install git` / `dnf install git` |
+| macOS / Linux | `scripts/bootstrap.sh`（源码编译 → `~/.local/bin/git`，版本两端一致） |
+
+> 为什么不用 distro/brew：发行版版本偏旧（如 CentOS 8 的 2.27）；brew-on-Linux 有多用户问题。源码编译统一两端版本，成本仅 ~1 分钟。
 
 ## 配置思路
 <!-- 个人身份信息是机器/账号相关，不要写死进仓库；agent 同步时从本地或向我询问 -->

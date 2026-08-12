@@ -25,8 +25,6 @@ export PATH="$HOME/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:/usr/local
 # ===== 平台专属：macOS / Homebrew =====
 if [ "$(uname)" = Darwin ]; then
   export PATH="/opt/homebrew/bin:$PATH"
-  # brew llvm（keg-only）前置 PATH：让 clang/clangd/clang-format/clang-tidy 用 brew 版（见 tools/c-cpp.md「LLVM 语言工具」）
-  export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
   export HOMEBREW_API_AUTO_UPDATE_SECS=86400
   export HOMEBREW_AUTO_UPDATE_SECS=604800
   # 中科大源（国内加速；按需换清华/官方）
@@ -37,3 +35,16 @@ if [ "$(uname)" = Darwin ]; then
   export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
   export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
 fi
+
+# ===== 平台专属：Linux / per-user llvm（CUDA 12.8 兼容的 clang<20）=====
+if [ "$(uname)" = Linux ]; then
+  # per-user 预编译 llvm（见 scripts/bootstrap.sh / tools/c-cpp.md）：clang/clangd/clang-format/clang-tidy
+  [ -x "$HOME/.local/llvm-18.1.8/bin/clang" ] && export PATH="$HOME/.local/llvm-18.1.8/bin:$PATH"
+  export CC=clang CXX=clang++
+fi
+
+# ===== mise（runtime + CLI + build 的 PATH 与版本切换）=====
+# init 钩子放各 shell rc（需指定 shell 类型）：
+#   zsh: eval "$(mise activate zsh)"    bash: eval "$(mise activate bash)"
+# 这里只确保 mise 二进制可解析（~/.local/bin 已在上面的通用 PATH）
+
