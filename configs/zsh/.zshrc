@@ -22,5 +22,7 @@ alias ll='ls -lah'
 alias vim='nvim'
 
 # ===== 工具钩子 =====
+# mise（runtime + CLI + build；与 brew 平级，见 tools/mise.md）
+eval "$(mise activate zsh)"
 # ===== 提示符：Starship =====
 eval "$(starship init zsh)"
