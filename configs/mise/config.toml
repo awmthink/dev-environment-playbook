@@ -1,0 +1,36 @@
+# configs/mise/config.toml — 全局默认（跨平台）
+#
+# 落地到 ~/.config/mise/config.toml。项目级 override 用项目根的 mise.toml。
+# 编排见 scripts/bootstrap.sh。职责边界见 tools/mise.md。
+# 注意：所有工具必须在 [tools] 表下，否则 mise 报 "unknown field" 不装。
+
+[tools]
+
+# ===== runtime（uv 与 python 都归 mise 管；rust 走 rustup）=====
+node = { version = "24", postinstall = "corepack enable" }   # LTS；corepack 提供 pnpm
+python = "3.12"   # 解释器由 mise 默认 backend 装
+uv = "latest"     # uv 二进制（aqua:astral-sh/uv 预编译）；它是 python 的项目 venv/依赖引擎（与 mise 装 python 相互独立）
+go = "1.26"
+rust = "1.97"     # core:rust 底层 rustup
+
+# ===== CLI 工具（aqua/ubi backend，预编译，musl 静态版跨 glibc）=====
+rg = "latest"
+jq = "latest"
+starship = "latest"
+fzf = "latest"
+tmux = "latest"          # aqua:tmux/tmux-builds（预编译 linux+macos）
+# neovim 不入 mise：官方只发 glibc 动态链接版，老 distro(CentOS 8 glibc<2.32) 跑不了。
+#   改由 bootstrap.sh 处理（现代 glibc/mac 拉官方二进制；老 glibc 源码编译）→ ~/.local/bin。
+
+# ===== build 工具 =====
+cmake = "latest"
+ninja = "latest"
+
+# ===== LSP（npm backend，随 node）=====
+"npm:pyright" = "latest"
+"npm:@vtsls/language-server" = "latest"
+# gopls（Go LSP）：mise registry 无、go: backend 待验证——暂不入 config，
+#   项目内 `go install golang.org/x/tools/gopls@latest` 或后续验证后再加。
+
+# 注：编译器(llvm)、git、CUDA、GUI/字体 不在此文件——
+#   mac=CLT(apple clang)+brew cask；linux=per-user llvm 预编译 tarball + git 源码（见 bootstrap.sh）。

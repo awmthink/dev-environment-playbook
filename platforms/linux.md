@@ -11,6 +11,7 @@
 | Ubuntu / Debian | apt | |
 | Arch | pacman / yay | |
 | Fedora | dnf | |
+| CentOS / RHEL 8+ | dnf（EOL 后需切 vault 源） | GPU 服务器常见；老版 gcc/llvm/cmake 偏旧 → 走 mise + per-user llvm（见下） |
 
 ## 通用约定
 - **开发工具优先 user-local 自管**：发行版 apt/dnf/yum 版本普遍偏旧，开发工具（git/node/go/rust/uv 等）不依赖系统源，装到用户目录自行管理版本（见下方「user-local 包管理」与各 `tools/*.md`）。
@@ -30,8 +31,12 @@
 ## user-local 包管理（开发工具）
 > Linux 发行版源版本偏旧，开发工具用以下方式装到用户目录、自行管理版本。
 
-- **Linuxbrew**：Homebrew 的 Linux 支持，无 sudo、装用户目录，用法与 macOS 完全一致。作为开发工具的统一入口（见 `tools/homebrew.md`）。装到 `/home/linuxbrew/.linuxbrew`（多用户共享）或 `~/.homebrew`（纯用户隔离）。
-- **语言运行时**：node → nvm/fnm、go → Linuxbrew + `GOTOOLCHAIN`、python → uv、rust → rustup——都比发行版新，user-local（不再用 mise，见 `tools/node.md` 弃用说明）。
+- **mise（主力）**：runtime（node/python/go/rust）+ CLI（rg/jq/starship/fzf/tmux/neovim）+ build（cmake/ninja）全部声明在 `configs/mise/config.toml`，per-user 装在 `~/.local/share/mise`。跨平台与 macOS 一致（见 `tools/mise.md`）。
+- **不在 Linux 用 brew**：brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户共享服务器别扭），dev 工具改由 mise 接管。brew 退回 macOS 专属（cask + 字体）。
+- **per-user `~/.local`（mise 之外）**：
+  - **编译器**：预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，CUDA 12.8 要 clang<20）——LLVM 不发 macOS 预编译、且 mise-llvm 走源码编译太慢，故 Linux 走 per-user 预编译（见 `tools/c-cpp.md`）。
+  - **git**：源码编译（~1min，两端统一版本；上游无预编译，不进 mise）。
+  - 见 `scripts/bootstrap.sh` 自动安装。
 - **单文件 CLI**：`cargo install` / `go install` / `uv tool install`，产物进对应 bin 目录。
 
 ## 常用探测命令
