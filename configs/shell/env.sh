@@ -7,13 +7,17 @@ export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
 # ===== 编辑器 / 分页器 =====
-export EDITOR=vim
+export EDITOR=nvim
 export VISUAL="$EDITOR"
 export PAGER=less
 export LESS=-RiF   # -R 颜色 / -i 搜索忽略大小写 / -F 一屏即退
 
 # ===== 颜色 =====
 export CLICOLOR=1
+
+# ===== Python / uv =====
+# 只用 uv 管理的 python（tools/python.md）：避免项目落到系统/brew python 上，保证解释器跨机器一致
+export UV_PYTHON_PREFERENCE=only-managed
 
 # ===== 通用 PATH（跨平台） =====
 export PATH="$HOME/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:/usr/local/bin:$PATH"
