@@ -37,6 +37,17 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 
 ## 参考
 - `configs/ghostty/config`（只读实物；本机落地在 `~/.config/ghostty/config`）
+- `configs/ghostty/terminfo/xterm-ghostty`（terminfo 源文件，见下方「远程登录」）
+
+## 远程登录（SSH）
+Ghostty 会把 `TERM=xterm-ghostty` 传给 SSH 目标机。ncurses **6.5-20241228 起**才内置该条目，旧发行版（如 CentOS 8 的 ncurses 6.1）的 terminfo 库里没有，于是 `clear` 等报 `terminals database is inaccessible` / `unknown terminal type`。
+
+- **首选**：把条目装到目标机用户目录（免 sudo、符合平台 user-local 约定），一劳永逸、保留 Ghostty 全部能力：
+  ```sh
+  tic -x configs/ghostty/terminfo/xterm-ghostty
+  ```
+  `tic` 默认写系统库、无权限时落到 `~/.terminfo`；如需强制 user-local 可设 `TERMINFO=~/.terminfo`。源文件由官方 `src/terminfo/ghostty.zig` 生成并入库，新机器不必再从网络拉取。
+- **备选**：SSH 配置 `SetEnv TERM=xterm-256color`（OpenSSH 8.7+）。零安装，但丢失彩色下划线、真彩检测等 Ghostty 增强能力。
 
 ## 验证
 > 在 **Ghostty 窗口内**运行（Ghostty 会把自身注入 PATH，裸 `ghostty` 可用）；从其它终端（iTerm 等）跑需换成完整路径 `/Applications/Ghostty.app/Contents/MacOS/ghostty`。
@@ -45,4 +56,11 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 ghostty --version                       # 期望：>= 1.3（stable）
 ghostty +list-themes | grep -i aura     # 期望：列出 Aura
 # 打开新 Ghostty 窗口：确认字体为 Maple Mono NF CN、配色为 Aura Dark
+```
+
+远程登录后的验证：
+
+```sh
+infocmp -x xterm-ghostty >/dev/null && echo OK   # 期望：OK
+clear                                            # 期望：清屏无报错
 ```
