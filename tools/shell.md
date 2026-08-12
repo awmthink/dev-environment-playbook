@@ -23,7 +23,7 @@ zsh：macOS 默认、生态成熟、补全强；bash：服务器普遍、脚本�
 - 历史：`HISTFILE` / `HISTSIZE` / `SAVEHIST`、`setopt SHARE_HISTORY` 共享历史。
 - 补全：启用 `compinit`；按需补全脚本放 `~/.config/zsh/completions`。
 - 别名：少量高频（`ll`、`vim=nvim`）；不用 git 别名（习惯原生命令），其余交给工具。
-- **各语言环境按需 source**：node/python/go/rust 的 PATH 由各自工具(mise/uv/rustup)注入，rc 里只负责调用它们的初始化钩子。
+- **各语言环境按需 source**：node 由 brew force-link 进 `/opt/homebrew/bin`（node@24，不用版本管理器）；python → uv、rust → rustup（`~/.cargo/bin`，env.sh 已覆盖）、go → brew（多版本走 `GOTOOLCHAIN`）。rc 不再为版本管理器写 init 钩子（弃用 mise）。
 - **user-local bin 进 PATH**：Linux 下优先 `~/.local/bin`（详见 `platforms/linux.md` 的安装目录约定），加上 `~/.cargo/bin`、`~/go/bin` 等；macOS 下 Homebrew 路径由 brew 处理。
 
 服务器端 `.bashrc` 为精简版：基础别名 + 历史 + 共用 env。

@@ -13,7 +13,7 @@
 | Shell (zsh/bash) | `shell.md` | 已写 |
 | Starship | `starship.md` | 已写（提示符） |
 | 网络代理 | `proxy.md` | 已写 |
-| Node.js + pnpm | `node.md` | 已写（mise + corepack） |
+| Node.js + pnpm | `node.md` | 已写（brew node@24 + corepack） |
 | Python + uv | `python.md` | 已写 |
 | Go | `go.md` | 已写 |
 | Rust | `rust.md` | 已写 |
@@ -32,6 +32,10 @@
 |------|------|------|
 | ripgrep (rg) | `brew install ripgrep` | 全文搜索（nvim `:grep` / shell） |
 | jq | macOS 自带；`brew install jq` | JSON 处理 |
+| gh | `brew install gh` | GitHub CLI（装后 `gh auth login`） |
+| ffmpeg | `brew install ffmpeg` | 音视频录制 / 转码 / 流处理 |
+| graphviz | `brew install graphviz` | 图可视化（dot） |
+| lftp | `brew install lftp` | 高级文件传输（FTP/HTTP/SFTP，镜像 + 断点续传） |
 
 ## 写作要点（给人和 agent）
 - 写**意图与理由**，不是只贴 dotfile。

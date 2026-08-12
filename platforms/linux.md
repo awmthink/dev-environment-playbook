@@ -24,7 +24,6 @@
   - `~/.local/bin`（通用首选）
   - `~/.cargo/bin`（Rust / rustup）
   - `~/go/bin`（`go install` 产物）
-  - `~/.local/share/mise/shims`（若用 mise）
 - 安装脚本默认目标为 `/usr/local/bin` 时，能加 `--prefix` / `-b` 等参数就改到 `~/.local`。
 - `~/.local/bin` 要在 PATH **靠前**，避免被系统旧版本覆盖；`.profile` 默认会自动加，确认即可。
 
@@ -32,7 +31,7 @@
 > Linux 发行版源版本偏旧，开发工具用以下方式装到用户目录、自行管理版本。
 
 - **Linuxbrew**：Homebrew 的 Linux 支持，无 sudo、装用户目录，用法与 macOS 完全一致。作为开发工具的统一入口（见 `tools/homebrew.md`）。装到 `/home/linuxbrew/.linuxbrew`（多用户共享）或 `~/.homebrew`（纯用户隔离）。
-- **语言运行时**：mise（node/go 等）、uv（python）、rustup（rust）——都比发行版新，user-local。
+- **语言运行时**：node → nvm/fnm、go → Linuxbrew + `GOTOOLCHAIN`、python → uv、rust → rustup——都比发行版新，user-local（不再用 mise，见 `tools/node.md` 弃用说明）。
 - **单文件 CLI**：`cargo install` / `go install` / `uv tool install`，产物进对应 bin 目录。
 
 ## 常用探测命令

@@ -6,14 +6,14 @@
 编译型、并发模型好、CLI 生态强；适合写工具与服务。
 
 ## 版本约束
-- Go：latest stable（按需通过版本管理器锁版本）
+- Go：latest stable（macOS/Linux brew 直装；多版本走原生 `GOTOOLCHAIN`，不用版本管理器）
 
 ## 安装
 
 | 平台 | 方式 |
 |------|------|
-| macOS | `brew install go`；或 `mise install go@latest` |
-| Linux | `apt install golang`（可能偏旧）/ `mise install go@latest`（推荐） |
+| macOS | `brew install go`（多版本走原生 `GOTOOLCHAIN`） |
+| Linux | `apt install golang`（可能偏旧）/ Linuxbrew `brew install go`（推荐，与 macOS 一致） |
 
 ## 配置思路
 - `GOROOT` / `GOPATH` 用默认即可；`$(go env GOPATH)/bin` 加入 PATH。

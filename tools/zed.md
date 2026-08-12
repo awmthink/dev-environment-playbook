@@ -9,7 +9,7 @@
 
 ## 版本约束
 - 版本：>= 1.0（stable channel；当前实测 **1.14.2**）
-- 更新：由 brew cask 统一管理（保持最新 stable）
+- 更新：cask 为 `auto_updates` flavor——brew 负责首次安装 / `brew upgrade` 不会主动升级它，**Zed 自带更新器**保持最新 stable。仍属 brew 收管（`brew list --cask` 可见、可 `brew uninstall --cask zed` 干净卸载）。
 
 ## 安装
 
@@ -18,7 +18,7 @@
 | macOS | `brew install --cask zed` |
 | Linux | 官方 tarball / 预览版（按需） |
 
-> macOS 已知坑（与 Ghostty 类似）：cask 只装 `Zed.app`，**不主动把 `zed` CLI 链进 PATH**。需在 Zed 内手动安装 CLI：打开 Zed → `Cmd+Shift+P` → **`zed: install cli`**，它会在 `/usr/local/bin/zed` 建软链指向 `/Applications/Zed.app/Contents/MacOS/cli`。之后 `zed .` / `git core.editor=zed` 才可用。**未装 CLI 时 `which zed` 找不到，不代表 App 没装。**
+> macOS cask 现已**自动把 `zed` CLI 链到 `/opt/homebrew/bin/zed`**（指向 `/Applications/Zed.app/Contents/MacOS/cli`），无需再手动 `zed: install cli`。早期版本（旧 cask）曾只装 App 不链 CLI，需在 Zed 内 `Cmd+Shift+P → zed: install cli` 建软链到 `/usr/local/bin/zed`——该手动软链现已冗余（PATH 上被 `/opt/homebrew/bin/zed` 覆盖），若历史遗留存在可忽略或 `sudo rm` 清理。`zed .` / `git core.editor=zed` 直接可用。
 
 ## 配置位置
 - 设置：`~/.config/zed/settings.json`
@@ -51,7 +51,7 @@
 
 ## 验证
 ```sh
-zed --version          # 期望：>= 1.0（CLI 已 install cli 才有此命令）
-which zed              # 期望：/usr/local/bin/zed
+zed --version          # 期望：>= 1.0
+which zed              # 期望：/opt/homebrew/bin/zed（cask 自动链入）
 # 启动 Zed：确认 Aura Dark 主题、面板布局生效；Agent 面板不使用
 ```

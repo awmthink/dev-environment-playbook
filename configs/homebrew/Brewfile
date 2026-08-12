@@ -1,0 +1,50 @@
+# configs/homebrew/Brewfile — 参考装机清单（只读实物）
+#
+# 用途：在新机器一键复现 dev-environment-playbook 声明的核心工具。
+#   复现：  brew bundle install --file configs/homebrew/Brewfile
+#   对账：  brew bundle check   --file configs/homebrew/Brewfile
+#   node@24 / rustup 是 keg-only，已标 `link: true`（等价 force-link）。
+#
+# 哲学：本文件**只列 tools/*.md 与 agents/*.md 明确声明**的「跨机器核心」工具，
+#   附注释指向对应 playbook。**机器/工作/个人特定**的工具（ffmpeg、gh、tmux、
+#   cursor、工作 npm 包等）不入此清单，由各机自装——保持「单一事实源」干净。
+#   安装后仍需各 playbook 的额外步骤（force-link、corepack、rustup default、
+#   font/cask 的 CLI 安装等），见各 tools/*.md 的「验证」。
+
+# ===== 版本控制 =====
+brew "git"             # tools/git.md
+brew "git-lfs"         # 已在 git config 配置 lfs filter（tools/git.md）
+
+# ===== Shell / 提示符 =====
+brew "starship"        # tools/starship.md
+
+# ===== 编辑器 / 搜索 =====
+brew "neovim"          # tools/neovim.md（>= 0.11）
+brew "ripgrep"         # nvim :grep + shell；tools/README 基础 CLI
+# 注：jq 走 macOS 自带（tools/README），不单列 brew
+
+# ===== 语言运行时 / 工具链 =====
+brew "node@24", link: true   # tools/node.md（keg-only → force-link；corepack enable 另跑）
+brew "uv"                    # tools/python.md
+brew "go"                    # tools/go.md
+brew "rustup", link: true    # tools/rust.md（keg-only → force-link；rustup default stable 另跑）
+
+# ===== LSP / 构建 =====
+brew "gopls"           # tools/lsp.md（Go LSP；其余 LSP：pyright/vtsls→npm -g、clangd→brew llvm、rust-analyzer→rustup component）
+brew "cmake"           # tools/c-cpp.md
+brew "ninja"           # tools/c-cpp.md（构建执行器，增量构建快于 Make）
+brew "llvm"            # tools/c-cpp.md「LLVM 语言工具」：clang/clangd/clang-format/clang-tidy 全套（keg-only，PATH 前置见 configs/shell/env.sh）
+
+# ===== 常用 / 通用 CLI（装即用，见 tools/README「基础 CLI 工具」）=====
+brew "gh"              # GitHub CLI（装后需 `gh auth login`）
+brew "ffmpeg"          # 音视频录制 / 转码 / 流处理
+brew "graphviz"        # 图可视化（dot / Graphviz 工具链）
+brew "lftp"            # 高级文件传输（FTP/HTTP/SFTP，支持镜像与断点续传）
+
+# ===== GUI 应用（cask）=====
+cask "ghostty"                    # tools/ghostty.md（macOS 主力终端）
+cask "zed"                        # tools/zed.md（GUI 主力 editor）
+
+# ===== 字体 =====
+cask "font-maple-mono-nf-cn"           # profile.md 主力字体（中英混排 / Nerd Font 图标）
+cask "font-jetbrains-mono-nerd-font"   # profile.md 备选字体
