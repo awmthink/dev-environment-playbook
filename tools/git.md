@@ -29,7 +29,7 @@
 - `user.name` / `user.email`：身份，待填（绝不进仓库）
 - `init.defaultBranch = main`：新仓库默认分支
 - `pull.rebase`：默认 false（merge）；若偏好线性历史可设 true（待定）
-- `core.editor`：指向当前主力编辑器（见 `profile.md`）
+- `core.editor`：默认继承 `$EDITOR=nvim`（见 `tools/shell.md` / `configs/shell/env.sh`），无需单独设置。用 nvim 而非 Zed——commit message / rebase 这类编辑场景常在终端 / SSH 下发生，Zed 是 GUI-only、SSH 不可用。
 - `credential.helper`：macOS 用 `osxkeychain`；Linux 用 `cache` 或 libsecret
 - **不设别名**：习惯原生命令（与 `shell.md` 「不用 git 别名」一致）
 

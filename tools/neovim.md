@@ -21,10 +21,10 @@
 | macOS | `brew install neovim` |
 | Linux | `scripts/bootstrap.sh` 按 glibc 分流：glibc >= 2.32 拉官方预编译二进制 → `~/.local/bin/nvim`；老 glibc（< 2.32，如 CentOS 8 的 2.28）源码编译 → `~/.local/bin/nvim` |
 
-> **为什么 Linux 不走 mise/brew**：官方 neovim 预编译二进制 min glibc 2.32，老 distro 跑不了（rg/jq/tmux 有 musl 静态版所以能走 mise，neovim 没有）；brew-on-Linux 在多用户服务器别扭。故 bootstrap 按 glibc 分流。
+> **为什么 Linux 不走 mise/brew**：官方 neovim 预编译二进制 min glibc 2.32，老 distro（CentOS 8 glibc 2.28）跑不了；brew-on-Linux 在多用户服务器别扭。故 bootstrap 按 glibc 分流（新 glibc 拉官方二进制，老 glibc 源码编译）→ `~/.local/bin`。
 
 ## 依赖
-- **ripgrep**：`:grep` 全文搜索 → mise 管（见 `configs/mise/config.toml`）
+- **ripgrep**：`:grep` 全文搜索 → 不进 mise，按平台最 canonical（mac=brew / linux=dnf，见 `platforms/linux.md`）
 - **不依赖**：LSP server（导航交 agent）、任何插件管理器 / Mason、tree-sitter CLI
 
 ## 配置位置

@@ -13,13 +13,13 @@ uv = "latest"     # uv 二进制（aqua:astral-sh/uv 预编译）；它是 pytho
 go = "1.26"
 rust = "1.97"     # core:rust 底层 rustup
 
-# ===== CLI 工具（aqua/ubi backend，预编译，musl 静态版跨 glibc）=====
-rg = "latest"
-jq = "latest"
-starship = "latest"
-fzf = "latest"
-tmux = "latest"          # aqua:tmux/tmux-builds（预编译 linux+macos）
-# neovim 不入 mise：官方只发 glibc 动态链接版，老 distro(CentOS 8 glibc<2.32) 跑不了。
+# ===== CLI 工具不在此文件 =====
+# 按 core principle（不追求安装方法统一），不需要多版本的 CLI 各平台选最 canonical 方式：
+#   mac:  brew formula（见 configs/homebrew/Brewfile）—— rg / jq / fzf / tmux / starship
+#   linux(CentOS 8): 系统版够用 → dnf（jq / rg via EPEL）；不够 → per-user
+#                    tmux 源码编译 ≥3.4（见 tools/tmux.md）、fzf+starship 官方 installer
+# mise 的 declarative 版本管理对它们无价值；详见各 tools/*.md 与 platforms/linux.md。
+# neovim 亦不入 mise：官方只发 glibc 动态链接版，老 disto(CentOS 8 glibc<2.32) 跑不了。
 #   改由 bootstrap.sh 处理（现代 glibc/mac 拉官方二进制；老 glibc 源码编译）→ ~/.local/bin。
 
 # ===== build 工具 =====

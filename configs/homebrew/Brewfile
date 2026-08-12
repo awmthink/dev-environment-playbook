@@ -1,11 +1,20 @@
 # configs/homebrew/Brewfile — 参考装机清单（只读实物）
 #
-# 角色：brew 是 **macOS peer 管理器**，只管 GUI app（cask）+ 字体。
-#   开发工具（runtime / CLI / build）已全部移交 mise（见 configs/mise/config.toml）。
+# 角色：brew 是 **macOS 包管理器**。
+#   - cask：GUI app + 字体（brew 不可替代的部分）
+#   - formula：不需要多版本的 CLI 工具（按 core principle 逐工具评估，macOS 上 brew 最 canonical）。
+#     runtime / build / LSP 仍归 mise（见 configs/mise/config.toml）。
 #   编译器：mac=Xcode CLT，不入 brew（曾用 brew llvm，现移除）。
 #
 #   复现：  brew bundle install --file configs/homebrew/Brewfile
 #   对账：  brew bundle check   --file configs/homebrew/Brewfile
+
+# ===== CLI 工具（不需要多版本；macOS 上 brew 最 canonical）=====
+brew "ripgrep"               # 全文搜索
+brew "jq"                    # JSON 处理
+brew "fzf"                   # 模糊查找（装后跑 $(brew --prefix)/opt/fzf/install 配 keybinds）
+brew "tmux"                  # 多路复用
+brew "starship"              # 提示符（见 tools/starship.md）
 
 # ===== GUI 应用（cask）=====
 cask "ghostty"                    # tools/ghostty.md（macOS 主力终端）

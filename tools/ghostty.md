@@ -17,7 +17,8 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `brew install --cask ghostty` |
-| Linux | 官方 AppImage / 源码构建（较新，按需） |
+
+> Linux 定位为 headless 服务器（见 `platforms/linux.md`），**不装 GUI 终端**。Linux 只作为 Ghostty 的 **SSH 远程登录目标机**——仅需处理 `xterm-ghostty` terminfo（见下方「远程登录（SSH）」），无需安装 Ghostty 本体。
 
 > macOS 已知：该 cask **只装 `Ghostty.app`，不往全局 PATH 链 `ghostty` CLI**（只链了 manpage / shell completion）。但 **Ghostty 启动的 shell 会自动把 `/Applications/Ghostty.app/Contents/MacOS` 注入 PATH**（即 `TERM_PROGRAM=ghostty` 时）——所以在 Ghostty 窗口内裸 `ghostty` 直接可用；只有从 iTerm / Terminal.app 等**别的终端**调用时才需要完整路径。无需为此建软链。
 

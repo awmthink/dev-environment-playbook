@@ -2,6 +2,7 @@
 # 真实文件：~/.zshrc（不软链；agent 按本文件思路生成）
 # 本模板只含跨机器通用的结构；机器特定的 PATH 注入（如 opencode）由本机自行维护。
 # 约定见 tools/shell.md；本地配置（env/proxy/secrets）在 ~/.config/shell/
+# 别名已抽到 configs/shell/env.sh（POSIX，与 .bashrc 共用），本文件只留 shell 专属项。
 
 # ===== 本地配置（幂等 source）=====
 [ -f ~/.config/shell/env.sh ]      && source ~/.config/shell/env.sh
@@ -17,12 +18,8 @@ setopt SHARE_HISTORY HIST_IGNORE_DUPS HIST_REDUCE_BLANKS HIST_VERIFY
 # ===== 补全 =====
 autoload -Uz compinit && compinit
 
-# ===== 别名 =====
-alias ll='ls -lah'
-alias vim='nvim'
-
 # ===== 工具钩子 =====
-# mise（runtime + CLI + build；与 brew 平级，见 tools/mise.md）
+# mise（runtime + build + LSP；macOS 与 Linux 共享，见 tools/mise.md）
 eval "$(mise activate zsh)"
 # ===== 提示符：Starship =====
 eval "$(starship init zsh)"

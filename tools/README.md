@@ -8,11 +8,12 @@
 
 | 工具 | 文件 | 状态 |
 |------|------|------|
-| **mise** | `mise.md` | 已写（版本管理器：runtime + CLI + build，跨平台 per-user） |
-| Homebrew | `homebrew.md` | 已写（**macOS 包管理器**：CLI / GUI app + 字体） |
+| **mise** | `mise.md` | 已写（版本管理器：runtime + build + LSP，跨平台 per-user） |
+| Homebrew | `homebrew.md` | 已写（**macOS 包管理器**：cask（GUI + 字体）+ CLI formula） |
 | Git | `git.md` | 已写（源码编译进 ~/.local，两端统一） |
+| tmux | `tmux.md` | 已写（Linux 源码编译 ≥3.4，mac=brew） |
 | Shell (zsh/bash) | `shell.md` | 已写 |
-| Starship | `starship.md` | 已写（提示符，mise 管） |
+| Starship | `starship.md` | 已写（提示符；mac=brew / linux=官方 installer） |
 | 网络代理 | `proxy.md` | 已写 |
 | Node.js + pnpm | `node.md` | 已写（mise 管 node；pnpm via corepack） |
 | Python + uv | `python.md` | 已写（mise 管 python；uv 作项目引擎） |
@@ -30,14 +31,17 @@
 
 ## 基础 CLI 工具（装即用，无独立 playbook）
 
-| 工具 | macOS | Linux | 用途 |
+> 不需要多版本、按 core principle 各平台选最 canonical 方式（mac=brew formula；linux 见 `platforms/linux.md`）。
+
+| 工具 | macOS | Linux（CentOS 8） | 用途 |
 |------|-------|-------|------|
-| ripgrep (rg) | brew | mise | 全文搜索（nvim `:grep` / shell） |
-| jq | brew | mise | JSON 处理 |
+| ripgrep (rg) | brew | `dnf install ripgrep`（EPEL） | 全文搜索（nvim `:grep` / shell） |
+| jq | brew | `dnf install jq`（AppStream 1.6 够用） | JSON 处理 |
 | gh | brew | 待定 | GitHub CLI（装后 `gh auth login`） |
-| tmux | brew | mise（aqua:tmux/tmux-builds 预编译） | 多路复用 |
-| fzf | brew | mise | 模糊查找 |
+| fzf | brew（+ 跑 `$(brew --prefix)/opt/fzf/install` 配 keybinds） | 官方 `git clone … ~/.fzf && ~/.fzf/install` | 模糊查找 |
 | cmake / ninja | mise | mise | 构建（见 `tools/c-cpp.md`） |
+
+> tmux / starship 有独立 playbook（见索引）——tmux 在 Linux 源码编译、starship 走官方 installer，非「装即用」。
 
 ## 写作要点（给人和 agent）
 - 写**意图与理由**，不是只贴 dotfile。

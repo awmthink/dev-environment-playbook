@@ -19,7 +19,10 @@
 
 | 平台 | 推荐方式 |
 |------|----------|
-| macOS / Linux | 都走 **mise**：`starship = "latest"` 在 `configs/mise/config.toml` |
+| macOS | `brew install starship`（starship 官方首推的 macOS 装法） |
+| Linux server | 官方脚本：`curl -sS https://starship.rs/install.sh \| sh -s -- -b ~/.local/bin`（per-user、免 sudo、starship-native） |
+
+> starship 是 prompt 工具，不需要多版本管理 → 不进 mise，各平台用各自最 canonical 的方式（见 `platforms/linux.md`）。rc 钩子（`starship init <shell>`）两端相同，见 `tools/shell.md`。
 
 ## 配置思路
 - **钩子**：shell rc 末尾 `eval "$(starship init <shell>)"`（zsh 加到 `.zshrc`，bash 加到 `.bashrc`；见 `shell.md`）。幂等，无副作用。

@@ -20,9 +20,14 @@
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `brew install --cask zed` |
-| Linux | 官方 tarball / 预览版（按需） |
 
-> macOS cask 现已**自动把 `zed` CLI 链到 `/opt/homebrew/bin/zed`**（指向 `/Applications/Zed.app/Contents/MacOS/cli`），无需再手动 `zed: install cli`。早期版本（旧 cask）曾只装 App 不链 CLI，需在 Zed 内 `Cmd+Shift+P → zed: install cli` 建软链到 `/usr/local/bin/zed`——该手动软链现已冗余（PATH 上被 `/opt/homebrew/bin/zed` 覆盖），若历史遗留存在可忽略或 `sudo rm` 清理。`zed .` / `git core.editor=zed` 直接可用。
+> Linux 定位为 headless 服务器（见 `platforms/linux.md`），**不装 GUI 版 Zed**。远程开发由 macOS 端 Zed 客户端通过 Remote 协议直连 Linux 服务器——远端跑的是 headless server 进程，由 Zed 客户端自动拉起，无需按本节步骤在 Linux 上手动安装。
+
+> **`zed` CLI 链接取决于安装方式**：
+> - **brew cask 安装**（本 playbook 推荐路径）：cask 会自动把 `zed` 链到 `/opt/homebrew/bin/zed`（指向 `/Applications/Zed.app/Contents/MacOS/cli`），无需任何手动步骤。
+> - **官方下载安装**（拖 App 到 `/Applications`）：App 本身**不会**自动链 CLI——需在 Zed 内 `Cmd+Shift+P → zed: install cli`，建软链到 `/usr/local/bin/zed`。
+>
+> 链接建好后终端里 `zed .`（在当前目录打开 Zed 项目）即可直接调用；区别只在落点 `/opt/homebrew/bin` 还是 `/usr/local/bin`。若历史上从官方下载迁移到 cask，旧 `/usr/local/bin/zed` 软链可忽略（PATH 上被 `/opt/homebrew/bin/zed` 覆盖）或 `sudo rm` 清理。
 
 ## 配置位置
 - 设置：`~/.config/zed/settings.json`

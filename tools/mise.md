@@ -35,10 +35,11 @@ eval "$(mise activate zsh)"   # bash 换 bash
 
 ## 实操备注：mise 擅长 / 不擅长
 
-mise 管 **runtime（node/python/go/rust）+ 多数 CLI（rg/jq/starship/fzf/tmux）+ build（cmake/ninja）** 很顺。弱项是以下几类（上游没给好预编译，故各 tool doc 另记安装法）：
+mise 管 **需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls）——很顺。以下几类**不进 mise**：
 
+- **不需要多版本的日用品 CLI**（rg / jq / fzf / tmux / starship）：mise 的 declarative 版本管理对它们无价值 → 按 core principle 各平台选最 canonical 方式（mac=brew formula，linux=dnf / 源码 / 官方 installer，见各 `tools/*.md` 与 `platforms/linux.md`）。
 - **编译器（llvm）**：mise 走源码编译，慢 → 各平台另装（mac=Xcode CLT，linux=per-user 预编译 llvm，见 `tools/c-cpp.md`）。
-- **git**：上游只发源码、无预编译 → Linux 源码编译进 `~/.local`（见 `tools/git.md`）。
+- **git / tmux**：上游只发源码、或发行版版本不够 → Linux 源码编译进 `~/.local`（见 `tools/git.md` / `tools/tmux.md`）。
 - **neovim**：官方预编译二进制 min glibc 2.32，老 distro 跑不了 → Linux bootstrap 按 glibc 分流（见 `tools/neovim.md`）。
 
 > 这是**实操取舍**，不是铁律——哪天上游有了好二进制，进 mise 也合理。

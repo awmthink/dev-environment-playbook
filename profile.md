@@ -14,14 +14,14 @@
 
 | 维度 | 偏好 | 理由 |
 |------|------|------|
-| Shell | zsh（macOS + Linux 全平台统一） | 跨平台一致；bash 兼容性不再是问题（脚本走 shebang，与登录 shell 无关） |
+| Shell | macOS zsh · Linux server bash | 登录 shell 属平台基础设施层：server bash 零依赖、救援 / single-user 可用；macOS zsh 取补全 / 历史。substance（PATH / 编辑器 / 别名）共享于 `configs/shell/env.sh`，两端 rc 仅薄壳；脚本走 shebang 与登录 shell 解耦 |
 | 提示符 | Starship | 跨 shell（zsh/bash）统一、自动显示 git/语言版本上下文；替代手写 prompt 与 oh-my-zsh 主题 |
 | 编辑器 | Zed（GUI 主力）· Neovim（terminal 主力） | Zed 不带 agent、只做编辑；Neovim 用于终端 / 远程服务器场景 |
 | Coding agent | opencode · claude-code · codex · qoder-cli | agent 与 editor 职责分离——编辑用 Zed，agent 用专用工具（终端 / CLI） |
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |
-| 系统包管理 | **mise**（跨平台 peer：runtime + CLI + build 工具）+ **brew**（macOS peer：GUI app + 字体）；编译器平台原生（mac=Xcode CLT，linux=per-user llvm 预编译）；CUDA/TensorRT 走外部 | mise 声明式、per-user、mac/linux 一份配置；brew 退守 macOS 不可替代的 cask；编译器因 mise 走源码编译太慢/无插件而留平台原生 |
+| 系统包管理 | **mise**（跨平台 peer：runtime + build + LSP，需多版本/锁版本的工具）+ **brew**（macOS peer：GUI app + 字体 + 不需多版本的 CLI formula）；CLI 日用品按 core principle 逐平台评估（mac=brew / linux=dnf/源码/官方 installer）；编译器平台原生（mac=Xcode CLT，linux=per-user llvm 预编译）；CUDA/TensorRT 走外部 | mise 声明式、per-user、mac/linux 一份配置；brew 管 macOS cask + 字体 + 日用品 CLI formula；编译器因 mise 走源码编译太慢/无插件而留平台原生 |
 | 主题 | Aura Dark | 长时间用眼偏好；指定 Aura Dark 配色 |
 | 字体 | 主力 **Maple Mono NF CN**；备选 **JetBrainsMono Nerd Font**（看腻时切换） | 主力：中英混排对齐、覆盖图标 / 连字 / CJK；备选：经典方正、纯 ASCII 区最稳 |
 | 键位 | 不改键位，保持系统默认 | 跨机器无需额外配置 |

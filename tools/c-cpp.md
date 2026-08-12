@@ -3,7 +3,7 @@
 > 性能 / 系统层与 GPU 算法（CUDA）。**编译器平台原生（不进 mise）**：mac=Xcode CLT(Apple clang)，linux=per-user 预编译 llvm；**gcc 弃用**（clang 通吃，含 CUDA host compiler）；cmake/ninja 走 mise。
 
 ## 为什么这样分工
-- mise 管 runtime/CLI/build 很强，但**编译器是弱项**：llvm 在 mise 走源码编译（慢）；无可用 gcc 插件。
+- mise 管 runtime/build/LSP 很强，但**编译器是弱项**：llvm 在 mise 走源码编译（慢）；无可用 gcc 插件。
 - LLVM 官方发 **Linux 预编译**（快），但**不发 macOS 预编译**；且 macOS 编译绕不开 Xcode CLT（SDK 只在 CLT 里）。
 - → 编译器留平台原生（最快、最稳），mise 专注 cmake/ninja + dev 工具。
 

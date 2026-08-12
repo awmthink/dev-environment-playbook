@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # scripts/bootstrap.sh — 新机器一键建环境（编排多层声明）
 #
-# 架构（见 tools/mise.md）：
-#   mise   (peer, 跨平台): runtime + CLI + build       ← Layer 1
-#   brew   (peer, macOS):   GUI app + 字体             ← Layer 2 (mac only)
-#   per-user ~/.local:      linux llvm 预编译 + git 源码 ← Layer 2 (linux only)
+# 架构（见 tools/mise.md / platforms/linux.md）：
+#   mise   (peer, 跨平台): runtime + build + LSP            ← Layer 1
+#   brew   (peer, macOS):   GUI app + 字体 + CLI formula    ← Layer 2 (mac only)
+#   per-user ~/.local:      linux llvm 预编译 + git/tmux 源码 ← Layer 2 (linux only)
 #   外部:                   CUDA/TensorRT（见 tools/cuda.md，本脚本不管）
 #
 # 幂等：重复跑不出错。破坏性操作前会打印并不自动继续。
@@ -24,7 +24,7 @@ say "Layer 0 — 前置检查（平台=$PLATFORM 架构=$ARCH）"
 command -v curl >/dev/null || { echo "需要 curl"; exit 1; }
 
 # ---------- Layer 1: mise ----------
-say "Layer 1 — mise（runtime + CLI + build）"
+say "Layer 1 — mise（runtime + build + LSP）"
 if ! command -v mise >/dev/null; then
   curl -LsSf https://mise.run | sh
 fi
@@ -54,7 +54,7 @@ fi
 
 # ---------- Layer 2: per-user llvm + git (Linux only) ----------
 if [ "$PLATFORM" = Linux ]; then
-  say "Layer 2 (Linux) — per-user llvm 预编译 + git 源码（进 ~/.local）"
+  say "Layer 2 (Linux) — per-user llvm 预编译 + git/tmux 源码（进 ~/.local）"
   mkdir -p ~/.local
 
   # llvm 18.1.8（CUDA 12.8 要 clang<20；选老 glibc 构建以兼容更广的发行版，含 CentOS 8）
@@ -103,6 +103,31 @@ if [ "$PLATFORM" = Linux ]; then
     rm -rf "$TMP"
   fi
   echo "  → git 装好：~/.local/bin/git $GIT_VER"
+
+  # tmux ≥3.4（CentOS 8 AppStream 3.1c 不够新；见 tools/tmux.md）。构建依赖（sudo 装一次）：libevent-devel + ncurses-devel。
+  TMUX_VER=3.5a
+  if ! ~/.local/bin/tmux -V 2>/dev/null | grep -q "$TMUX_VER"; then
+    missing=""
+    echo "#include <event2/event.h>" | ${CC:-cc} -E - >/dev/null 2>&1 || missing="$missing libevent-devel"
+    echo "#include <ncurses.h>"       | ${CC:-cc} -E - >/dev/null 2>&1 || missing="$missing ncurses-devel"
+    if [ -n "$missing" ]; then
+      echo "  ⚠ tmux 源码编译缺少构建依赖：$missing"
+      echo "    CentOS/RHEL: sudo dnf install libevent-devel ncurses-devel"
+      echo "    Ubuntu/Debian: sudo apt install libevent-dev libncurses-dev"
+      echo "    装好依赖后重跑本脚本。"
+      exit 1
+    fi
+    TMP=$(mktemp -d)
+    curl -fL "https://github.com/tmux/tmux/releases/download/$TMUX_VER/tmux-$TMUX_VER.tar.gz" -o "$TMP/tmux.tar.gz"
+    tar -xf "$TMP/tmux.tar.gz" -C "$TMP"
+    # 用刚装的 clang 编译 tmux（不依赖系统 gcc）
+    ( cd "$TMP/tmux-$TMUX_VER" \
+        && ./configure --prefix="$HOME/.local" CC=clang \
+        && make -j"$(nproc)" \
+        && make install )
+    rm -rf "$TMP"
+  fi
+  echo "  → tmux 装好：~/.local/bin/tmux $(~/.local/bin/tmux -V 2>/dev/null || echo '?')"
 fi
 
 # ---------- neovim（不进 mise：官方二进制 min glibc 2.32，老 distro 要源码编译）----------
@@ -154,6 +179,7 @@ mise current
 if [ "$PLATFORM" = Linux ]; then
   ~/.local/llvm-18.1.8/bin/clang --version | head -1
   ~/.local/bin/git --version
+  ~/.local/bin/tmux -V
 else
   clang --version | head -1          # mac: Xcode CLT 的 apple clang
   command -v git && git --version

@@ -15,6 +15,10 @@ export LESS=-RiF   # -R 颜色 / -i 搜索忽略大小写 / -F 一屏即退
 # ===== 颜色 =====
 export CLICOLOR=1
 
+# ===== 别名（POSIX，zsh / bash 共用；从各 rc 抽出以去重）=====
+alias ll='ls -lah'
+alias vim='nvim'
+
 # ===== Python / uv =====
 # 只用 uv 管理的 python（tools/python.md）：避免项目落到系统/brew python 上，保证解释器跨机器一致
 export UV_PYTHON_PREFERENCE=only-managed
@@ -43,7 +47,7 @@ if [ "$(uname)" = Linux ]; then
   export CC=clang CXX=clang++
 fi
 
-# ===== mise（runtime + CLI + build 的 PATH 与版本切换）=====
+# ===== mise（runtime + build + LSP 的 PATH 与版本切换）=====
 # init 钩子放各 shell rc（需指定 shell 类型）：
 #   zsh: eval "$(mise activate zsh)"    bash: eval "$(mise activate bash)"
 # 这里只确保 mise 二进制可解析（~/.local/bin 已在上面的通用 PATH）
