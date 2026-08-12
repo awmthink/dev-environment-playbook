@@ -5,14 +5,18 @@
 ## 为什么单独成章
 CUDA 工具链不属于 brew/mise 任何一方（brew 无 cuda formula、mise 无 nvcc），且**版本耦合严格**（驱动 ↔ CUDA ↔ host compiler ↔ PyTorch），踩坑成本高，需要专门记录版本组合与验证。
 
-## 版本约束（按机器实际填；下为示例组合）
+## 最低版本要求（按机器实际填；下为示例组合）
 - GPU 架构：示例 sm_75（如 T4）；按 `nvidia-smi` 实际填，cmake 用 `CMAKE_CUDA_ARCHITECTURES`
 - 驱动 / CUDA Toolkit / TensorRT：版本需互相 + 与 PyTorch 对齐
 - **host compiler：clang 18.1.8**（CUDA 12.x 要求 clang<20；见 `tools/c-cpp.md`）
 
 > CUDA 与 host compiler 兼容区间必须对齐（CUDA 12.8：gcc ≤13.2、clang <20）。**用 clang**，不用 gcc。
 
-## 来源（按机器选其一）
+## 版本与安装策略
+
+**多版本需求：否（单机通常一个版本）**——与驱动、PyTorch 强耦合，不轻易并存。需要多版本时用 user-local runfile 装到 `~/cuda-<ver>` 各目录，靠环境变量（`CUDAToolkit_ROOT` 等）切换；优先用集群预装的固定版本，自管为下策。驱动只装一个（高版本驱动向上兼容多个 CUDA toolkit 版本）。
+
+**来源（按机器选其一）**：
 
 | 来源 | 适用 | 说明 |
 |------|------|------|

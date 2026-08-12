@@ -7,14 +7,18 @@
 
 > **不用 Zed 的 agent 功能**：内置 Agent 模式、`context_servers`（MCP）、`language_models`（LLM provider）都不配置——这些能力分散到专用 agent 工具，职责清晰、各取所长。Zed 只做编辑器。
 
-## 版本约束
+## 最低版本要求
 - 版本：>= 1.0（stable channel；当前实测 **1.14.2**）
 - 更新：cask 为 `auto_updates` flavor——brew 负责首次安装 / `brew upgrade` 不会主动升级它，**Zed 自带更新器**保持最新 stable。仍属 brew 收管（`brew list --cask` 可见、可 `brew uninstall --cask zed` 干净卸载）。
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
+**多版本需求：否**——编辑器全局单一即可；自带更新器维持最新 stable。
+
+**各平台安装**：
+
+| 平台 | 推荐方式 |
+|------|----------|
 | macOS | `brew install --cask zed` |
 | Linux | 官方 tarball / 预览版（按需） |
 

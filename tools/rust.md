@@ -5,14 +5,18 @@
 ## 为什么用
 性能 + 安全；适合写高性能工具 / 组件。mise 统一声明版本（跨平台一致），rustup 作 engine 保留其完整能力（component 管理、toolchain 切换）。
 
-## 版本约束
+## 最低版本要求
 - 工具链：stable 默认（mise 管；rustup engine）；按项目需要可加 nightly
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
-| macOS / Linux | 都走 **mise**：`rust = "1.97"` 在 `configs/mise/config.toml`；`mise install` 即装（mise 的 rust backend 底层调 rustup） |
+**多版本需求：按项目**——项目根放 `rust-toolchain.toml`（rustup 机制），进目录自动切 channel / 版本。mise 管全局默认 stable；rustup 支持多 toolchain 并存（stable / nightly / 特定版本）。component（rust-analyzer 等）跟随各 toolchain，`rustup component add` 按需装。
+
+**各平台安装**（多版本需求 → 走 mise/rustup）：
+
+| 平台 | 推荐方式 |
+|------|----------|
+| macOS / Linux | 都走 **mise**：`rust = "1.97"` 在 `configs/mise/config.toml`；`mise install` 即装（底层调 rustup） |
 
 > mise 的 rust backend **就是 rustup**：`rust = "1.97"` 会用 rustup 装该 toolchain。装完后 `rustup component add rust-analyzer`、`rustup default stable` 等命令照常可用。cargo 产物进 `~/.cargo/bin`（PATH 见 `configs/shell/env.sh`）。
 

@@ -5,20 +5,23 @@
 ## 为什么用
 编译型、并发模型好、CLI 生态强；适合写工具与服务。mise 统一声明版本（跨平台一致）。
 
-## 版本约束
-- Go：latest stable（mise 管；多版本走 mise 项目级 override）
+## 最低版本要求
+- Go：latest stable（mise 管）
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
+**多版本需求：基本不需要手动管**——Go 1.21+ 的 `toolchain` 机制按 `go.mod` 的 `go` / `toolchain` 行自动下载匹配版本（`GOTOOLCHAIN=auto`，默认开）。mise 只管全局默认；项目需要别的版本靠 `go.mod` 驱动，不用切 mise。极端情况才在项目 `mise.toml` 写 `go = "1.25"`。
+
+**各平台安装**：
+
+| 平台 | 推荐方式 |
+|------|----------|
 | macOS / Linux | 都走 **mise**：`go = "1.26"` 在 `configs/mise/config.toml` |
 
 ## 配置思路
 - `GOROOT` / `GOPATH` 用默认即可；`$(go env GOPATH)/bin` 加入 PATH（见 `configs/shell/env.sh`）。
 - 国内加速：`go env -w GOPROXY=https://goproxy.cn,direct`（与代理二选一）。
 - `GO111MODULE=on`（现代默认）。
-- 多版本：项目 `mise.toml` 里 `go = "1.25"` override 全局。
 
 ## 参考
 - `configs/mise/config.toml`（go 声明）

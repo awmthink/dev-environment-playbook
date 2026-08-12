@@ -7,7 +7,7 @@
 - LLVM 官方发 **Linux 预编译**（快），但**不发 macOS 预编译**；且 macOS 编译绕不开 Xcode CLT（SDK 只在 CLT 里）。
 - → 编译器留平台原生（最快、最稳），mise 专注 cmake/ninja + dev 工具。
 
-## 版本约束
+## 最低版本要求
 - **clang/llvm**：linux 用 **18.1.8** 预编译（CUDA 12.8 要求 clang<20；选老 glibc 构建兼容更广，含 CentOS 8）；mac 用 Xcode CLT 自带 Apple clang（版本跟随 Xcode）
 - **gcc**：**不装**（clang 高度 gcc 兼容；CUDA 也用 clang 当 host；某项目硬要 gcc 时临时 devtoolset/源码，不入全局）
 - CUDA Toolkit：按 GPU / 驱动匹配（通常 latest 稳定分支，Linux GPU 机才有，见 `tools/cuda.md`）
@@ -28,10 +28,14 @@
 - **macOS**：clangd / clang-format 随 Xcode CLT（`/usr/bin/clangd`）；要 clang-tidy 或更新 clang → 临时装 brew llvm（不入 mise）。
 - **Linux**：clang / clangd / clang-format / clang-tidy 全在 `~/.local/llvm-18.1.8/bin`（同一份预编译 tarball 给齐，版本一致）。
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 命令 |
-|------|------|
+**多版本需求：否（clang 锁 18.1.8）**——CUDA 12.8 兼容区间 clang<20，全局单一，一般不切版本。极少需要多版本 clang；某项目硬要别的版本时临时 devtoolset / 源码另装，不入全局。cmake/ninja 跟随 mise，可项目级 override（`mise.toml`）。
+
+**各平台安装**（编译器平台原生，不进 mise；cmake/ninja 走 mise）：
+
+| 平台 | 推荐方式 |
+|------|----------|
 | macOS | Xcode CLT（见 `platforms/macos.md`）；cmake/ninja 走 mise（`scripts/bootstrap.sh`） |
 | Linux | `scripts/bootstrap.sh` 装 per-user llvm 18.1.8 + cmake/ninja（mise）；CUDA 见 `tools/cuda.md` |
 

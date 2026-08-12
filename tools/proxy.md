@@ -5,11 +5,12 @@
 ## 为什么用
 国内网络下，部分包源 / 模型 API / 文档需要代理；但地址随网络 / 机器变化，还可能含凭据，不能固化。
 
-## 版本约束
+## 最低版本要求
 - 不适用（配置类）
 
-## 安装
-代理客户端本身（如 clash / mihomo / surge）若需要，可单独建 `tools/<client>.md`。
+## 版本与安装策略
+
+**多版本需求：不适用**（配置类）。代理客户端本身（如 clash / mihomo / surge）若需要，可单独建 `tools/<client>.md`。
 
 ## 配置思路
 **地址放本地、未跟踪文件**：`~/.config/shell/proxy.env`（已被 `.gitignore` 覆盖），shell 启动时 `source`。

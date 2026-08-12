@@ -5,13 +5,17 @@
 ## 为什么用
 zsh：补全强、生态成熟、跨平台一份 rc；bash 兼容性不再构成约束（脚本走自身 shebang，与登录 shell 解耦）。
 
-## 版本约束
+## 最低版本要求
 - zsh：>= 5.5（macOS 自带 / brew / Linux `dnf install zsh`；CentOS 8 dnf 版 5.5.1 够用）
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
+**多版本需求：否**——登录 shell 全局单一版本。各语言运行时的多版本由 mise 管，shell 本身不参与。
+
+**各平台安装**：
+
+| 平台 | 推荐方式 |
+|------|----------|
 | macOS | 系统自带 zsh；`brew install zsh` 取新版；`chsh -s /bin/zsh` |
 | Linux | `dnf install zsh`（系统级，进 `/usr/bin/zsh` + `/etc/shells`，可 chsh）；`chsh -s /usr/bin/zsh` |
 

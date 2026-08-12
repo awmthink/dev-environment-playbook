@@ -5,15 +5,21 @@
 ## 为什么用
 算法 / 数据 / 脚本核心语言；uv 极快，一个工具覆盖虚拟环境、依赖、全局 CLI 工具（替代 pipx/poetry/conda 的多数场景）。mise 统一声明版本（跨机器、跨平台一致），uv 负责项目级管理——各取所长。
 
-## 版本约束
-- Python：按项目锁定（mise 管理）；**全局默认 `3.12`**（`configs/mise/config.toml`）
-- uv：latest（mise 管 `uv = "latest"`）
+## 最低版本要求
+- Python：**>= 3.12**（全局默认；项目可按需锁定其它版本）。
+- uv：latest。
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
-| macOS / Linux | 都走 **mise**：`python` / `uv` 均在 `configs/mise/config.toml` 声明，`mise install` 一并装 |
+**多版本需求：是**——不同项目（尤其 ML / 老项目）常要求不同 python。
+
+**管理方式**：mise 管解释器版本（项目 `mise.toml` 锁定，如 `python = "3.11"`，按需下载）；uv 建 per-project venv（`uv venv` / `uv sync`）做依赖隔离；GPU 服务器既有 conda env 与 uv/mise 共存——conda 管自己的 env，uv/mise 管新项目，互不抢占。
+
+**各平台安装**（多版本需求 → 两端都走版本管理器）：
+
+| 平台 | 推荐方式 |
+|------|----------|
+| macOS / Linux | 都走 **mise**：`python` / `uv` 写进 `configs/mise/config.toml`，`mise install` 一并装 |
 
 > uv 是 mise 管的**独立工具**（aqua backend 拉预编译）；它不是 mise 装 python 的 backend——uv 自己有 `uv python` 能力，但 mise 装的解释器与 uv 互不耦合。项目里 `uv sync` 读 `pyproject.toml` / `uv.lock`。
 

@@ -7,14 +7,21 @@
 
 > **不做代码导航**：终端里主要是快改配置 / 写 commit message / 扫一眼文件；仔细读代码、分析函数关系等已交给 agent（opencode / claude-code / codex / qoder-cli），比手按 `gd`/`gr` 更高效。LSP server 仍会装，但仅供 **Zed** 使用（见 `lsp.md`）。
 
-## 版本约束
-- 版本：>= 0.11（当前 **0.12.4**）
-- 安装：**不进 mise**（见下"为什么不在 mise"），由 `scripts/bootstrap.sh` 装：
-  - 现代 glibc（>=2.32）/ macOS：拉官方预编译二进制 → `~/.local/bin/nvim`
-  - 老 glibc（<2.32，如 CentOS 8）：**源码编译** → `~/.local/bin/nvim`（链系统 glibc，能跑）
+## 最低版本要求
+- **>= 0.11**（当前 0.12.4）。0.11+ 才有原生 LSP / treesitter API。
 
-## 为什么不在 mise
-mise 拉的 neovim 是官方 glibc 动态链接版，**min glibc 2.32+**，老 distro（如 CentOS 8 的 2.28）跑不了；rg/jq/tmux 有 musl 静态版所以能跑，neovim 没有。故 neovim 与 git/llvm 同属"官方二进制不够通用"，归 `bootstrap.sh` 按 glibc 分流。
+## 版本与安装策略
+
+**多版本需求：否**——编辑器全局单一版本即可。
+
+**各平台安装**：
+
+| 平台 | 推荐方式 |
+|------|----------|
+| macOS | `brew install neovim` |
+| Linux | `scripts/bootstrap.sh` 按 glibc 分流：glibc >= 2.32 拉官方预编译二进制 → `~/.local/bin/nvim`；老 glibc（< 2.32，如 CentOS 8 的 2.28）源码编译 → `~/.local/bin/nvim` |
+
+> **为什么 Linux 不走 mise/brew**：官方 neovim 预编译二进制 min glibc 2.32，老 distro 跑不了（rg/jq/tmux 有 musl 静态版所以能走 mise，neovim 没有）；brew-on-Linux 在多用户服务器别扭。故 bootstrap 按 glibc 分流。
 
 ## 依赖
 - **ripgrep**：`:grep` 全文搜索 → mise 管（见 `configs/mise/config.toml`）

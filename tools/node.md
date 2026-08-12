@@ -5,17 +5,23 @@
 ## 为什么用
 TypeScript + Vue 栈必备；大量 CLI 工具基于 Node。mise 统一声明版本（跨平台一致、per-user、无需 brew force-link 的 keg-only 处理）。
 
-## 版本约束
-- Node：**LTS，全局单版本**（当前 **24**），由 mise 管
-- pnpm：latest（通过 **corepack** 管理，按项目 `package.json` 的 `packageManager` 字段锁定）
+## 最低版本要求
+- Node：**>= 24（LTS）**，全局单版本。
+- pnpm：latest（通过 **corepack** 管理，按项目 `package.json` 的 `packageManager` 字段锁定）。
 
-## 安装
+## 版本与安装策略
 
-| 平台 | 方式 |
-|------|------|
-| macOS / Linux | 都走 **mise**：`node = { version = "24", postinstall = "corepack enable" }` 在 `configs/mise/config.toml` |
+**多版本需求：基本不需要**——所有项目都用同一 LTS（24），全局单版本即可。个别项目要别的 node：项目根放 `mise.toml`（如 `node = "22"`）override，进目录自动切。pnpm 版本由 corepack 按项目 `package.json` 的 `packageManager` 字段锁定，无需额外版本管理。
 
-> **为什么不用版本管理器（nvm/fnm/mise 之外的）也不再用 brew**：实际开发不切换 node 版本（各项目都用同一 LTS），mise 声明单版本即可，跨平台一致、无需 brew 的 `node@24` keg-only force-link 麻烦。真撞上需要切版本的项目，mise 项目级 `mise.toml` override 成本也很低。
+**管理方式**：仍走版本管理器（mise）——偶尔的项目级 override 需要它，且 brew `node@24` 是 keg-only、需 force-link，不如 mise 干净。
+
+**各平台安装**：
+
+| 平台 | 推荐方式 |
+|------|----------|
+| macOS / Linux | 都走 **mise**：`node = { version = "24", postinstall = "corepack enable" }` 写进 `configs/mise/config.toml` |
+
+> macOS 上若确定永不切换版本、只想最省事，`brew install node` 也行，但后续要项目级换版本时还得再上版本管理器。
 
 ## 配置思路
 - **pnpm 通过 corepack**：node 自带 corepack，`postinstall = "corepack enable"` 后 pnpm/yarn 由 corepack 提供。

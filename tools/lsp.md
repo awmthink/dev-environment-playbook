@@ -15,6 +15,15 @@
 | C/C++ | clangd | **平台原生**：mac=Xcode CLT；linux=`~/.local/llvm-18.1.8/bin`（见 `tools/c-cpp.md`） | 与 clang-format/clang-tidy 同源 |
 | Go | gopls | **待验证**：mise registry 无、go backend 未验证 → 暂在项目内 `go install golang.org/x/tools/gopls@latest` | 验证后再入 `configs/mise/config.toml` |
 
+## 版本与安装策略
+
+**多版本需求：否**——server 版本跟随各自语言运行时（见上方「安装」列），不单独做多版本管理：
+  - pyright / vtsls 随 mise 的 node；
+  - rust-analyzer 跟随 rustup toolchain（`rust-toolchain.toml`）；
+  - clangd 跟随平台 llvm（锁 18.1.8）。
+
+同一语言要多套 server 版本的情况极少；真要时随对应运行时切换即可。各 server 的具体安装方式见上方「servers 清单」表。
+
 ## 配置思路
 - **Zed**：自动检测 PATH 的 server 读代码（纯 editor 定位，无需配置；见 `tools/zed.md`）。
 - **Neovim**：不使用（终端读代码交 agent；见 `tools/neovim.md`）。

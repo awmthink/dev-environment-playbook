@@ -5,20 +5,23 @@
 ## 为什么用
 事实标准；命令行 + 图形工具(lazygit / IDE)生态最全。
 
-## 版本约束
-- 版本：latest（各平台包管理器自带即可）
+## 最低版本要求
+- **>= 2.30**（较新即可）。CentOS 8 自带的 2.27 偏旧，且不认 `http_proxy` 环境变量（需 `git -c http.proxy=...`），是 Linux 上要装新版的主要动机。
 
-## 安装
+## 版本与安装策略
 
-> git **不进 mise**（上游只发源码、无预编译二进制）。**两端都源码编译进 `~/.local`**，由 `scripts/bootstrap.sh` 完成（含依赖检测：make / autoconf / zlib-devel / libcurl-devel 等）。
->
-> 构建：`make configure && ./configure --prefix=... CC=clang && make NO_ICONV=YesPlease all && make install`。`NO_ICONV=YesPlease` 规避某些 distro 的 iconv 链接问题（仅禁用字符集转换，**不影响 `text`/`eol` 行尾规范化**）。依赖不全时脚本退出并打印 dnf/apt 命令；缺依赖期间可用**系统 git 兜底**。
+**多版本需求：否**——各项目不要求特定 git 版本，全局单一即可（故不需要版本管理器，每平台选最轻方案）。
 
-| 平台 | 方式 |
-|------|------|
-| macOS / Linux | `scripts/bootstrap.sh`（源码编译 → `~/.local/bin/git`，版本两端一致） |
+**各平台安装**：
 
-> 为什么不用 distro/brew：发行版版本偏旧（如 CentOS 8 的 2.27）；brew-on-Linux 有多用户问题。源码编译统一两端版本，成本仅 ~1 分钟。
+| 平台 | 推荐方式 |
+|------|----------|
+| macOS | `brew install git`（单用户，brew 版本足够新） |
+| Linux | 源码编译 → `~/.local/bin/git`（发行版偏旧，上游无预编译二进制）。由 `scripts/bootstrap.sh` 完成。 |
+
+> **Linux 源码编译要点**：`make configure && ./configure --prefix=$HOME/.local CC=clang && make NO_ICONV=YesPlease all && make install`。
+> - `NO_ICONV=YesPlease` 规避部分 distro 的 iconv 链接问题（仅禁字符集转换，**不影响 `text`/`eol` 行尾规范化**）。
+> - 依赖（make / autoconf / zlib-devel / libcurl-devel）不全时脚本退出并打印 dnf/apt 命令；缺依赖期间可用**系统 git 兜底**。
 
 ## 配置思路
 <!-- 个人身份信息是机器/账号相关，不要写死进仓库；agent 同步时从本地或向我询问 -->
