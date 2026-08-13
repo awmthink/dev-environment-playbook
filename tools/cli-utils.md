@@ -24,7 +24,7 @@
 | 工具 | macOS | Linux |
 |------|-------|-------|
 | rg | `brew install ripgrep` | GitHub musl 静态 → `~/.local/bin` |
-| jq | `brew install jq` | GitHub 静态单文件 → `~/.local/bin` |
+| jq | **先查系统自带**：macOS 26+ 自带 `/usr/bin/jq`（`jq-1.7.x-apple`），满足 >=1.7 则无需装；否则 `brew install jq` | GitHub 静态单文件 → `~/.local/bin` |
 | fzf | `brew install fzf` | GitHub 单文件 → `~/.local/bin` |
 | fd | `brew install fd` | GitHub musl 静态 → `~/.local/bin` |
 
@@ -65,7 +65,7 @@ install -m 0755 "/tmp/fd-v$FD_VER-x86_64-unknown-linux-musl/fd" ~/.local/bin/fd
 ## 验证
 ```sh
 rg --version | head -1     # 期望：ripgrep 15.x
-jq --version               # 期望：jq-1.8.x
+jq --version               # 期望：>=1.7（macOS 26+ 系统自带 jq-1.7.x-apple 即满足，无需 brew）
 fzf --version              # 期望：0.7x
 fd --version               # 期望：fd 10.x
 echo '{"a":1}' | jq .a     # 期望：1（jq pipe 可用）
