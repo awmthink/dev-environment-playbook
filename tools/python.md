@@ -1,6 +1,6 @@
 # tool: Python
 
-> 算法主力语言。**版本由 mise 锁**（`mise use -g python@3.12`），**uv 作项目 venv / 依赖 / CLI 工具引擎**。两者分工：mise 定解释器版本，uv 管项目。
+> 算法主力语言。**版本由 mise 锁**（>=3.12，`mise use -g python@latest`），**uv 作项目 venv / 依赖 / CLI 工具引擎**。两者分工：mise 定解释器版本，uv 管项目。
 
 ## 为什么用
 算法 / 数据 / 脚本核心语言；uv 极快，一个工具覆盖虚拟环境、依赖、全局 CLI 工具（替代 pipx/poetry/conda 的多数场景）。mise 统一声明版本（跨机器、跨平台一致），uv 负责项目级管理——各取所长。
@@ -19,7 +19,7 @@
 
 | 平台 | 推荐方式 |
 |------|----------|
-| macOS / Linux | 都走 **mise**：`mise use -g python@3.12` + `mise use -g uv@latest`（装 + 锁全局默认） |
+| macOS / Linux | 都走 **mise**：`mise use -g python@latest`（**>=3.12**，取最新稳定版；项目可按需 override） + `mise use -g uv@latest`（装 + 锁全局默认） |
 
 > uv 是 mise 管的**独立工具**（aqua backend 拉预编译）；它不是 mise 装 python 的 backend——uv 自己有 `uv python` 能力，但 mise 装的解释器与 uv 互不耦合。项目里 `uv sync` 读 `pyproject.toml` / `uv.lock`。
 
