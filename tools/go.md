@@ -1,6 +1,6 @@
 # tool: Go
 
-> 后端 / CLI 工具语言之一。**版本由 mise 声明**（`go = "1.26"`）。
+> 后端 / CLI 工具语言之一。**版本由 mise 锁**（`mise use -g go@1.26`）。
 
 ## 为什么用
 编译型、并发模型好、CLI 生态强；适合写工具与服务。mise 统一声明版本（跨平台一致）。
@@ -16,7 +16,7 @@
 
 | 平台 | 推荐方式 |
 |------|----------|
-| macOS / Linux | 都走 **mise**：`go = "1.26"` 在 `configs/mise/config.toml` |
+| macOS / Linux | 都走 **mise**：`mise use -g go@1.26`（装 + 锁全局默认） |
 
 ## 配置思路
 - `GOROOT` / `GOPATH` 用默认即可；`$(go env GOPATH)/bin` 加入 PATH（见 `configs/shell/env.sh`）。
@@ -24,7 +24,6 @@
 - `GO111MODULE=on`（现代默认）。
 
 ## 参考
-- `configs/mise/config.toml`（go 声明）
 - `configs/shell/env.sh`（`GOPATH/bin` PATH）
 
 ## 验证

@@ -39,7 +39,7 @@
 ## user-local 包管理（开发工具）
 > Linux 发行版源版本偏旧，开发工具用以下方式装到用户目录、自行管理版本。
 
-- **mise（主力）**：**需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls），声明在跨平台 `configs/mise/config.toml`，per-user 装在 `~/.local/share/mise`（见 `tools/mise.md`）。CLI 日用品 / 编译器 / git / neovim 不进 mise（见下）。
+- **mise（主力）**：**需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls），各 `tools/*.md` 给出 `mise use -g` 命令，agent 逐卡片检测+安装（config.toml 由 mise 自动维护、不 assemble），per-user 装在 `~/.local/share/mise`（见 `tools/mise.md`）。CLI 日用品 / 编译器 / git / neovim 不进 mise（见下）。
 - **不在 Linux 用 brew**：brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户共享服务器别扭），dev 工具改由 mise + per-user 接管。brew 退回 macOS 专属（cask + 字体 + CLI formula）。
 - **per-user `~/.local`（mise 之外）**：
   - **编译器**：预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，CUDA 12.8 要 clang<20）——LLVM 不发 macOS 预编译、且 mise-llvm 走源码编译太慢，故 Linux 走 per-user 预编译（见 `tools/c-cpp.md`）。

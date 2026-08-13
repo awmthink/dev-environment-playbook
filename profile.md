@@ -35,5 +35,5 @@
 ## 工作流约定
 
 - 借助 coding agent 推进项目；重复性的环境配置 / 同步也交给 agent（见 `README.md` 两类场景）。
-- 语言版本管理：**统一归 mise**（node/python/go/rust 声明在 `configs/mise/config.toml`；python 的 venv/依赖用 **uv** 作 engine、rust 用 **rustup** 作 engine，mise 只声明版本）。不再用 brew/nvm 管运行时；编译器（clang）+ git 不进 mise（见各 `tools/*.md`）。
+- 语言版本管理：**统一归 mise**（node/python/go/rust 各自在 `tools/*.md` 给出 `mise use -g` 命令，agent 逐卡片检测+安装；config.toml 由 mise 自动维护、不手写；python 的 venv/依赖用 **uv** 作 engine、rust 用 **rustup** 作 engine，mise 只锁版本）。不再用 brew/nvm 管运行时；编译器（clang）+ git 不进 mise（见各 `tools/*.md`）。
 - <!-- 待补充：项目目录约定（如 ~/Workspace）、git 提交信息风格等 -->

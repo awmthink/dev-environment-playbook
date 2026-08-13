@@ -2,6 +2,24 @@
 
 每个开发工具一篇 `.md`，记录「我要什么 + 为什么 + 版本 + 验证」。新增工具时复制 `_template.md`。
 
+## agent 工作模式：逐卡片「检测 → 安装」
+
+> **不 assemble 中央 manifest**。agent 按下面的**推荐顺序**逐个读卡片，每张卡片独立完成「检测现状 → 缺/旧则装 → 验证」。mise 的 `~/.config/mise/config.toml` 与 brew 状态由工具在 `use` / `install` 时自行维护，agent 不手写。
+
+### 推荐安装顺序（按依赖分层）
+1. **shell 基座**：`shell.md`（rc / env.sh / PATH / starship 钩子）——一切的前置
+2. **版本管理器**：`mise.md`——runtime/build/LSP 都依赖它
+3. **runtime**（mise）：`node.md` → `python.md`(含 uv) → `go.md` → `rust.md`
+4. **build**（mise）：`c-cpp.md` 的 cmake/ninja
+5. **LSP**（依赖各 runtime）：`lsp.md`（pyright/vtsls 随 node；rust-analyzer 随 rust；gopls 随 go）
+6. **CLI 增强与多路复用**：`cli-utils.md`(rg/jq/fzf) · `zellij.md`
+7. **编译器 / git / 编辑器**（per-user 预编译或源码）：`c-cpp.md`(llvm) · `git.md` · `neovim.md`
+8. **GPU（仅 GPU 机）**：`cuda.md`（最后，依赖 llvm/CUDA 兼容区间）
+9. **macOS 桌面补充**（仅 mac）：`zed.md` · `ghostty.md` · `fonts.md`
+10. **网络**：`proxy.md`（按需）
+
+> 顺序非强制——仅是「依赖在前、叶子在后」的默认走法；agent 按用户请求的「配置 X」跳到对应卡片即可，缺依赖时回上层补。
+
 ## 索引
 
 <!-- 在这里维护工具清单，方便 agent 和你快速定位 -->
@@ -24,6 +42,7 @@
 | Ghostty | `ghostty.md` | 已写（macOS 主力终端） |
 | iTerm2 | — | 备选 / 待写 |
 | Zed（GUI 主力） | `zed.md` | 已写 |
+| 字体（Nerd Font） | `fonts.md` | 已写（macOS cask；主力 Maple Mono NF CN / 备选 JetBrainsMono） |
 | Neovim（terminal 主力） | `neovim.md` | 已写 |
 | LSP servers（跨编辑器） | `lsp.md` | 已写（pyright/vtsls 走 mise；clangd 走平台 llvm） |
 | Docker | — | 待写 |

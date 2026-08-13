@@ -9,11 +9,11 @@
 
 | 语言 | server | 安装 | 备注 |
 |------|--------|------|------|
-| Python | pyright | **mise**（`"npm:pyright"`，随 node） | 类型 / 定义 / 引用 |
-| TypeScript/Vue | vtsls | **mise**（`"npm:@vtsls/language-server"`，随 node） | TS/JS/Vue |
+| Python | pyright | **mise**：`mise use -g npm:pyright@latest`（随 node） | 类型 / 定义 / 引用 |
+| TypeScript/Vue | vtsls | **mise**：`mise use -g npm:@vtsls/language-server@latest`（随 node） | TS/JS/Vue |
 | Rust | rust-analyzer | `rustup component add rust-analyzer` | 跟随 rustup toolchain（见 `tools/rust.md`） |
 | C/C++ | clangd | **平台原生**：mac=Xcode CLT；linux=`~/.local/llvm-18.1.8/bin`（见 `tools/c-cpp.md`） | 与 clang-format/clang-tidy 同源 |
-| Go | gopls | **待验证**：mise registry 无、go backend 未验证 → 暂在项目内 `go install golang.org/x/tools/gopls@latest` | 验证后再入 `configs/mise/config.toml` |
+| Go | gopls | **待验证**：mise registry 无、go backend 未验证 → 暂在项目内 `go install golang.org/x/tools/gopls@latest` | 验证后再进 mise 全局 config |
 
 ## 版本与安装策略
 
@@ -31,8 +31,8 @@
 - **不依赖 Mason**（避免黑盒、版本统一、跨工具共享）。
 
 ## 参考
-- `configs/mise/config.toml`（pyright/vtsls 声明）
 - `tools/c-cpp.md`（clangd 来源）
+- `tools/mise.md`（pyright/vtsls 经 mise 全局 config 声明）
 
 ## 验证
 ```sh

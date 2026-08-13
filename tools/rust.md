@@ -1,6 +1,6 @@
 # tool: Rust
 
-> 系统 / 性能敏感场景语言。**版本由 mise 声明**（`rust = "1.97"`），**底层引擎是 rustup**——mise 只决定 toolchain 版本，rustup 的 `component` / `default` 等机制照旧。
+> 系统 / 性能敏感场景语言。**版本由 mise 锁**（`mise use -g rust@1.97`），**底层引擎是 rustup**——mise 只决定 toolchain 版本，rustup 的 `component` / `default` 等机制照旧。
 
 ## 为什么用
 性能 + 安全；适合写高性能工具 / 组件。mise 统一声明版本（跨平台一致），rustup 作 engine 保留其完整能力（component 管理、toolchain 切换）。
@@ -16,7 +16,7 @@
 
 | 平台 | 推荐方式 |
 |------|----------|
-| macOS / Linux | 都走 **mise**：`rust = "1.97"` 在 `configs/mise/config.toml`；`mise install` 即装（底层调 rustup） |
+| macOS / Linux | 都走 **mise**：`mise use -g rust@1.97`（装 + 锁全局默认；底层调 rustup） |
 
 > mise 的 rust backend **就是 rustup**：`rust = "1.97"` 会用 rustup 装该 toolchain。装完后 `rustup component add rust-analyzer`、`rustup default stable` 等命令照常可用。cargo 产物进 `~/.cargo/bin`（PATH 见 `configs/shell/env.sh`）。
 
@@ -27,7 +27,6 @@
 - LSP：`rustup component add rust-analyzer`（见 `tools/lsp.md`）。
 
 ## 参考
-- `configs/mise/config.toml`（rust 声明）
 - `configs/shell/env.sh`（`~/.cargo/bin` PATH）
 
 ## 验证

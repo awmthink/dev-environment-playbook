@@ -4,7 +4,7 @@
 
 ## 包管理
 - 首选 **Homebrew**（`brew install`）。安装方式见 `tools/homebrew.md`（官方一键脚本，具体命令在彼处）。
-- Brewfile 来源：`configs/homebrew/Brewfile`。可用 `brew bundle install --file configs/homebrew/Brewfile` 批量复现；`brew bundle check` 对账。
+- 不维护中央 Brewfile——各工具的 `brew install` / `brew install --cask` 命令记在对应 `tools/*.md`，按卡片逐个装（装机清单 = 工具卡片的并集）。
 - GUI 应用优先 `brew install --cask`。
 
 ## 开发者基础：Xcode Command Line Tools（CLT）

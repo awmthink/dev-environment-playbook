@@ -39,6 +39,8 @@
 | macOS | Xcode CLT（见 `platforms/macos.md`）；cmake/ninja 走 mise |
 | Linux | per-user 预编译 llvm 18.1.8 + cmake/ninja（mise）；CUDA 见 `tools/cuda.md` |
 
+**cmake/ninja（mise 安装）**：`mise use -g cmake@latest`、`mise use -g ninja@latest`（装 + 锁全局默认），可项目级 `mise.toml` override 锁版本。
+
 ### Linux 安装（per-user llvm 预编译 tarball）
 > 选 **ubuntu-18.04 变体**（老 glibc 构建），兼容 CentOS 8（glibc 2.28）等老发行版。装到 `~/.local/llvm-18.1.8`，由 `configs/shell/env.sh` 前置进 PATH。
 ```sh
