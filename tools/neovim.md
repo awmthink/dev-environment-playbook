@@ -47,6 +47,7 @@ fi
 
 ## 依赖
 - **ripgrep**：`:grep` 全文搜索 → 不进 mise，按平台最 canonical（mac=brew / linux=dnf，见 `platforms/linux.md`）
+- **剪切板 provider**：nvim 自身不含，需外部工具——macOS 自带 `pbcopy`/`pbpaste`；Linux 需 `xclip`（X11）或 `wl-clipboard`（Wayland），否则 `+` 寄存器不生效（yank 进不了系统剪切板）
 - **不依赖**：LSP server（导航交 agent）、任何插件管理器 / Mason、tree-sitter CLI
 
 ## 配置位置
@@ -58,6 +59,7 @@ fi
 - **高亮**：nvim 内置 syntax（默认开启）+ `termguicolors` 真彩色。
 - **格式 / 选项**：行号 + 相对行号、缩进（`expandtab` / `tabstop` / `shiftwidth`）、搜索（`smartcase` / `ignorecase`）、分屏方向、`cursorline`、`scrolloff` 等。
 - **搜索**：`:grep` 走 ripgrep（`grepprg = rg`），结果进 quickfix，`:copen` 查看。
+- **剪切板**：`o.clipboard = "unnamedplus,unnamed"`，yank/delete 默认同步系统剪切板（依赖 provider：macOS=pbcopy，Linux=xclip/wl-copy）。
 - **键位**：仅基础——窗口切换（`<C-h/j/k/l>`）、`<esc>` 清高亮、`<leader>q` 全退。**不设**代码导航键位。
 
 ## 参考
@@ -66,5 +68,8 @@ fi
 ## 验证
 ```sh
 nvim --version | head -1     # 期望：>= 0.11
+# 剪切板联动：nvim 内 yank 一行后，系统剪切板应能取到
+printf 'CLIP_TEST\n' > /tmp/_t.txt && nvim --headless /tmp/_t.txt +'normal! ggyy' +qa && pbpaste   # macOS 期望输出 CLIP_TEST（Linux 换 xclip -o）
+rm -f /tmp/_t.txt
 # 启动 nvim 打开代码文件：确认语法高亮 / 缩进 / :grep 可用
 ```

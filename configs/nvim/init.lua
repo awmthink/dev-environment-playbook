@@ -21,6 +21,8 @@ o.splitright = true
 o.splitbelow = true
 o.termguicolors = true
 o.cursorline = true
+-- 系统剪切板联动：yank/delete 默认进系统剪切板（macOS 走 pbcopy；Linux 需 xclip/wl-copy）
+o.clipboard = "unnamedplus,unnamed"
 -- :grep 走 ripgrep（基础搜索，结果进 quickfix）
 o.grepprg = "rg --vimgrep --no-heading --smart-case"
 o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
