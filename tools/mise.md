@@ -37,7 +37,7 @@ eval "$(mise activate zsh)"   # bash 换 bash
 
 mise 管 **需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls）——很顺。以下几类**不进 mise**：
 
-- **单文件 leaf CLI / 多路复用器**（**rg / jq / fzf / starship / zellij**）：官方/GitHub 预编译二进制最 canonical、最透明 → 直接装到 `~/.local/bin`（linux）/ brew（mac），无需版本管理层。
+- **单文件 leaf CLI / 多路复用器**（**rg / jq / fzf / fd / starship / zellij**）：官方/GitHub 预编译二进制最 canonical、最透明 → 直接装到 `~/.local/bin`（linux）/ brew（mac），无需版本管理层。
 - **编译器（llvm）**：mise 走源码编译，慢 → 各平台另装（mac=Xcode CLT，linux=per-user 预编译 llvm，见 `tools/c-cpp.md`）。
 - **git**：上游只发源码 → Linux 源码编译进 `~/.local`（见 `tools/git.md`）。
 - **neovim**：官方预编译二进制 min glibc 2.32，老 distro 跑不了 → Linux 按 glibc 分流（见 `tools/neovim.md`）。

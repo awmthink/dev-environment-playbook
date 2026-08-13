@@ -13,7 +13,7 @@
 **多版本需求：不适用**（配置类）。代理客户端本身（如 clash / mihomo / surge）若需要，可单独建 `tools/<client>.md`。
 
 ## 配置思路
-**地址放本地、未跟踪文件**：`~/.config/shell/proxy.env`（已被 `.gitignore` 覆盖），shell 启动时 `source`。
+**地址放本地**：`~/.config/shell/proxy.env`（仓库外、不入版本管理），shell 启动时 `source`——但**只定义变量与开关函数，不导出**（代理默认关闭，避免无谓流量/泄漏），需要时 `proxy_on`。
 
 需要统一处理的环境变量：
 - `HTTP_PROXY` / `HTTPS_PROXY` / `ALL_PROXY` / `NO_PROXY`（小写同名也设一份，部分工具只认小写）

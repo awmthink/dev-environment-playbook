@@ -45,7 +45,7 @@
 | 编译器 | llvm（clang/clangd） | per-user 预编译 tarball → `~/.local/llvm-*` | `tools/c-cpp.md` |
 | 编辑器 | neovim | glibc 分流（源码 / 官方二进制）→ `~/.local/bin` | `tools/neovim.md` |
 | 版本控制 | git | 源码编译 → `~/.local/bin` | `tools/git.md` |
-| leaf CLI | rg / jq / fzf | 官方/GitHub 预编译 → `~/.local/bin` | `tools/cli-utils.md` |
+| leaf CLI | rg / jq / fzf / fd | 官方/GitHub 预编译 → `~/.local/bin` | `tools/cli-utils.md` |
 | 多路复用 / 提示符 | zellij / starship | 官方/GitHub 预编译 → `~/.local/bin` | `tools/zellij.md` / `tools/shell.md` |
 
 - **不在 Linux 用 brew**：brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户共享服务器别扭），dev 工具改由 mise + per-user 接管。brew 退回 macOS 专属。

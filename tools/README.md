@@ -12,7 +12,7 @@
 3. **runtime**（mise）：`node.md` → `python.md`(含 uv) → `go.md` → `rust.md`
 4. **build**（mise）：`c-cpp.md` 的 cmake/ninja
 5. **LSP**（依赖各 runtime）：`lsp.md`（pyright/vtsls 随 node；rust-analyzer 随 rust；gopls 随 go）
-6. **CLI 增强与多路复用**：`cli-utils.md`(rg/jq/fzf) · `zellij.md`
+6. **CLI 增强与多路复用**：`cli-utils.md`(rg/jq/fzf/fd) · `zellij.md`
 7. **编译器 / git / 编辑器**（per-user 预编译或源码）：`c-cpp.md`(llvm) · `git.md` · `neovim.md`
 8. **GPU（仅 GPU 机）**：`cuda.md`（最后，依赖 llvm/CUDA 兼容区间）
 9. **macOS 桌面补充**（仅 mac）：`zed.md` · `ghostty.md` · `fonts.md`
@@ -31,7 +31,7 @@
 | Git | `git.md` | 已写（源码编译进 ~/.local，两端统一） |
 | Zellij | `zellij.md` | 已写（多路复用，**替代 tmux**；linux=GitHub 二进制 / mac=brew） |
 | Shell (zsh/bash + Starship) | `shell.md` | 已写（登录 shell + 提示符；starship 合入此卡片） |
-| CLI 增强工具 (rg/jq/fzf) | `cli-utils.md` | 已写（shell 增强工具：搜索 / JSON / 模糊查找） |
+| CLI 增强工具 (rg/jq/fzf/fd) | `cli-utils.md` | 已写（shell 增强工具：搜索 / JSON / 模糊查找 / 文件查找） |
 | 网络代理 | `proxy.md` | 已写 |
 | Node.js + pnpm | `node.md` | 已写（mise 管 node；pnpm via corepack） |
 | Python + uv | `python.md` | 已写（mise 管 python；uv 作项目引擎） |
@@ -54,7 +54,7 @@
 
 | 工具 | 归属 | 说明 |
 |------|------|------|
-| ripgrep / jq / fzf | `tools/cli-utils.md` | shell 增强工具（搜索 / JSON / 模糊查找），独立卡片 |
+| ripgrep / jq / fzf / fd | `tools/cli-utils.md` | shell 增强工具（搜索 / JSON / 模糊查找 / 文件查找），独立卡片 |
 | starship / Zellij | `tools/shell.md` / `tools/zellij.md` | starship 合入 shell 卡片 |
 | cmake / ninja | `tools/c-cpp.md` | 构建（走 mise） |
 | gh | — | 待定（GitHub CLI，见 `profile.md` 候选） |

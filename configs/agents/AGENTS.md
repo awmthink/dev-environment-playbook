@@ -14,7 +14,7 @@
 
 访问境外开发资源（`github.com`、npm registry、`docker hub / ghcr.io`、`huggingface.co`、`pypi.org` 等）失败时，优先确认代理环境变量是否生效，而不是放弃操作：
 
-- 登录 shell 已从 `~/.config/shell/proxy.env` 初始化 `http_proxy` / `https_proxy`（约定见 `tools/shell.md`）。先确认当前会话里变量存在（`env | grep -i proxy`）；非登录 shell、容器、`sudo` 等场景未继承时，手动导出与登录 shell 一致的值。
+- 代理**默认关闭**，按需手动开启：交互 shell 的 rc 已 source `~/.config/shell/proxy.env`（提供 `proxy_on` / `proxy_off` 开关函数；约定见 `tools/proxy.md`），直接 `proxy_on`。确认当前会话变量存在（`env | grep -i proxy`）；非登录 shell、容器、`sudo` 等场景没有 `proxy_on` 函数时，先 `source ~/.config/shell/proxy.env` 再开启。
 - 只认大写变量的工具用 `HTTP_PROXY` / `HTTPS_PROXY`；`git` 单独配时 `git config --global http.proxy`，取值与 shell 环境一致。
 - **不在此文件写死代理地址**——各环境入口地址可能不同，一律以环境变量为准。
 
