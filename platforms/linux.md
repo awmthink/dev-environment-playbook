@@ -44,8 +44,7 @@
 - **per-user `~/.local`（mise 之外）**：
   - **编译器**：预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，CUDA 12.8 要 clang<20）——LLVM 不发 macOS 预编译、且 mise-llvm 走源码编译太慢，故 Linux 走 per-user 预编译（见 `tools/c-cpp.md`）。
   - **git**：源码编译（~1min，两端统一版本；上游无预编译，不进 mise）。
-  - **rg / jq / fzf / starship / zellij**：官方/GitHub 预编译单文件二进制 → `~/.local/bin`（starship 官方 installer；rg/jq/fzf/zellij 取 GitHub release，rg/zellij 用 musl 静态版跨 glibc）。
-  - 见 `scripts/bootstrap.sh` 自动安装。
+  - **rg / jq / fzf / starship / zellij**：官方/GitHub 预编译单文件二进制 → `~/.local/bin`（starship 官方 installer；rg/jq/fzf/zellij 取 GitHub release，rg/zellij 用 musl 静态版跨 glibc）。具体命令见 `tools/cli-utils.md`（rg/jq/fzf）、`tools/shell.md`（starship）、`tools/zellij.md`（zellij）。
 - **单文件 CLI**：`cargo install` / `go install` / `uv tool install`，产物进对应 bin 目录。
 
 ## CLI 日用品（CentOS 8，按 core principle 逐工具评估）
@@ -59,7 +58,7 @@
 | fzf | EPEL 不可靠 | GitHub 预编译最 canonical（单文件） | GitHub release `fzf-*-linux_amd64.tar.gz` → `~/.local/bin`（shell keybinds 另配） |
 | starship | 无 dnf 包 | 官方 installer 最 canonical | `curl -sS https://starship.rs/install.sh \| sh -s -- -b ~/.local/bin` |
 
-> **判定原则**：leaf 单文件 CLI / 多路复用器优先官方/GitHub 预编译二进制（最 canonical、最透明）→ `~/.local/bin`。不再依赖系统 dnf 版本（发行版源偏旧/不可靠）。详见各 `tools/*.md` 与 `scripts/bootstrap.sh`。
+> **判定原则**：leaf 单文件 CLI / 多路复用器优先官方/GitHub 预编译二进制（最 canonical、最透明）→ `~/.local/bin`。不再依赖系统 dnf 版本（发行版源偏旧/不可靠）。安装命令：rg/jq/fzf 见 `tools/cli-utils.md`；starship 见 `tools/shell.md`；zellij/llvm/git/nvim 见各自 `tools/*.md`。
 
 ## 常用探测命令
 - 发行版：`cat /etc/os-release`

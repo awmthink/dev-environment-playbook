@@ -19,9 +19,31 @@
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `brew install neovim` |
-| Linux | `scripts/bootstrap.sh` 按 glibc 分流：glibc >= 2.32 拉官方预编译二进制 → `~/.local/bin/nvim`；老 glibc（< 2.32，如 CentOS 8 的 2.28）源码编译 → `~/.local/bin/nvim` |
+| Linux | 按 glibc 分流：glibc >= 2.32 拉官方预编译二进制 → `~/.local/bin/nvim`；老 glibc（< 2.32，如 CentOS 8 的 2.28）源码编译 → `~/.local/bin/nvim` |
 
-> **为什么 Linux 不走 mise/brew**：官方 neovim 预编译二进制 min glibc 2.32，老 distro（CentOS 8 glibc 2.28）跑不了；brew-on-Linux 在多用户服务器别扭。故 bootstrap 按 glibc 分流（新 glibc 拉官方二进制，老 glibc 源码编译）→ `~/.local/bin`。
+> **为什么 Linux 不走 mise/brew**：官方 neovim 预编译二进制 min glibc 2.32，老 distro（CentOS 8 glibc 2.28）跑不了；brew-on-Linux 在多用户服务器别扭。故按 glibc 分流（新 glibc 拉官方二进制，老 glibc 源码编译）→ `~/.local/bin`。
+
+### Linux 安装（按 glibc 分流）
+```sh
+NVIM_VER="stable"
+GLIBC_VER=$(ldd --version | awk 'NR==1{print $NF}')
+glibc_new_enough() {  # 真·版本比较
+  awk -v a="$GLIBC_VER" -v b="$1" 'BEGIN{split(a,A,".");split(b,B,".");
+    for(i=1;i<=3;i++){x=A[i]+0;y=B[i]+0; if(x>y)exit 0; if(x<y)exit 1}}'
+}
+if glibc_new_enough 2.32; then
+  # glibc >= 2.32：官方预编译二进制
+  curl -fL "https://github.com/neovim/neovim/releases/download/$NVIM_VER/nvim-linux-x86_64.tar.gz" \
+    | tar -xz -C ~/.local --strip-components=1
+else
+  # glibc < 2.32（如 CentOS 8）：源码编译（链系统 glibc）。需 cmake（mise 已装）
+  TMP=$(mktemp -d)
+  git clone --depth=1 --branch "$NVIM_VER" https://github.com/neovim/neovim "$TMP/nvim"
+  ( cd "$TMP/nvim" && make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/.local" )
+  ( cd "$TMP/nvim/build" && cmake --install . )
+  rm -rf "$TMP"
+fi
+```
 
 ## 依赖
 - **ripgrep**：`:grep` 全文搜索 → 不进 mise，按平台最 canonical（mac=brew / linux=dnf，见 `platforms/linux.md`）

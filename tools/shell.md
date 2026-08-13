@@ -28,7 +28,7 @@
 
 ## 配置思路
 - **不依赖重框架**（不用 oh-my-zsh），保持启动快、配置可读；手写 `.zshrc`。
-- **提示符交给 Starship**（见 `profile.md` 候选），rc 里不写 prompt 主题。
+- **提示符交给 Starship**（见下「提示符（Starship）」一节），rc 里不写 prompt 主题。
 - **本地配置统一放 `~/.config/shell/`**（仓库外、不提交）：`env.sh`（共用环境变量，zsh / bash 都 source）、`proxy.env`（代理，见 `proxy.md`）、`secrets.env`（API key / token，`chmod 600`）。`.zshrc` 幂等 source：`[ -f ~/.config/shell/secrets.env ] && source ~/.config/shell/secrets.env`；脱敏模板见 `configs/shell/secrets.env.example`。
 - 历史：`HISTFILE` / `HISTSIZE` / `SAVEHIST`、`setopt SHARE_HISTORY` 共享历史。
 - 补全：启用 `compinit`；按需补全脚本放 `~/.config/zsh/completions`。
@@ -41,6 +41,22 @@
 
 Linux server `.bashrc` 为薄壳：source env.sh + 历史 + 工具钩子（与 `.zshrc` 同结构，仅 shell 语法差异）。
 
+## 提示符（Starship）
+
+> 跨 shell 的提示符工具，zsh / bash 统一（替代 oh-my-zsh 主题与手写 PROMPT）。开箱显示 git 分支 / 状态、当前目录语言版本、上条命令耗时；Rust 实现、启动开销小。对应 `profile.md`「提示符」偏好。
+
+- **安装**（不进 mise，各平台最 canonical）：
+
+  | 平台 | 方式 |
+  |------|------|
+  | macOS | `brew install starship` |
+  | Linux | 官方脚本 → `~/.local/bin`：`curl -sS https://starship.rs/install.sh \| sh -s -- -b ~/.local/bin`（per-user、免 sudo） |
+
+- **钩子**：rc 末尾 `eval "$(starship init <shell>)"`（bash/zsh 同形，幂等无副作用）。
+- **开箱即用、不写 `starship.toml`**：内置默认已覆盖目录 / git / 语言版本 / 耗时，无个性化需求——**不创建 `~/.config/starship.toml`**，保持零配置、跨机器零同步成本。字体图标依赖 Nerd Font，profile 主力 Maple Mono NF CN 已覆盖。
+- **日后若需个性化**（目前不打算）：`starship.toml` 是纯偏好 TOML（`[module]` 控制模块），可纳入 `configs/` 多机复用，或 `starship preset <name>` 生成起点。
+- **排查**：`starship timings` 看各模块耗时；`starship explain` 解释当前模块。
+
 ## 参考
 - `configs/zsh/.zshrc`、`configs/bash/.bashrc`（两端薄壳）、`configs/shell/env.sh`（共享 substance）；脱敏模板：`configs/shell/secrets.env.example`、`configs/shell/proxy.env.example`
 
@@ -51,4 +67,7 @@ echo $SHELL        # macOS 期望：/bin/zsh 或 /opt/homebrew/bin/zsh；Linux s
 zsh --version      # 期望：>= 5.5
 # Linux server：
 bash --version     # 期望：>= 4（主流默认 5.x）
+# 提示符（Starship）：
+starship --version # 期望：有版本输出（在 PATH）
+starship explain   # 期望：列出当前提示符各模块及原因
 ```

@@ -20,7 +20,7 @@ cask 是 macOS 上装 GUI 应用 / 字体最省事的入口；macOS 系统库补
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`（装到 `/opt/homebrew`） |
-| Linux | **不用 brew**。runtime/build/LSP 走 mise；CLI 日用品 / 多路复用器走 per-user（官方/GitHub 预编译 → `~/.local/bin`，见 `platforms/linux.md` / `scripts/bootstrap.sh`）；编译器/git/neovim 走 per-user（预编译/源码） |
+| Linux | **不用 brew**。runtime/build/LSP 走 mise；CLI 日用品 / 多路复用器走 per-user（官方/GitHub 预编译 → `~/.local/bin`，见 `platforms/linux.md` / `tools/README.md`）；编译器/git/neovim 走 per-user（预编译/源码） |
 
 > macOS 装完脚本会提示把 `eval "$(/opt/homebrew/bin/brew shellenv)"` 加进 `~/.zprofile`（本仓库 `configs/shell/env.sh` 已用 `export PATH="/opt/homebrew/bin:$PATH"` 覆盖）。
 

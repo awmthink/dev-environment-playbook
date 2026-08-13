@@ -1,7 +1,7 @@
 # configs/mise/config.toml — 全局默认（跨平台）
 #
 # 落地到 ~/.config/mise/config.toml。项目级 override 用项目根的 mise.toml。
-# 编排见 scripts/bootstrap.sh。职责边界见 tools/mise.md。
+# 安装：mise install（读本文件）。职责边界见 tools/mise.md。
 # 注意：所有工具必须在 [tools] 表下，否则 mise 报 "unknown field" 不装。
 
 [tools]
@@ -15,10 +15,10 @@ rust = "1.97"     # core:rust 底层 rustup
 
 # ===== CLI 工具：按 core principle 各平台选最 canonical 方式（不进此跨平台文件）=====
 #   mac:  brew formula（见 configs/homebrew/Brewfile）—— rg / jq / fzf / starship / zellij
-#   linux: rg / jq / fzf / starship / zellij → 官方/GitHub 预编译单文件二进制 → ~/.local/bin（见 platforms/linux.md / bootstrap.sh）
+#   linux: rg / jq / fzf / starship / zellij → 官方/GitHub 预编译单文件二进制 → ~/.local/bin（见 platforms/linux.md / tools/cli-utils.md / 各 tools/*.md）
 # mise 的 declarative 版本管理对单版本 leaf CLI 价值有限 → 各平台用最 canonical 的官方二进制 / brew。
 # neovim 亦不入 mise：官方只发 glibc 动态链接版，老 disto(CentOS 8 glibc<2.32) 跑不了。
-#   改由 bootstrap.sh 处理（现代 glibc/mac 拉官方二进制；老 glibc 源码编译）→ ~/.local/bin。
+#   按 glibc 分流（现代 glibc/mac 拉官方二进制；老 glibc 源码编译）→ ~/.local/bin（见 tools/neovim.md）。
 
 # ===== build 工具 =====
 cmake = "latest"
@@ -31,4 +31,4 @@ ninja = "latest"
 #   项目内 `go install golang.org/x/tools/gopls@latest` 或后续验证后再加。
 
 # 注：编译器(llvm)、git、CUDA、GUI/字体 不在此文件——
-#   mac=CLT(apple clang)+brew cask；linux=per-user llvm 预编译 tarball + git 源码（见 bootstrap.sh）。
+#   mac=CLT(apple clang)+brew cask；linux=per-user llvm 预编译 tarball + git 源码（见各 tools/*.md）。

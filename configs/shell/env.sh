@@ -42,7 +42,7 @@ fi
 
 # ===== 平台专属：Linux / per-user llvm（CUDA 12.8 兼容的 clang<20）=====
 if [ "$(uname)" = Linux ]; then
-  # per-user 预编译 llvm（见 scripts/bootstrap.sh / tools/c-cpp.md）：clang/clangd/clang-format/clang-tidy
+  # per-user 预编译 llvm（见 tools/c-cpp.md）：clang/clangd/clang-format/clang-tidy
   [ -x "$HOME/.local/llvm-18.1.8/bin/clang" ] && export PATH="$HOME/.local/llvm-18.1.8/bin:$PATH"
   export CC=clang CXX=clang++
 fi

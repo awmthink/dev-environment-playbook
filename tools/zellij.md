@@ -23,9 +23,19 @@
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `brew install zellij`（zellij 官方推荐的 macOS 装法） |
-| Linux | GitHub release 预编译静态二进制（musl，跨 glibc）→ `~/.local/bin`。由 `scripts/bootstrap.sh` 完成。 |
+| Linux | GitHub release 预编译静态二进制（musl，跨 glibc）→ `~/.local/bin` |
 
 > zellij 官方发 musl 静态预编译（`zellij-*-unknown-linux-musl.tar.gz`），单文件、零依赖、老 distro（CentOS 8 glibc 2.28）直接能跑——故 Linux 走 GitHub 二进制，不进 mise、不需源码编译。
+
+### Linux 安装（GitHub 预编译）
+```sh
+ZELLIJ_VER=0.44.3
+TMP=$(mktemp -d)
+curl -fL "https://github.com/zellij-org/zellij/releases/download/v$ZELLIJ_VER/zellij-x86_64-unknown-linux-musl.tar.gz" -o "$TMP/z.tar.gz"
+tar -xzf "$TMP/z.tar.gz" -C "$TMP"
+install -m 0755 "$TMP/zellij" ~/.local/bin/zellij
+rm -rf "$TMP"
+```
 
 ## 配置思路
 > 整份见 `configs/zellij/config.kdl`。只写「与默认不同」的偏好，其余用内置默认。
@@ -38,7 +48,6 @@
 
 ## 参考
 - `configs/zellij/config.kdl`（参考实物：compact 布局 + mouse + Aura 主题）
-- `scripts/bootstrap.sh`（Linux GitHub 二进制下载段）
 
 ## 验证
 ```sh

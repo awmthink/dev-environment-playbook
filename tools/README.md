@@ -12,8 +12,8 @@
 | Homebrew | `homebrew.md` | 已写（**macOS 包管理器**：cask（GUI + 字体）+ CLI formula） |
 | Git | `git.md` | 已写（源码编译进 ~/.local，两端统一） |
 | Zellij | `zellij.md` | 已写（多路复用，**替代 tmux**；linux=GitHub 二进制 / mac=brew） |
-| Shell (zsh/bash) | `shell.md` | 已写 |
-| Starship | `starship.md` | 已写（提示符；mac=brew / linux=官方 installer） |
+| Shell (zsh/bash + Starship) | `shell.md` | 已写（登录 shell + 提示符；starship 合入此卡片） |
+| CLI 增强工具 (rg/jq/fzf) | `cli-utils.md` | 已写（shell 增强工具：搜索 / JSON / 模糊查找） |
 | 网络代理 | `proxy.md` | 已写 |
 | Node.js + pnpm | `node.md` | 已写（mise 管 node；pnpm via corepack） |
 | Python + uv | `python.md` | 已写（mise 管 python；uv 作项目引擎） |
@@ -29,19 +29,17 @@
 | Docker | — | 待写 |
 | lazygit | — | 待评估（见 `profile.md`） |
 
-## 基础 CLI 工具（装即用，无独立 playbook）
+## 基础 CLI 工具
 
-> 不需要多版本、按 core principle 各平台选最 canonical 方式（mac=brew formula；linux 见 `platforms/linux.md`）。
+> leaf 单文件、无需多版本、按 core principle 各平台选最 canonical 方式（mac=brew formula；linux=官方/GitHub 预编译 → `~/.local/bin`，见 `platforms/linux.md`）。
 
-| 工具 | macOS | Linux（CentOS 8） | 用途 |
-|------|-------|-------|------|
-| ripgrep (rg) | brew | GitHub 预编译（musl 静态）→ `~/.local/bin` | 全文搜索（nvim `:grep` / shell） |
-| jq | brew | GitHub 预编译 → `~/.local/bin` | JSON 处理 |
-| gh | brew | 待定 | GitHub CLI（装后 `gh auth login`） |
-| fzf | brew（+ 跑 `$(brew --prefix)/opt/fzf/install` 配 keybinds） | GitHub 预编译 → `~/.local/bin` | 模糊查找 |
-| cmake / ninja | mise | mise | 构建（见 `tools/c-cpp.md`） |
+| 工具 | 归属 | 说明 |
+|------|------|------|
+| ripgrep / jq / fzf | `tools/cli-utils.md` | shell 增强工具（搜索 / JSON / 模糊查找），独立卡片 |
+| starship / Zellij | `tools/shell.md` / `tools/zellij.md` | starship 合入 shell 卡片 |
+| cmake / ninja | `tools/c-cpp.md` | 构建（走 mise） |
+| gh | — | 待定（GitHub CLI，见 `profile.md` 候选） |
 
-> starship / Zellij 有独立 playbook（见索引）——Linux 上均走官方/GitHub 预编译二进制 → `~/.local/bin`。
 
 ## 写作要点（给人和 agent）
 - 写**意图与理由**，不是只贴 dotfile。

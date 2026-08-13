@@ -16,7 +16,7 @@
 
 | 层 | 工具 | macOS 来源 | Linux 来源 | 说明 |
 |----|------|-----------|-----------|------|
-| 编译器 | clang | Xcode CLT（Apple clang，默认） | per-user 预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，见 `scripts/bootstrap.sh`） | 算法 / CUDA 代码均用 clang |
+| 编译器 | clang | Xcode CLT（Apple clang，默认） | per-user 预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，见下「Linux 安装」） | 算法 / CUDA 代码均用 clang |
 | gcc | — | 不装 | 不装 | 弃用；必要时临时 devtoolset |
 | 构建·生成 | CMake | mise | mise | 必装 |
 | 构建·执行 | Ninja | mise | mise | 大项目增量构建远快于 Make |
@@ -36,8 +36,19 @@
 
 | 平台 | 推荐方式 |
 |------|----------|
-| macOS | Xcode CLT（见 `platforms/macos.md`）；cmake/ninja 走 mise（`scripts/bootstrap.sh`） |
-| Linux | `scripts/bootstrap.sh` 装 per-user llvm 18.1.8 + cmake/ninja（mise）；CUDA 见 `tools/cuda.md` |
+| macOS | Xcode CLT（见 `platforms/macos.md`）；cmake/ninja 走 mise |
+| Linux | per-user 预编译 llvm 18.1.8 + cmake/ninja（mise）；CUDA 见 `tools/cuda.md` |
+
+### Linux 安装（per-user llvm 预编译 tarball）
+> 选 **ubuntu-18.04 变体**（老 glibc 构建），兼容 CentOS 8（glibc 2.28）等老发行版。装到 `~/.local/llvm-18.1.8`，由 `configs/shell/env.sh` 前置进 PATH。
+```sh
+LLVM_VER=18.1.8
+TARBALL="clang+llvm-$LLVM_VER-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+curl -fL "https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VER/$TARBALL" -o /tmp/llvm.tar.xz
+tar -xf /tmp/llvm.tar.xz -C /tmp
+mv /tmp/clang+llvm-* ~/.local/llvm-$LLVM_VER
+```
+> clang/clangd/clang-format/clang-tidy 同一 tarball 给齐，版本一致。aarch64 把 TARBALL 换成 `clang+llvm-$LLVM_VER-aarch64-linux-gnu.tar.xz`。
 
 ## 配置思路
 - **编译器**：mac 默认 Apple clang（SDK 感知）；linux 把 `~/.local/llvm-18.1.8/bin` 前置 PATH（见 `configs/shell/env.sh`），`CC=clang CXX=clang++`。
@@ -51,7 +62,6 @@
 - **调试**：linux 用 gdb；mac 用 lldb。
 
 ## 参考
-- `scripts/bootstrap.sh`（linux per-user llvm 安装）
 - `configs/shell/env.sh`（linux llvm PATH 前置、CC/CXX）
 - `tools/cuda.md`（CUDA toolchain）
 

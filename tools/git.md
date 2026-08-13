@@ -17,11 +17,28 @@
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `brew install git`（单用户，brew 版本足够新） |
-| Linux | 源码编译 → `~/.local/bin/git`（发行版偏旧，上游无预编译二进制）。由 `scripts/bootstrap.sh` 完成。 |
+| Linux | 源码编译 → `~/.local/bin/git`（发行版偏旧，上游无预编译二进制）。安装命令见下。 |
 
 > **Linux 源码编译要点**：`make configure && ./configure --prefix=$HOME/.local CC=clang && make NO_ICONV=YesPlease all && make install`。
 > - `NO_ICONV=YesPlease` 规避部分 distro 的 iconv 链接问题（仅禁字符集转换，**不影响 `text`/`eol` 行尾规范化**）。
-> - 依赖（make / autoconf / zlib-devel / libcurl-devel）不全时脚本退出并打印 dnf/apt 命令；缺依赖期间可用**系统 git 兜底**。
+> - 缺依赖期间可用**系统 git 兜底**。
+
+### Linux 安装（源码编译，链 per-user clang）
+```sh
+# 构建依赖（一次性，需 sudo）：
+#   CentOS/RHEL: sudo dnf install make autoconf zlib-devel libcurl-devel expat-devel openssl-devel gettext perl
+#   Ubuntu/Debian: sudo apt install make autoconf zlib1g-dev libcurl4-openssl-dev libexpat1-dev libssl-dev gettext perl
+GIT_VER=2.55.0
+TMP=$(mktemp -d)
+curl -fL "https://mirrors.edge.kernel.org/pub/software/scm/git/git-$GIT_VER.tar.xz" -o "$TMP/git.tar.xz"
+tar -xf "$TMP/git.tar.xz" -C "$TMP"
+( cd "$TMP/git-$GIT_VER" \
+    && make CC=clang configure \
+    && ./configure --prefix="$HOME/.local" CC=clang \
+    && make -j"$(nproc)" NO_ICONV=YesPlease all \
+    && make NO_ICONV=YesPlease install )
+rm -rf "$TMP"
+```
 
 ## 配置思路
 <!-- 个人身份信息是机器/账号相关，不要写死进仓库；agent 同步时从本地或向我询问 -->
