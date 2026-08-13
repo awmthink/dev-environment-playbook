@@ -51,7 +51,7 @@ tar -xf /tmp/llvm.tar.xz -C /tmp
 mv /tmp/clang+llvm-* ~/.local/llvm-$LLVM_VER
 ```
 > clang/clangd/clang-format/clang-tidy 同一 tarball 给齐，版本一致。aarch64 把 TARBALL 换成 `clang+llvm-$LLVM_VER-aarch64-linux-gnu.tar.xz`。
-> **运行时依赖 `libtinfo.so.5`**：clang 等需要（tarball 不自带）。CentOS/RHEL 8 只发 libtinfo 6 → 装 compat 包：`sudo dnf install ncurses-compat-libs`（Ubuntu/Debian 通常自带）。**勿用**「`libtinfo.so.5` → `libtinfo.so.6`」伪软链当 compat——会触发 `no version information available` 警告。
+> **运行时依赖 `libtinfo.so.5`**：clang 等需要（tarball 不自带）。CentOS/RHEL 8 只发 libtinfo 6 → 装 compat 包：`sudo dnf install ncurses-compat-libs`（Ubuntu/Debian 通常自带）。**勿用**「`libtinfo.so.5` → `libtinfo.so.6`」伪软链当 compat——tinfo5/tinfo6 符号版本不一致，依赖 tinfo5 符号的程序会加载失败。注意：CentOS 8 的 compat 包本身不带 symbol version info，clang 启动时打 `no version information available` 警告属**预期现象**（无害），不能据此判断库装错（实测正版 compat 包也会打）。
 
 ## 配置思路
 - **编译器**：mac 默认 Apple clang（SDK 感知）；linux 把 `~/.local/llvm-18.1.8/bin` 前置 PATH（见 `configs/shell/env.sh`），`CC=clang CXX=clang++`。
