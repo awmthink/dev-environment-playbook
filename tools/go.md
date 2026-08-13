@@ -19,16 +19,20 @@
 | macOS / Linux | 都走 **mise**：`mise use -g go@1.26`（装 + 锁全局默认） |
 
 ## 配置思路
-- `GOROOT` / `GOPATH` 用默认即可；`$(go env GOPATH)/bin` 加入 PATH（见 `configs/shell/env.sh`）。
+- `GOROOT` / `GOPATH` 用默认即可（**不 export**；现代 Go 默认 `~/go`、`~/go/bin`）；把 `~/go/bin` 加进 PATH（见 `configs/shell/env.sh`）。
+- **`GOBIN` 必须保持未设置**：mise 激活 go 时会注入 `GOBIN=<mise go 安装目录>`，导致 `go install` 的工具（gopls/dlv…）绑死 go 版本、mise 升级 go 时丢失。故 rc 里 `mise activate` 之后要 `unset GOBIN`，让工具落 `~/go/bin`、跨版本持久（见 `configs/bash/.bashrc` / `configs/zsh/.zshrc`）。
 - 国内加速：`go env -w GOPROXY=https://goproxy.cn,direct`（与代理二选一）。
 - `GO111MODULE=on`（现代默认）。
 
 ## 参考
-- `configs/shell/env.sh`（`GOPATH/bin` PATH）
+- `configs/shell/env.sh`（`~/go/bin` 进 PATH）
+- `configs/bash/.bashrc` / `configs/zsh/.zshrc`（`unset GOBIN`）
 
 ## 验证
 ```sh
 mise current go
 go version
 go env GOPATH GOPROXY
+echo "GOBIN=[${GOBIN:-<unset>}]"   # 期望空（mise 注入的已被 rc 里 unset 掉）
+command -v gopls                    # 期望：~/go/bin/gopls（非 mise 安装目录）
 ```

@@ -21,5 +21,6 @@ PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 # ===== 工具钩子 =====
 # mise（runtime + build + LSP；见 tools/mise.md）
 eval "$(mise activate bash)"
+unset GOBIN   # 覆盖 mise 为 go 注入的 GOBIN（=mise go 安装目录），让 go install 落 ~/go/bin、跨 go 版本持久（见 tools/go.md）
 # ===== 提示符：Starship =====
 eval "$(starship init bash)"
