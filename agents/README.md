@@ -15,4 +15,4 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | Qoder | <!-- 待补充 --> | `qoder.md` |
 
 ## 共享：MCP servers
-> 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（含 opencode / Zed 两种格式 + 差异速查）。各 agent 从自己配置文件读（opencode `mcp` 字段、Zed `context_servers` 字段），key 统一走 `{env:ZAI_CODING_API_KEY}`，放 `~/.config/shell/secrets.env`。
+> 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（含 opencode / Zed 两种格式 + 差异速查）。各 agent 从自己配置文件读（opencode `mcp` 字段、Zed `context_servers` 字段），key 统一走 `{env:ZAI_CODING_CN_API_KEY}`，放 `~/.config/shell/secrets.env`。
