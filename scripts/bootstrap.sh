@@ -4,7 +4,7 @@
 # 架构（见 tools/mise.md / platforms/linux.md）：
 #   mise   (peer, 跨平台): runtime + build + LSP            ← Layer 1
 #   brew   (peer, macOS):   GUI app + 字体 + CLI formula    ← Layer 2 (mac only)
-#   per-user ~/.local:      linux llvm 预编译 + git/tmux 源码 ← Layer 2 (linux only)
+#   per-user ~/.local:      linux llvm 预编译 + git 源码 + rg/jq/starship 预编译 ← Layer 2 (linux only)
 #   外部:                   CUDA/TensorRT（见 tools/cuda.md，本脚本不管）
 #
 # 幂等：重复跑不出错。破坏性操作前会打印并不自动继续。
@@ -54,7 +54,7 @@ fi
 
 # ---------- Layer 2: per-user llvm + git (Linux only) ----------
 if [ "$PLATFORM" = Linux ]; then
-  say "Layer 2 (Linux) — per-user llvm 预编译 + git/tmux 源码（进 ~/.local）"
+  say "Layer 2 (Linux) — per-user llvm 预编译 + git 源码 + rg/jq/starship 预编译（进 ~/.local）"
   mkdir -p ~/.local
 
   # llvm 18.1.8（CUDA 12.8 要 clang<20；选老 glibc 构建以兼容更广的发行版，含 CentOS 8）
@@ -104,30 +104,52 @@ if [ "$PLATFORM" = Linux ]; then
   fi
   echo "  → git 装好：~/.local/bin/git $GIT_VER"
 
-  # tmux ≥3.4（CentOS 8 AppStream 3.1c 不够新；见 tools/tmux.md）。构建依赖（sudo 装一次）：libevent-devel + ncurses-devel。
-  TMUX_VER=3.5a
-  if ! ~/.local/bin/tmux -V 2>/dev/null | grep -q "$TMUX_VER"; then
-    missing=""
-    echo "#include <event2/event.h>" | ${CC:-cc} -E - >/dev/null 2>&1 || missing="$missing libevent-devel"
-    echo "#include <ncurses.h>"       | ${CC:-cc} -E - >/dev/null 2>&1 || missing="$missing ncurses-devel"
-    if [ -n "$missing" ]; then
-      echo "  ⚠ tmux 源码编译缺少构建依赖：$missing"
-      echo "    CentOS/RHEL: sudo dnf install libevent-devel ncurses-devel"
-      echo "    Ubuntu/Debian: sudo apt install libevent-dev libncurses-dev"
-      echo "    装好依赖后重跑本脚本。"
-      exit 1
-    fi
+  # rg（GitHub 预编译 musl 静态，跨 glibc；见 platforms/linux.md）
+  if [ ! -x ~/.local/bin/rg ]; then
+    RG_VER=15.2.0
     TMP=$(mktemp -d)
-    curl -fL "https://github.com/tmux/tmux/releases/download/$TMUX_VER/tmux-$TMUX_VER.tar.gz" -o "$TMP/tmux.tar.gz"
-    tar -xf "$TMP/tmux.tar.gz" -C "$TMP"
-    # 用刚装的 clang 编译 tmux（不依赖系统 gcc）
-    ( cd "$TMP/tmux-$TMUX_VER" \
-        && ./configure --prefix="$HOME/.local" CC=clang \
-        && make -j"$(nproc)" \
-        && make install )
+    curl -fL "https://github.com/BurntSushi/ripgrep/releases/download/$RG_VER/ripgrep-$RG_VER-x86_64-unknown-linux-musl.tar.gz" -o "$TMP/rg.tgz"
+    tar -xzf "$TMP/rg.tgz" -C "$TMP"
+    install -m 0755 "$TMP/ripgrep-$RG_VER-x86_64-unknown-linux-musl/rg" ~/.local/bin/rg
     rm -rf "$TMP"
   fi
-  echo "  → tmux 装好：~/.local/bin/tmux $(~/.local/bin/tmux -V 2>/dev/null || echo '?')"
+  echo "  → rg 装好：$(~/.local/bin/rg --version 2>/dev/null | head -1 || echo '?')"
+
+  # jq（GitHub 预编译，静态单文件二进制）
+  if [ ! -x ~/.local/bin/jq ]; then
+    JQ_VER=1.8.2
+    curl -fL "https://github.com/jqlang/jq/releases/download/jq-$JQ_VER/jq-linux-amd64" -o ~/.local/bin/jq
+    chmod 0755 ~/.local/bin/jq
+  fi
+  echo "  → jq 装好：$(~/.local/bin/jq --version 2>/dev/null || echo '?')"
+
+  # starship（官方 installer → ~/.local/bin；见 tools/starship.md）
+  if [ ! -x ~/.local/bin/starship ]; then
+    curl -sSf https://starship.rs/install.sh | sh -s -- -b ~/.local/bin -y
+  fi
+  echo "  → starship 装好：$(~/.local/bin/starship --version 2>/dev/null | head -1 || echo '?')"
+
+  # fzf（GitHub 预编译单文件二进制）
+  if [ ! -x ~/.local/bin/fzf ]; then
+    FZF_VER=0.74.2
+    TMP=$(mktemp -d)
+    curl -fL "https://github.com/junegunn/fzf/releases/download/v$FZF_VER/fzf-$FZF_VER-linux_amd64.tar.gz" -o "$TMP/fzf.tgz"
+    tar -xzf "$TMP/fzf.tgz" -C "$TMP"
+    install -m 0755 "$TMP/fzf" ~/.local/bin/fzf
+    rm -rf "$TMP"
+  fi
+  echo "  → fzf 装好：$(~/.local/bin/fzf --version 2>/dev/null || echo '?')"
+
+  # zellij（GitHub 预编译 musl 静态，替代 tmux；见 tools/zellij.md）
+  if [ ! -x ~/.local/bin/zellij ]; then
+    ZELLIJ_VER=0.44.3
+    TMP=$(mktemp -d)
+    curl -fL "https://github.com/zellij-org/zellij/releases/download/v$ZELLIJ_VER/zellij-x86_64-unknown-linux-musl.tar.gz" -o "$TMP/z.tar.gz"
+    tar -xzf "$TMP/z.tar.gz" -C "$TMP"
+    install -m 0755 "$TMP/zellij" ~/.local/bin/zellij
+    rm -rf "$TMP"
+  fi
+  echo "  → zellij 装好：$(~/.local/bin/zellij --version 2>/dev/null || echo '?')"
 fi
 
 # ---------- neovim（不进 mise：官方二进制 min glibc 2.32，老 distro 要源码编译）----------
@@ -179,7 +201,11 @@ mise current
 if [ "$PLATFORM" = Linux ]; then
   ~/.local/llvm-18.1.8/bin/clang --version | head -1
   ~/.local/bin/git --version
-  ~/.local/bin/tmux -V
+  ~/.local/bin/rg --version | head -1
+  ~/.local/bin/jq --version
+  ~/.local/bin/fzf --version
+  ~/.local/bin/starship --version | head -1
+  command -v zellij >/dev/null && zellij --version    # 多路复用（替代 tmux）
 else
   clang --version | head -1          # mac: Xcode CLT 的 apple clang
   command -v git && git --version

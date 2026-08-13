@@ -3,7 +3,7 @@
 > macOS 日常主力**编辑器**（见 `profile.md`）。定位为**纯 editor**——只用它的编辑 / 远程开发能力，**不用它的 agent / MCP / LLM provider**。agent 交给 opencode / claude-code / codex / qoder-cli（见各自 `agents/*.md`）。
 
 ## 为什么用
-启动快、Rust 原生、GPU 渲染；Remote 开发直连 GPU 服务器，比 Neovim + tmux 更适合日常（Neovim 仍作纯命令行 fallback）。Cursor 留给大仓库场景。
+启动快、Rust 原生、GPU 渲染；Remote 开发直连 GPU 服务器，比 Neovim + zellij 更适合日常（Neovim 仍作纯命令行 fallback）。Cursor 留给大仓库场景。
 
 > **不用 Zed 的 agent 功能**：内置 Agent 模式、`context_servers`（MCP）、`language_models`（LLM provider）都不配置——这些能力分散到专用 agent 工具，职责清晰、各取所长。Zed 只做编辑器。
 
@@ -45,7 +45,7 @@
 - **buffer font 用 Zed 默认 `.zedMono`**：不设 `buffer_font_family`。Zed 自家代码字体专为代码渲染优化、观感优于手设；代码区字体不与终端强求一致（终端用 Maple Mono NF CN 是为 Nerd Font 图标，编辑器无此需求）。
 
 ### 远程开发
-- 用 Zed Remote 直连 GPU 服务器（远程训练机），省去 Neovim + tmux 往返。
+- 用 Zed Remote 直连 GPU 服务器（远程训练机），省去 Neovim + zellij 往返。
 - **`ssh_connections` 与具体机器 / 账号绑定，不写入 `configs/` 模板**；由各机器本地 `~/.config/zed/settings.json` 自行维护。
 
 ### 编辑器行为

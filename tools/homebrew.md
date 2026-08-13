@@ -3,7 +3,7 @@
 > **macOS 包管理器**：cask（GUI app + 字体）+ formula（不需要多版本的 CLI 工具）。runtime / build / LSP 归 mise（见 `tools/mise.md`）。按 core principle（不追求安装方法统一）逐工具评估——brew 收回 macOS 上 canonical 的 CLI formula，mise 只管真正需要多版本 / 锁版本的部分。
 
 ## 为什么用
-cask 是 macOS 上装 GUI 应用 / 字体最省事的入口；macOS 系统库补位也靠它。CLI 工具按是否需要多版本分两档：**不需要多版本的日用品 CLI**（rg / jq / fzf / tmux / starship）brew formula 最 canonical，回收进 `Brewfile`；**需要多版本 / 锁版本的 runtime & build & LSP**（node / python / go / rust / cmake / pyright…）交 mise。brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户服务器别扭），故 brew 不上 Linux server。
+cask 是 macOS 上装 GUI 应用 / 字体最省事的入口；macOS 系统库补位也靠它。CLI 工具按是否需要多版本分两档：**不需要多版本的日用品 CLI**（rg / jq / fzf / starship / zellij）brew formula 最 canonical，回收进 `Brewfile`；**需要多版本 / 锁版本的 runtime & build & LSP**（node / python / go / rust / cmake / pyright…）交 mise。brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户服务器别扭），故 brew 不上 Linux server。
 
 ## 最低版本要求
 - 版本：latest（自动更新）
@@ -20,7 +20,7 @@ cask 是 macOS 上装 GUI 应用 / 字体最省事的入口；macOS 系统库补
 | 平台 | 推荐方式 |
 |------|----------|
 | macOS | `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`（装到 `/opt/homebrew`） |
-| Linux | **不用 brew**。runtime/build/LSP 走 mise；CLI 日用品逐个评估（dnf / 源码 / 官方 installer，见 `platforms/linux.md`）；编译器/git/tmux 走 per-user（见 `scripts/bootstrap.sh`） |
+| Linux | **不用 brew**。runtime/build/LSP 走 mise；CLI 日用品 / 多路复用器走 per-user（官方/GitHub 预编译 → `~/.local/bin`，见 `platforms/linux.md` / `scripts/bootstrap.sh`）；编译器/git/neovim 走 per-user（预编译/源码） |
 
 > macOS 装完脚本会提示把 `eval "$(/opt/homebrew/bin/brew shellenv)"` 加进 `~/.zprofile`（本仓库 `configs/shell/env.sh` 已用 `export PATH="/opt/homebrew/bin:$PATH"` 覆盖）。
 

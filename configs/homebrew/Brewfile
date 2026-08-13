@@ -13,7 +13,7 @@
 brew "ripgrep"               # 全文搜索
 brew "jq"                    # JSON 处理
 brew "fzf"                   # 模糊查找（装后跑 $(brew --prefix)/opt/fzf/install 配 keybinds）
-brew "tmux"                  # 多路复用
+brew "zellij"                 # 多路复用（替代 tmux，见 tools/zellij.md）
 brew "starship"              # 提示符（见 tools/starship.md）
 
 # ===== GUI 应用（cask）=====

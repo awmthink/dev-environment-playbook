@@ -1,0 +1,26 @@
+// configs/zellij/config.kdl — 参考实物（只读）
+// 落地到 ~/.config/zellij/config.kdl。思路见 tools/zellij.md。
+// 仅写「与 zellij 默认不同」的偏好；其余（快捷键、状态栏自显提示）用内置默认。
+// panes 的默认 shell 跟随登录 shell，故不设 default_shell。
+// Aura 色板取自 aura-theme 官方（packages/color-palettes/aura-colors.css），对齐 profile.md Aura Dark 偏好。
+
+default_layout "compact"     // 默认非 compact；紧凑布局省屏（SSH / 小终端友好）
+mouse_mode true              // 默认 false；开鼠标：点 pane / 滚屏 / 拖分隔线
+scroll_buffer_size 100000    // 默认 10000；放大滚屏缓冲
+
+themes {
+    aura {
+        bg      "#15141b"   // black（背景）
+        fg      "#edecee"   // white（前景）
+        red     "#ff6767"
+        green   "#61ffca"
+        yellow  "#ffca85"   // aura orange 兼作 yellow（Aura 无独立 yellow）
+        blue    "#82e2ff"
+        magenta "#f694ff"   // aura pink 兼作 magenta
+        orange  "#ffca85"
+        cyan    "#61ffca"   // aura green(mint) 最近 cyan（Aura 无独立 cyan）
+        black   "#15141b"
+        white   "#edecee"
+    }
+}
+theme "aura"

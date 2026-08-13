@@ -39,27 +39,27 @@
 ## user-local 包管理（开发工具）
 > Linux 发行版源版本偏旧，开发工具用以下方式装到用户目录、自行管理版本。
 
-- **mise（主力）**：**需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls），声明在 `configs/mise/config.toml`，per-user 装在 `~/.local/share/mise`（见 `tools/mise.md`）。CLI 日用品 / 编译器 / git / tmux / neovim 不进 mise（见下两节）。
+- **mise（主力）**：**需要多版本 / 锁版本的工具**——runtime（node/python/go/rust）+ build（cmake/ninja）+ LSP（pyright/vtsls），声明在跨平台 `configs/mise/config.toml`，per-user 装在 `~/.local/share/mise`（见 `tools/mise.md`）。CLI 日用品 / 编译器 / git / neovim 不进 mise（见下）。
 - **不在 Linux 用 brew**：brew-on-Linux 受限（bottle 只认标准 prefix `/home/linuxbrew/.linuxbrew`、单用户设计、多用户共享服务器别扭），dev 工具改由 mise + per-user 接管。brew 退回 macOS 专属（cask + 字体 + CLI formula）。
 - **per-user `~/.local`（mise 之外）**：
   - **编译器**：预编译 llvm 18.1.8（`~/.local/llvm-18.1.8`，CUDA 12.8 要 clang<20）——LLVM 不发 macOS 预编译、且 mise-llvm 走源码编译太慢，故 Linux 走 per-user 预编译（见 `tools/c-cpp.md`）。
   - **git**：源码编译（~1min，两端统一版本；上游无预编译，不进 mise）。
-  - **tmux**：源码编译 ≥3.4（CentOS 8 AppStream 3.1c 不够新；deps `libevent-devel` / `ncurses-devel`，见 `tools/tmux.md`）。
+  - **rg / jq / fzf / starship / zellij**：官方/GitHub 预编译单文件二进制 → `~/.local/bin`（starship 官方 installer；rg/jq/fzf/zellij 取 GitHub release，rg/zellij 用 musl 静态版跨 glibc）。
   - 见 `scripts/bootstrap.sh` 自动安装。
 - **单文件 CLI**：`cargo install` / `go install` / `uv tool install`，产物进对应 bin 目录。
 
 ## CLI 日用品（CentOS 8，按 core principle 逐工具评估）
-> 不需要多版本、不进 mise；按「系统版本够不够用」决定 `dnf` 还是 per-user。
+> 不需要多版本、不进跨平台 mise config；按「最 canonical 来源」决定 dnf / 官方预编译 / mise。
 
 | 工具 | CentOS 8 系统版 | 判定 | 安装 |
 |------|----------------|------|------|
-| jq | AppStream 1.6 | 够用（1.6 仍是事实标准） | `sudo dnf install jq` |
-| ripgrep (rg) | EPEL（约 12/13.x） | 够用（核心功能稳定） | `sudo dnf install ripgrep`（需启用 EPEL） |
-| tmux | AppStream 3.1c（2020） | 不够（要 ≥3.4） | 源码编译 → `~/.local/bin`（见 `tools/tmux.md` / `scripts/bootstrap.sh`） |
-| fzf | EPEL 不可靠 + shell 集成靠自带脚本 | 官方 installer 最优 | `git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install` |
-| starship | 无 dnf 包 | 官方 installer | `curl -sS https://starship.rs/install.sh \| sh -s -- -b ~/.local/bin` |
+| jq | AppStream 1.6 | 官方预编译最 canonical（静态单文件） | GitHub release `jq-linux-amd64` → `~/.local/bin` |
+| ripgrep (rg) | EPEL（偏旧） | 官方预编译最 canonical（musl 静态） | GitHub release `ripgrep-*-x86_64-unknown-linux-musl.tar.gz` → `~/.local/bin` |
+| zellij | 无 | 官方预编译最 canonical（musl 静态） | GitHub release `zellij-x86_64-unknown-linux-musl.tar.gz` → `~/.local/bin`（替代 tmux，见 `tools/zellij.md`） |
+| fzf | EPEL 不可靠 | GitHub 预编译最 canonical（单文件） | GitHub release `fzf-*-linux_amd64.tar.gz` → `~/.local/bin`（shell keybinds 另配） |
+| starship | 无 dnf 包 | 官方 installer 最 canonical | `curl -sS https://starship.rs/install.sh \| sh -s -- -b ~/.local/bin` |
 
-> **判定原则**：系统版本够用 → `dnf install`（接受 sudo、全 server 用户共享、最 canonical）；不够 → per-user（源码 / 官方 installer，免 sudo、可随用户迁移）。与 git / neovim / tmux 同一套路。详见各 `tools/*.md`。
+> **判定原则**：leaf 单文件 CLI / 多路复用器优先官方/GitHub 预编译二进制（最 canonical、最透明）→ `~/.local/bin`。不再依赖系统 dnf 版本（发行版源偏旧/不可靠）。详见各 `tools/*.md` 与 `scripts/bootstrap.sh`。
 
 ## 常用探测命令
 - 发行版：`cat /etc/os-release`
