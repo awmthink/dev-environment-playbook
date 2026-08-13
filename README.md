@@ -38,13 +38,13 @@
 
 **检查差异**（只读，最安全，建议先跑）
 ```
-对比当前环境与 tools/ 的声明，列出：缺哪些工具、版本不符的、配置缺失的。
+对比当前环境与 tools/ 和 agents/（CLI 类）的声明，列出：缺哪些工具、版本不符的、配置缺失的。
 先只报告，不要改动任何东西。
 ```
 
 **同步 / 更新**
 ```
-按 tools/ 和 agents/ 配置我的 shell、git 和 opencode。
+按 tools/ 和 agents/（CLI 类：opencode、pi）配置我的 shell、git 和 opencode。
 遇到既有配置先 diff 给我确认。
 ```
 
