@@ -19,8 +19,8 @@
 | macOS | `brew install git`（单用户，brew 版本足够新） |
 | Linux | 源码编译 → `~/.local/bin/git`（发行版偏旧，上游无预编译二进制）。安装命令见下。 |
 
-> **Linux 源码编译要点**：`make configure && ./configure --prefix=$HOME/.local CC=clang && make NO_ICONV=YesPlease all && make install`。
-> - `NO_ICONV=YesPlease` 规避部分 distro 的 iconv 链接问题（仅禁字符集转换，**不影响 `text`/`eol` 行尾规范化**）。
+> **Linux 源码编译要点**：`make configure && ./configure --prefix=$HOME/.local CC=clang && make all && make install`。
+> - **必须在剥离 conda 的 PATH 下编译**：conda 在 PATH 时，configure 会捡到 conda 的 `curl-config`，把 `-I <conda>/include` 带进编译 → conda 的 GNU libiconv `iconv.h`（`#define iconv_open libiconv_open`）遮蔽 glibc 头 → 链接报 `undefined reference to libiconv_open`。同时 curl/openssl 也会被链到 conda 版本，git 与 conda 耦合。
 > - 缺依赖期间可用**系统 git 兜底**。
 
 ### Linux 安装（源码编译，链 per-user clang）
@@ -28,15 +28,17 @@
 # 构建依赖（一次性，需 sudo）：
 #   CentOS/RHEL: sudo dnf install make autoconf zlib-devel libcurl-devel expat-devel openssl-devel gettext perl
 #   Ubuntu/Debian: sudo apt install make autoconf zlib1g-dev libcurl4-openssl-dev libexpat1-dev libssl-dev gettext perl
+# 干净 PATH：剥掉 conda，避免 conda 的 curl-config / GNU libiconv 头泄漏（见上方要点）
+CLEAN_PATH=$(echo "$PATH" | tr ':' '\n' | rg -v 'miniconda|conda' | paste -sd:)
 GIT_VER=2.55.0
 TMP=$(mktemp -d)
 curl -fL "https://mirrors.edge.kernel.org/pub/software/scm/git/git-$GIT_VER.tar.xz" -o "$TMP/git.tar.xz"
 tar -xf "$TMP/git.tar.xz" -C "$TMP"
 ( cd "$TMP/git-$GIT_VER" \
-    && make CC=clang configure \
-    && ./configure --prefix="$HOME/.local" CC=clang \
-    && make -j"$(nproc)" NO_ICONV=YesPlease all \
-    && make NO_ICONV=YesPlease install )
+    && PATH="$CLEAN_PATH" make CC=clang configure \
+    && PATH="$CLEAN_PATH" ./configure --prefix="$HOME/.local" CC=clang \
+    && PATH="$CLEAN_PATH" make -j"$(nproc)" CC=clang all \
+    && PATH="$CLEAN_PATH" make CC=clang install )
 rm -rf "$TMP"
 ```
 
@@ -57,4 +59,9 @@ rm -rf "$TMP"
 ```sh
 git --version      # 期望：较新稳定版
 git config --list  # 确认身份与上述设置已生效
+# iconv 已启用（非 NO_ICONV）：GBK 提交信息能正确转码显示
+tmp=$(mktemp -d) && cd "$tmp" && git init -q && git config user.email t@t && git config user.name t \
+  && printf '中文' | iconv -t GBK > m && git -c i18n.commitEncoding=GBK commit --allow-empty -q -F m \
+  && git log -1 --pretty=%s   # 期望输出：中文（GBK → UTF-8 转码成功）
+cd - && rm -rf "$tmp"
 ```
