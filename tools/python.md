@@ -32,6 +32,11 @@
 
 > 不再单独装 pipx / conda（被 uv 覆盖）；除非有强 conda 依赖（某些科学计算环境，如 GPU 服务器的旧 ML env）才另议——那种机器 conda 与 uv 共存，conda 管它自己的 env、uv/mise 管新项目。
 
+### conda 共存约定（GPU 服务器）：按需使用，不常驻 PATH
+- **不把 conda 目录写进 env.sh 的 PATH**、`~/.condarc` 设 `auto_activate_base: false`、rc 里只留 `conda shell.bash hook`（注册 conda 函数、不改 PATH）。
+- **为什么**：conda 常驻 PATH 时，它的 `curl-config` / GNU libiconv `iconv.h` / openssl 等会泄漏进 configure 类源码构建（实测破坏过 git 编译，见 `tools/git.md`），且 conda python 会抢占 mise/uv 的 python（`UV_PYTHON_PREFERENCE` 只防 uv，不防构建探测）。
+- **用时**：手动 `conda activate <env>`（hook 动态前置 env bin）；`deactivate` 即恢复 mise/uv 环境。
+
 ## 参考
 - `configs/shell/env.sh`（`UV_PYTHON_PREFERENCE`）
 
