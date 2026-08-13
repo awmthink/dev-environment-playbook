@@ -1,6 +1,6 @@
 # configs/mcp/ — MCP servers
 
-> MCP server 配置集中于此。当前 agent 主力是 **opencode**（见 `profile.md`），MCP 配在 opencode 的 `mcp` 字段。Zed 定位为纯 editor，不配 MCP。
+> MCP server 配置集中于此。**opencode** 用 `mcp` 字段格式（见 `profile.md`）；**pi**（装 pi-mcp-adapter 后）用标准 `mcpServers` 格式。Zed 定位为纯 editor，不配 MCP。
 
 ## MCP servers 清单
 
@@ -39,4 +39,31 @@
 }
 ```
 
-> 其它 agent（claude-code / codex / qoder-cli）若需同样的 MCP，参考各自 MCP 配置格式，key 同样走 `{env:ZAI_CODING_CN_API_KEY}`。
+> 其它 agent（codex / zcode / cursor）是 GUI App，MCP 在 App 内配置，本仓库不覆盖（见 `agents/README.md`）。
+
+## pi 格式（pi-mcp-adapter，标准 `mcpServers`，放 `~/.config/mcp/mcp.json`）
+
+> pi 无内置 MCP，先装适配器 `pi install npm:pi-mcp-adapter`（见 `agents/pi.md`），再读标准 MCP 配置文件。adapter 按字段推断传输（`url` = StreamableHTTP / `command`+`args` = stdio，**无 `type` 字段**）；插值用 `${VAR}`（不是 opencode 的 `{env:VAR}`）：
+
+```json
+{
+  "mcpServers": {
+    "web-search-prime": {
+      "url": "https://open.bigmodel.cn/api/mcp/web_search_prime/mcp",
+      "headers": { "Authorization": "Bearer ${ZAI_CODING_CN_API_KEY}" }
+    },
+    "web-reader": {
+      "url": "https://open.bigmodel.cn/api/mcp/web_reader/mcp",
+      "headers": { "Authorization": "Bearer ${ZAI_CODING_CN_API_KEY}" }
+    },
+    "zai-mcp-server": {
+      "command": "npx",
+      "args": ["-y", "@z_ai/mcp-server"],
+      "env": {
+        "Z_AI_API_KEY": "${ZAI_CODING_CN_API_KEY}",
+        "Z_AI_MODE": "ZHIPU"
+      }
+    }
+  }
+}
+```

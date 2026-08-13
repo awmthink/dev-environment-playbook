@@ -52,7 +52,8 @@
 
 ## 参考
 - `configs/opencode/opencode.json`（provider 结构；key 走环境变量）
-- `configs/mcp/`（MCP servers 共享参考，opencode + Zed 两种格式）
+- `configs/agents/AGENTS.md`（跨 agent 全局指令的参考实物；本机 `~/.config/opencode/AGENTS.md` 软链到 `~/.agents/AGENTS.md`）
+- `configs/mcp/`（MCP servers 共享参考，opencode + pi 两种格式）
 
 ## 验证
 ```sh

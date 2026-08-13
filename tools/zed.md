@@ -1,6 +1,6 @@
 # tool: Zed（纯 editor）
 
-> macOS 日常主力**编辑器**（见 `profile.md`）。定位为**纯 editor**——只用它的编辑 / 远程开发能力，**不用它的 agent / MCP / LLM provider**。agent 交给 opencode / claude-code / codex / qoder-cli（见各自 `agents/*.md`）。
+> macOS 日常主力**编辑器**（见 `profile.md`）。定位为**纯 editor**——只用它的编辑 / 远程开发能力，**不用它的 agent / MCP / LLM provider**。agent 交给 opencode / pi（CLI）与 codex / zcode / cursor（App，见各自 `agents/*.md`）。
 
 ## 为什么用
 启动快、Rust 原生、GPU 渲染；Remote 开发直连 GPU 服务器，比 Neovim + zellij 更适合日常（Neovim 仍作纯命令行 fallback）。Cursor 留给大仓库场景。

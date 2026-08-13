@@ -1,7 +1,7 @@
 // Zed settings（参考实物）
 // 真实文件：~/.config/zed/settings.json（不软链；agent 按本文件思路生成）
 // 本模板含跨机器通用的外观 / 布局 / 编辑器偏好；
-// Zed 定位为**纯 editor**——不配置 agent / MCP / LLM provider（agent 交给 opencode / claude-code / codex / qoder-cli）。
+// Zed 定位为**纯 editor**——不配置 agent / MCP / LLM provider（agent 交给 opencode / pi / codex / zcode / cursor）。
 // 配置思路见 tools/zed.md
 {
   // ===== 外观（对齐 profile：Aura Dark）=====

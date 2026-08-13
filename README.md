@@ -4,7 +4,7 @@
 
 ## 默认前提
 
-你已经在某台机器上 `clone` 了本仓库，并用某个 coding agent（opencode / Claude Code / Codex / Cursor / Zed 等）在本目录打开了会话。agent 会先读 `AGENTS.md`（流程 + 安全规则），然后按你的指令工作。**你不直接改文件，而是下指令 + review agent 的产出。**
+你已经在某台机器上 `clone` 了本仓库，并用某个 coding agent（opencode / pi / codex / zcode / cursor 等）在本目录打开了会话。agent 会先读 `AGENTS.md`（流程 + 安全规则），然后按你的指令工作。**你不直接改文件，而是下指令 + review agent 的产出。**
 
 ## 两类核心场景（都通过 agent 驱动）
 
@@ -27,7 +27,7 @@
 
 **完善 agent 配置**
 ```
-补全 agents/qoder.md 的配置入口、思路和验证方式。
+在 agents/ 登记新 agent（CLI / App 分类 + 验证方式；CLI 类再补配置思路）。
 ```
 
 > `AGENTS.md` 里的「写作约定」规定了这些文档的统一格式，agent 会自动遵循。
@@ -70,7 +70,7 @@
 ## 目标平台 / 覆盖的 agent
 
 - 平台：macOS（Homebrew）、Linux（见 `platforms/linux.md`）
-- Agent：opencode · Claude Code · Codex · Cursor · Zed · Zcode · Qoder（见 `agents/`）
+- Agent：opencode · pi（CLI）· codex · zcode · cursor（App，见 `agents/`）
 
 ## 为什么不是 dotfiles 仓库？
 
