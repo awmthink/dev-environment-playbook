@@ -12,11 +12,12 @@
 
 | 平台 | 方式 |
 |------|------|
-| macOS / Linux | 官方脚本 `curl -fsSL https://opencode.ai/install \| bash`，装到 `~/.opencode/`（user-local，无 sudo） |
+| macOS | 官方脚本 `curl -fsSL https://opencode.ai/install \| bash`（装到 `~/.opencode/`，user-local、无 sudo）；或 `brew install opencode`（Go 独立二进制，同样与 node 解耦，升级走 `brew upgrade`）——两者都推荐 |
+| Linux | 官方脚本 `curl -fsSL https://opencode.ai/install \| bash`（装到 `~/.opencode/`，user-local，无 sudo） |
 
-> **不用 `npm install -g opencode-ai`**：它跟随当前 node 版本（本机 node 归 mise，见 `tools/node.md`），mise 升级 node 主版本时全局包不自动迁移、会丢失；且与官方脚本并存会双来源 + PATH 遮蔽（旧版压新版）。官方脚本是独立二进制、与 node 解耦，故选它。
+> **不用 `npm install -g opencode-ai`**：它跟随当前 node 版本（本机 node 归 mise，见 `tools/node.md`），mise 升级 node 主版本时全局包不自动迁移、会丢失；且与官方脚本并存会双来源 + PATH 遮蔽（旧版压新版）。官方脚本与 brew 都是独立二进制、与 node 解耦，故选它们。
 
-> shell 钩子：把 `$HOME/.opencode/bin` 前置进 PATH（本机放 `~/.config/shell/env.sh`，两端 bash/zsh 共享 substance；机器特定，不入 configs 模板）。
+> shell 钩子：仅官方脚本安装需要把 `$HOME/.opencode/bin` 前置进 PATH（本机放 `~/.config/shell/env.sh`，两端 bash/zsh 共享 substance；机器特定，不入 configs 模板）；brew 安装则无需任何钩子。
 
 ## 配置位置
 - 全局配置：`~/.config/opencode/opencode.json`（**注意：不是 `~/.opencode/`**——那是安装目录）
