@@ -43,6 +43,7 @@ rm -rf "$TMP"
 - 配置文件 `~/.config/zellij/config.kdl`（可选；不创建则用内置默认，已足够起步）。
 - 起步：`zellij setup --dump-config` 看全量可配置项；按需取几行进自己的 config。
 - **主题**：自定义 Aura Dark 主题（色板取自 aura-theme 官方），对齐 profile.md 偏好——见参考配置的 `[themes]` 块 + `theme "aura"`。
+- **`bg` 的坑（重要）**：zellij 用主题的 `bg` 渲染**鼠标选区高亮**（非直觉，见官方 PR zellij-org/zellij#3450）。`bg` **不能设成与终端背景同色**，否则选区高亮=普通背景、完全看不见。故 Aura 主题的 `bg` 用 `#3a2f5e`（中暗紫）而非终端背景 `#15141b`——选区清晰可见。`bg` 只管选区，**不影响状态栏**（状态栏色由简化格式派生 ribbon/text 组件决定）也不影响 pane 正文背景（默认透出终端色）。`black` 仍保持 `#15141b`（ANSI 前景色，给程序输出用，不受此影响）。
 - 默认快捷键无需配置——状态栏自显示；`Ctrl-g` 锁定/解锁、`Ctrl-p` pane、`Ctrl-t` tab、`Ctrl-s` scroll。
 - 会话持久化：zellij 自带 server 化会话，`zellij attach <name>` / `zellij ls`。
 

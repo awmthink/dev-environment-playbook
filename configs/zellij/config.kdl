@@ -10,7 +10,7 @@ scroll_buffer_size 100000    // 默认 10000；放大滚屏缓冲
 
 themes {
     aura {
-        bg      "#15141b"   // black（背景）
+        bg      "#3a2f5e"   // 鼠标选区高亮色：zellij 用 bg 渲染选区，不可与终端背景(#15141b)同色，否则选区不可见
         fg      "#edecee"   // white（前景）
         red     "#ff6767"
         green   "#61ffca"
