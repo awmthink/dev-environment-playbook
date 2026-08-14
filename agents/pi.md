@@ -9,7 +9,7 @@
 - session 树 + 分支（`/tree`）、自动 compaction、`/share` 导出会话。
 
 ## 版本约束
-- 版本：latest（自带更新器 `pi update --self`，不走 npm upgrade）
+- 版本：latest（自带更新器 `pi update --self`，pi 官方更新方式；勿手动 `npm upgrade -g`，那样绕过 pi 的版本 / shrinkwrap 处理）
 
 ## 安装
 

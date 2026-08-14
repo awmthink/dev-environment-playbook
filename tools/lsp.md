@@ -13,7 +13,7 @@
 | TypeScript/Vue | vtsls | **mise**：`mise use -g npm:@vtsls/language-server@latest`（随 node） | TS/JS/Vue |
 | Rust | rust-analyzer | `rustup component add rust-analyzer` | 跟随 rustup toolchain（见 `tools/rust.md`） |
 | C/C++ | clangd | **平台原生**：mac=Xcode CLT；linux=`~/.local/llvm-18.1.8/bin`（见 `tools/c-cpp.md`） | 与 clang-format/clang-tidy 同源 |
-| Go | gopls | **待验证**：mise registry 无、go backend 未验证 → 暂在项目内 `go install golang.org/x/tools/gopls@latest` | 验证后再进 mise 全局 config |
+| Go | gopls | `go install golang.org/x/tools/gopls@latest`（全局，落 `~/go/bin`、跨 go 版本持久，见 `tools/go.md`） | mise registry 无 go backend；全局 go install 已够用（已验证 v0.23） |
 
 ## 版本与安装策略
 
