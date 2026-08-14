@@ -47,7 +47,7 @@ fi
 
 ## 依赖
 - **ripgrep**：`:grep` 全文搜索 → 不进 mise，按平台最 canonical（mac=brew / linux=dnf，见 `platforms/linux.md`）
-- **剪切板 provider**：nvim 自身不含，需外部工具——macOS 自带 `pbcopy`/`pbpaste`；Linux 需 `xclip`（X11）或 `wl-clipboard`（Wayland），否则 `+` 寄存器不生效（yank 进不了系统剪切板）
+- **剪切板**：按平台分流，**不检测 SSH/DISPLAY**——macOS 用自带的 `pbcopy`/`pbpaste`（nvim 自动检测 provider）；**Linux 用 OSC52**（yank 时把内容写到控制终端，经 ssh/终端透传到**本地**系统剪切板），**不依赖 xclip/wl-copy**（那俩在 SSH 无 DISPLAY 场景下根本连不上 X/Wayland，是 SSH 友好定位下的死路）。详见配置思路「剪切板」。
 - **不依赖**：LSP server（导航交 agent）、任何插件管理器 / Mason、tree-sitter CLI
 
 ## 配置位置
@@ -57,9 +57,10 @@ fi
 > 整份见 `configs/nvim/init.lua`。极简、纯原生、0 插件。
 
 - **高亮**：nvim 内置 syntax（默认开启）+ `termguicolors` 真彩色。
+- **SSH 启动警告（`NVIM_NOTTYFAST`）**：nvim 启动早期发 OSC 11 查终端背景色自动判断 dark/light；SSH 高延迟下来不及响应，每次启动报警告且变慢（neovim #38699/#38648）。解法：shell 环境 `export NVIM_NOTTYFAST=1`（见 `configs/shell/env.sh` Linux 块）跳过该检测，并在 init.lua 显式 `o.background = "dark"` 兜底。检测发生在 user config 之前，故必须用环境变量——init.lua 里设 background 拦不住这个警告。
 - **格式 / 选项**：行号 + 相对行号、缩进（`expandtab` / `tabstop` / `shiftwidth`）、搜索（`smartcase` / `ignorecase`）、分屏方向、`cursorline`、`scrolloff` 等。
 - **搜索**：`:grep` 走 ripgrep（`grepprg = rg`），结果进 quickfix，`:copen` 查看。
-- **剪切板**：`o.clipboard = "unnamedplus,unnamed"`，yank/delete 默认同步系统剪切板（依赖 provider：macOS=pbcopy，Linux=xclip/wl-copy）。
+- **剪切板（按平台分流）**：macOS → `o.clipboard = "unnamedplus,unnamed"`（pbcopy provider 自动生效）；Linux → `TextYankPost` autocmd 里用 OSC52 把 yank 写 `/dev/tty`（纯 lua + 系统 `base64`，0 插件/0 外部脚本）。**Linux 不设 `clipboard=unnamedplus`**：SSH 下没有可用 paste provider，设了反而让 `p` 失灵；故只同步 yank 方向，粘贴进 nvim 走 `Cmd+V` 终端层 bracketed paste。这是为「SSH 友好」定位补的洞——xclip/wl-copy 方案在 SSH 远程（无 DISPLAY）完全失效，只有 OSC52 能跨 ssh 到本地剪切板（前提：本地终端支持 OSC52，如 Ghostty/iTerm2；macOS 自带 Terminal.app 不支持）。
 - **键位**：仅基础——窗口切换（`<C-h/j/k/l>`）、`<esc>` 清高亮、`<leader>q` 全退。**不设**代码导航键位。
 
 ## 参考
@@ -68,8 +69,9 @@ fi
 ## 验证
 ```sh
 nvim --version | head -1     # 期望：>= 0.11
-# 剪切板联动：nvim 内 yank 一行后，系统剪切板应能取到
-printf 'CLIP_TEST\n' > /tmp/_t.txt && nvim --headless /tmp/_t.txt +'normal! ggyy' +qa && pbpaste   # macOS 期望输出 CLIP_TEST（Linux 换 xclip -o）
-rm -f /tmp/_t.txt
+# 剪切板联动：
+#   macOS：nvim 内 yy 一行 → 终端外 `pbpaste` 应输出该行（pbcopy provider 自动生效）
+#   Linux：headless 无法验证 OSC52（需真实交互终端渲染），改手动——
+#          nvim 内 yy 一行 → 切到本地终端 Cmd+V，应粘出该行（OSC52 经 ssh 透传）
 # 启动 nvim 打开代码文件：确认语法高亮 / 缩进 / :grep 可用
 ```

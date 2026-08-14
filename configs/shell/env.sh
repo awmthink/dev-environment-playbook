@@ -45,6 +45,8 @@ if [ "$(uname)" = Linux ]; then
   # per-user 预编译 llvm（见 tools/c-cpp.md）：clang/clangd/clang-format/clang-tidy
   [ -x "$HOME/.local/llvm-18.1.8/bin/clang" ] && export PATH="$HOME/.local/llvm-18.1.8/bin:$PATH"
   export CC=clang CXX=clang++
+  # nvim：SSH 高延迟下启动时的 OSC11 背景检测会超时报警告，跳过之（init.lua 显式 background=dark 兜底）
+  export NVIM_NOTTYFAST=1
 fi
 
 # ===== mise（runtime + build + LSP 的 PATH 与版本切换）=====
