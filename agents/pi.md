@@ -21,6 +21,8 @@
 
 > npm 备选（本仓库 node 由 mise 管，见 `tools/node.md`）：`npm install -g --ignore-scripts @earendil-works/pi-coding-agent`，装进当前 node 前缀、经 mise shim 暴露 `pi`。
 
+> **官方脚本内部即 `npm install -g`**（装到当前 npm prefix = mise node 版本目录），与上方手动 npm 等价、落点相同——与 opencode 不同（opencode 是 Go 独立二进制、真与 node 解耦；pi 是 node 程序，必须依赖 node）。**后果**：mise 升级 node 后 pi 绑在旧版本目录、会从 PATH 消失（node 升级频率低，故不做 postinstall 自动化）；恢复：重跑 install.sh（自动用新 node prefix 重装，`pi update --self` 因此时 pi 不在 PATH 而不可用）。
+
 ### MCP 适配器 + server 配置
 
 > pi 无内置 MCP，需要时以扩展补齐（本环境已纳入标配）：

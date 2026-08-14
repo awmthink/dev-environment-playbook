@@ -14,6 +14,8 @@
 |------|------|
 | macOS / Linux | 官方脚本 `curl -fsSL https://opencode.ai/install \| bash`，装到 `~/.opencode/`（user-local，无 sudo） |
 
+> **不用 `npm install -g opencode-ai`**：它跟随当前 node 版本（本机 node 归 mise，见 `tools/node.md`），mise 升级 node 主版本时全局包不自动迁移、会丢失；且与官方脚本并存会双来源 + PATH 遮蔽（旧版压新版）。官方脚本是独立二进制、与 node 解耦，故选它。
+
 > shell 钩子：`.zshrc` 里 `export PATH="$HOME/.opencode/bin:$PATH"`（机器特定，不入 configs 模板）。
 
 ## 配置位置
