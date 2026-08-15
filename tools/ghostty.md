@@ -52,6 +52,13 @@ Ghostty 会把 `TERM=xterm-ghostty` 传给 SSH 目标机。ncurses **6.5-2024122
   tic -x configs/ghostty/terminfo/xterm-ghostty
   ```
   `tic` 默认写系统库、无权限时落到 `~/.terminfo`；如需强制 user-local 可设 `TERMINFO=~/.terminfo`。源文件由官方 `src/terminfo/ghostty.zig` 生成并入库，新机器不必再从网络拉取。
+- **坑：conda 环境的 ncurses 只认 hex 目录布局**。conda-forge ncurses ≥6.5 构建查找 terminfo 时只按首字符的十六进制目录（如 `x` → `~/.terminfo/78/`、`g` → `~/.terminfo/67/`），不读 `tic` 默认写入的字母目录（`x/`、`g/`）。在激活了 conda 环境的机器上（PATH 里 `clear`/`tput` 解析到 `$CONDA_PREFIX/bin`），会再次报 `terminals database is inaccessible`。补一份硬链接即可（幂等）：
+  ```sh
+  mkdir -p ~/.terminfo/78 ~/.terminfo/67
+  ln -f ~/.terminfo/x/xterm-ghostty ~/.terminfo/78/xterm-ghostty
+  ln -f ~/.terminfo/g/ghostty       ~/.terminfo/67/ghostty
+  ```
+  硬链接让字母 / hex 两种布局共享同一份数据，系统 ncurses（字母布局）不受影响。
 - **备选**：SSH 配置 `SetEnv TERM=xterm-256color`（OpenSSH 8.7+）。零安装，但丢失彩色下划线、真彩检测等 Ghostty 增强能力。
 
 ## 验证
