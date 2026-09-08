@@ -31,7 +31,10 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 - `macos-titlebar-style = transparent` + `background-opacity = 0.96`：沉浸感 + 长时用眼柔和。
 - `cursor-style = block` + `cursor-style-blink = false`：减少视觉干扰。
 - `scrollback-limit = 100000`：足够回溯。
-- `shell-integration = detect` + `cursor,sudo,title`：自动 zsh 集成，无需手动改 rc。
+- `shell-integration = detect` + `cursor,sudo,title,ssh-env`：自动 zsh 集成，无需手动改 rc。
+  - `ssh-env`（必选，治本）：SSH 时自动把 `TERM` 从 `xterm-ghostty` 转成 `xterm-256color`（所有服务器都有），并传播 `COLORTERM`/`TERM_PROGRAM`/`TERM_PROGRAM_VERSION`。**已知坑：不加它，ssh 到没有 `xterm-ghostty` terminfo 的 Linux 服务器时，远端 bash 的 readline / clear / less / vim 全坏**（方向键乱码、退格失效等）。
+  - `sudo`：包装 sudo 以保留 terminfo（避免 sudo 后环境里的终端能力丢失）。
+  - **不用 `ssh-terminfo`**：它会往远端写 terminfo（副作用），不符合「零副作用」偏好；`ssh-env` 的 TERM 转换已能覆盖所有服务器。
 - `copy-on-select = clipboard`：选中即复制（保留 iTerm2 习惯）。
 - `mouse-hide-while-typing = true`。
 - 视觉增强（与半透背景配合）：`background-blur = true`（macOS 原生毛玻璃）、`window-colorspace = display-p3`（Apple Silicon 宽色域，Aura 更饱满）、`window-padding-balance = true`（内容居中）、`adjust-cell-height = 2`（略增行高，长时间用眼更舒服）。
@@ -47,7 +50,8 @@ GPU(Metal) 渲染流畅、原生 macOS 体验、单文件 `key = value` 配置�
 ## 远程登录（SSH）
 Ghostty 会把 `TERM=xterm-ghostty` 传给 SSH 目标机。ncurses **6.5-20241228 起**才内置该条目，旧发行版（如 CentOS 8 的 ncurses 6.1）的 terminfo 库里没有，于是 `clear` 等报 `terminals database is inaccessible` / `unknown terminal type`。
 
-- **首选**：把条目装到目标机用户目录（免 sudo、符合平台 user-local 约定），一劳永逸、保留 Ghostty 全部能力：
+- **首选（零副作用、自动）**：本机已启用 `ssh-env`（见上方 shell 集成）。SSH 时自动把 `TERM` 从 `xterm-ghostty` 转成 `xterm-256color`（所有服务器都有），并传播 `COLORTERM`/`TERM_PROGRAM`/`TERM_PROGRAM_VERSION`。不改远端任何文件、零安装。**依赖 shell 集成包裹 `ssh` 命令**：需在 Ghostty 窗口内、zsh 集成已加载时直接敲 `ssh`；从脚本或其它终端发起的 ssh 不生效。
+- **可选（保留完整能力）**：想保留 `xterm-ghostty` 全部能力（彩色下划线、真彩检测等）时，把条目装到目标机用户目录（免 sudo、符合平台 user-local 约定），一劳永逸：
   ```sh
   tic -x configs/ghostty/terminfo/xterm-ghostty
   ```
@@ -59,7 +63,7 @@ Ghostty 会把 `TERM=xterm-ghostty` 传给 SSH 目标机。ncurses **6.5-2024122
   ln -f ~/.terminfo/g/ghostty       ~/.terminfo/67/ghostty
   ```
   硬链接让字母 / hex 两种布局共享同一份数据，系统 ncurses（字母布局）不受影响。
-- **备选**：SSH 配置 `SetEnv TERM=xterm-256color`（OpenSSH 8.7+）。零安装，但丢失彩色下划线、真彩检测等 Ghostty 增强能力。
+- **兜底**：SSH 配置 `SetEnv TERM=xterm-256color`（OpenSSH 8.7+）。不依赖 shell 集成，适合脚本或非 Ghostty 终端发起 ssh 的场景；但会丢失 Ghostty 增强能力。
 
 ## 验证
 > 在 **Ghostty 窗口内**运行（Ghostty 会把自身注入 PATH，裸 `ghostty` 可用）；从其它终端（iTerm 等）跑需换成完整路径 `/Applications/Ghostty.app/Contents/MacOS/ghostty`。
@@ -70,9 +74,15 @@ ghostty +list-themes | grep -i aura     # 期望：列出 Aura
 # 打开新 Ghostty 窗口：确认字体为 Maple Mono NF CN、配色为 Aura Dark
 ```
 
-远程登录后的验证：
+远程登录后的验证（走 `ssh-env`，默认）：
+
+```sh
+ssh <host> 'echo $TERM'    # 期望：xterm-256color
+ssh <host> 'tput colors'   # 期望：256
+```
+
+走 terminfo 安装路线的，改为验证：
 
 ```sh
 infocmp -x xterm-ghostty >/dev/null && echo OK   # 期望：OK
-clear                                            # 期望：清屏无报错
 ```

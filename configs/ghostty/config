@@ -27,7 +27,7 @@ scrollback-limit = 100000
 
 # ===== Shell 集成 =====
 shell-integration = detect
-shell-integration-features = cursor,sudo,title
+shell-integration-features = cursor,sudo,title,ssh-env
 
 # ===== 行为 =====
 copy-on-select = clipboard
