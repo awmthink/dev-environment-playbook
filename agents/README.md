@@ -35,7 +35,7 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | Zcode | `~/.zcode/AGENTS.md` → 软链 |
 
 ## 共享：MCP servers
-> 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（opencode 的 `mcp` 字段 + pi 的标准 `mcpServers` 两种格式 + server 清单）。各 agent 从自己配置文件读，key 统一走环境变量（`ZAI_CODING_CN_API_KEY`），放 `~/.config/shell/secrets.env`。
+> 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（opencode 的 `mcp.servers` 字段 + pi 的标准 `mcpServers` 两种格式 + server 清单）。各 agent 从自己配置文件读，key 统一走环境变量（`ZAI_CODING_API_KEY`），放 `~/.config/shell/secrets.env`。
 
 ## 环境对齐必检清单
 
@@ -46,8 +46,8 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | opencode | 本体 / provider / MCP | `opencode.md` 验证段（`--version`、`auth list`、`mcp list` 等） |
 | pi | 本体 / 扩展 / MCP | `pi.md` 验证段（`--version`、`pi list`、pi 内 `/mcp`） |
 | 全局指令软链 | opencode / pi / codex / zcode 的读取位置 → `~/.agents/AGENTS.md` | `ls -l ~/.config/opencode/AGENTS.md ~/.pi/agent/AGENTS.md ~/.codex/AGENTS.md ~/.zcode/AGENTS.md` |
-| secrets.env | 存在、0600、含 agent 所需 key（如 `ZAI_CODING_CN_API_KEY`，值不外显） | `stat -c %a ~/.config/shell/secrets.env`（Linux，期望 600；macOS 用 `stat -f %Lp`）；`grep -c 'ZAI_CODING_CN_API_KEY' ~/.config/shell/secrets.env`（期望 ≥1） |
+| secrets.env | 存在、0600、含 agent 所需 key（如 `ZAI_CODING_API_KEY`，值不外显） | `stat -c %a ~/.config/shell/secrets.env`（Linux，期望 600；macOS 用 `stat -f %Lp`）；`grep -c 'ZAI_CODING_API_KEY' ~/.config/shell/secrets.env`（期望 ≥1） |
 | pi MCP 配置 | `~/.config/mcp/mcp.json`（mcpServers 格式、`${VAR}` 插值） | `test -f ~/.config/mcp/mcp.json && echo ok` |
 | skills 共享目录 | `~/.agents/skills/`（opencode / pi 共用，若使用） | `test -d ~/.agents/skills && echo ok` |
 
-> 凭据约定随附检查：opencode 的 `~/.local/share/opencode/auth.json` 期望 `{}`；pi 的 `~/.pi/agent/auth.json` 期望 `{}` 或仅订阅 OAuth 条目（API key 走 env，见各卡片验证段）。
+> 凭据约定随附检查：opencode 的 API key 走 env（`opencode auth list` 里 env 注入的 provider 显示 `environment`；账号存 `~/.local/share/opencode/account.json`，期望无 api-key 账号）；pi 的 `~/.pi/agent/auth.json` 期望 `{}` 或仅订阅 OAuth 条目（API key 走 env，见各卡片验证段）。

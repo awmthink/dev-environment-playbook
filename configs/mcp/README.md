@@ -1,38 +1,44 @@
 # configs/mcp/ — MCP servers
 
-> MCP server 配置集中于此。**opencode** 用 `mcp` 字段格式（见 `profile.md`）；**pi**（装 pi-mcp-adapter 后）用标准 `mcpServers` 格式。Zed 定位为纯 editor，不配 MCP。
+> MCP server 配置集中于此。**opencode** 用 `mcp.servers` 字段格式（见 `agents/opencode.md`）；**pi**（装 pi-mcp-adapter 后）用标准 `mcpServers` 格式。Zed 定位为纯 editor，不配 MCP。
 
 ## MCP servers 清单
 
 | Server | 类型 | 用途 | Key 来源 |
 |--------|------|------|----------|
-| web-search-prime | remote | 联网搜索（bigmodel） | `ZAI_CODING_CN_API_KEY` |
-| web-reader | remote | 网页阅读（bigmodel） | `ZAI_CODING_CN_API_KEY` |
-| zai-mcp-server | local（npx） | Z.AI MCP 工具集 | `ZAI_CODING_CN_API_KEY` |
+| web-search-prime | remote | 联网搜索（bigmodel） | `ZAI_CODING_API_KEY` |
+| web-reader | remote | 网页阅读（bigmodel） | `ZAI_CODING_API_KEY` |
+| zai-mcp-server | local（npx） | Z.AI MCP 工具集 | `ZAI_CODING_API_KEY` |
 
-> 所有 server 的 key 统一走 `ZAI_CODING_CN_API_KEY`（放 `~/.config/shell/secrets.env`，见 `tools/shell.md`）。config 里用 `{env:ZAI_CODING_CN_API_KEY}` 插值，**绝不写明文**。
+> 所有 server 的 key 统一走 `ZAI_CODING_API_KEY`（放 `~/.config/shell/secrets.env`，见 `tools/shell.md`）。config 里用 `{env:ZAI_CODING_API_KEY}` 插值，**绝不写明文**。
 
-## opencode 格式（`mcp` 字段，放 `~/.config/opencode/opencode.json`）
+## opencode 格式（`mcp.servers`，放 `~/.config/opencode/opencode.json`）
+
+> remote 且纯 API key（无 OAuth）的 server 设 `"oauth": false`（默认走 OAuth）。
 
 ```json
 {
   "mcp": {
-    "web-search-prime": {
-      "type": "remote",
-      "url": "https://open.bigmodel.cn/api/mcp/web_search_prime/mcp",
-      "headers": { "Authorization": "Bearer {env:ZAI_CODING_CN_API_KEY}" }
-    },
-    "web-reader": {
-      "type": "remote",
-      "url": "https://open.bigmodel.cn/api/mcp/web_reader/mcp",
-      "headers": { "Authorization": "Bearer {env:ZAI_CODING_CN_API_KEY}" }
-    },
-    "zai-mcp-server": {
-      "type": "local",
-      "command": ["npx", "-y", "@z_ai/mcp-server"],
-      "environment": {
-        "Z_AI_API_KEY": "{env:ZAI_CODING_CN_API_KEY}",
-        "Z_AI_MODE": "ZHIPU"
+    "servers": {
+      "web-search-prime": {
+        "type": "remote",
+        "url": "https://open.bigmodel.cn/api/mcp/web_search_prime/mcp",
+        "oauth": false,
+        "headers": { "Authorization": "Bearer {env:ZAI_CODING_API_KEY}" }
+      },
+      "web-reader": {
+        "type": "remote",
+        "url": "https://open.bigmodel.cn/api/mcp/web_reader/mcp",
+        "oauth": false,
+        "headers": { "Authorization": "Bearer {env:ZAI_CODING_API_KEY}" }
+      },
+      "zai-mcp-server": {
+        "type": "local",
+        "command": ["npx", "-y", "@z_ai/mcp-server"],
+        "environment": {
+          "Z_AI_API_KEY": "{env:ZAI_CODING_API_KEY}",
+          "Z_AI_MODE": "ZHIPU"
+        }
       }
     }
   }
@@ -50,17 +56,17 @@
   "mcpServers": {
     "web-search-prime": {
       "url": "https://open.bigmodel.cn/api/mcp/web_search_prime/mcp",
-      "headers": { "Authorization": "Bearer ${ZAI_CODING_CN_API_KEY}" }
+      "headers": { "Authorization": "Bearer ${ZAI_CODING_API_KEY}" }
     },
     "web-reader": {
       "url": "https://open.bigmodel.cn/api/mcp/web_reader/mcp",
-      "headers": { "Authorization": "Bearer ${ZAI_CODING_CN_API_KEY}" }
+      "headers": { "Authorization": "Bearer ${ZAI_CODING_API_KEY}" }
     },
     "zai-mcp-server": {
       "command": "npx",
       "args": ["-y", "@z_ai/mcp-server"],
       "env": {
-        "Z_AI_API_KEY": "${ZAI_CODING_CN_API_KEY}",
+        "Z_AI_API_KEY": "${ZAI_CODING_API_KEY}",
         "Z_AI_MODE": "ZHIPU"
       }
     }

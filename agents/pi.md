@@ -31,7 +31,7 @@
 pi install npm:pi-mcp-adapter   # 装 MCP 适配器扩展，重启 pi 生效
 ```
 
-> 配置文件：标准 `mcpServers` 格式落 `~/.config/mcp/mcp.json`（用户全局共享、adapter 优先级最高），内容见 `configs/mcp/README.md` 的「pi 格式」段；key 用 `${VAR}` 插值（读 secrets.env 的 `ZAI_CODING_CN_API_KEY`），不写明文。装完在 pi 内 `/mcp` 确认 server 状态（懒加载：首次调用才拉起）。
+> 配置文件：标准 `mcpServers` 格式落 `~/.config/mcp/mcp.json`（用户全局共享、adapter 优先级最高），内容见 `configs/mcp/README.md` 的「pi 格式」段；key 用 `${VAR}` 插值（读 secrets.env 的 `ZAI_CODING_API_KEY`），不写明文。装完在 pi 内 `/mcp` 确认 server 状态（懒加载：首次调用才拉起）。
 
 ## 配置位置
 - 全局：`~/.pi/agent/`（可用 `PI_CODING_AGENT_DIR` 覆盖）
@@ -52,10 +52,8 @@ pi install npm:pi-mcp-adapter   # 装 MCP 适配器扩展，重启 pi 生效
 
 | Provider | 环境变量 | 备注 |
 |----------|----------|------|
-| DeepSeek | `DEEPSEEK_API_KEY` | 与 opencode 同变量，secrets.env 已有 |
-| Z.AI Coding CN | `ZAI_CODING_CN_API_KEY` | provider id `zai-coding-cn`（baseUrl open.bigmodel.cn），与 opencode 同变量直接复用 |
+| Z.AI Coding CN | `ZAI_CODING_API_KEY` | provider id `zai-coding-cn`（baseUrl open.bigmodel.cn），与 opencode 同变量直接复用 |
 | OpenCode Go / Zen | `OPENCODE_API_KEY` | 与 opencode 同变量 |
-| Xiaomi MiMo | `XIAOMI_API_KEY` | 与 opencode 同变量 |
 
 > 完整映射参考 pi 仓库 `packages/ai/src/env-api-keys.ts`。变量放 `~/.config/shell/secrets.env`（见 `tools/shell.md`），pi 从终端启动即继承。
 
@@ -76,7 +74,7 @@ pi install npm:pi-mcp-adapter   # 装 MCP 适配器扩展，重启 pi 生效
 
 ## 参考
 - `configs/agents/AGENTS.md`（跨 agent 全局指令的参考实物）
-- `configs/shell/secrets.env.example`（`ZAI_CODING_CN_API_KEY` 条目，pi 与 opencode 共用）
+- `configs/shell/secrets.env.example`（`ZAI_CODING_API_KEY` 条目，pi 与 opencode 共用）
 - 官方文档：https://pi.dev/docs/latest（settings / providers / skills）
 
 ## 验证
