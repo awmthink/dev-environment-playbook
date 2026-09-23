@@ -4,7 +4,7 @@
 
 ## 默认前提
 
-你已经在某台机器上 `clone` 了本仓库，并用某个 coding agent（opencode / pi / codex / zcode / cursor 等）在本目录打开了会话。agent 会先读 `AGENTS.md`（流程 + 安全规则），然后按你的指令工作。**你不直接改文件，而是下指令 + review agent 的产出。**
+你已经在某台机器上 `clone` 了本仓库，并用某个 coding agent（opencode / pi / codex / zcode 等）在本目录打开了会话。agent 会先读 `AGENTS.md`（流程 + 安全规则），然后按你的指令工作。**你不直接改文件，而是下指令 + review agent 的产出。**
 
 ## 两类核心场景（都通过 agent 驱动）
 
@@ -70,7 +70,7 @@
 ## 目标平台 / 覆盖的 agent
 
 - 平台：macOS（Homebrew）、Linux（见 `platforms/linux.md`）
-- Agent：opencode · pi（CLI）· codex · zcode · cursor（App，见 `agents/`）
+- Agent：opencode · pi（CLI）· codex · zcode（App，见 `agents/`）
 
 ## 为什么不是 dotfiles 仓库？
 

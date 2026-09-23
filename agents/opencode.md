@@ -3,7 +3,7 @@
 > 终端 AI coding agent（TUI），coding agent 协作主力之一。全局配置 `~/.config/opencode/opencode.json`，credentials 一律走环境变量（不入 auth.json）。
 
 ## 为什么用
-终端原生、启动快、支持 75+ LLM provider（via models.dev）、MCP 生态完整；项目级 `.opencode/` 可定制 agent/command/skill；与 Zed/Cursor 等 IDE 的 agent 互补（终端 / 脚本 / 远程服务器场景）。
+终端原生、启动快、支持 75+ LLM provider（via models.dev）、MCP 生态完整；项目级 `.opencode/` 可定制 agent/command/skill；与 App 类 agent（codex / zcode）互补（终端 / 脚本 / 远程服务器场景）。
 
 ## 版本约束
 - 版本：latest

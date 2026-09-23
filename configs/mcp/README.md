@@ -39,7 +39,7 @@
 }
 ```
 
-> 其它 agent（codex / zcode / cursor）是 GUI App，MCP 在 App 内配置，本仓库不覆盖（见 `agents/README.md`）。
+> 其它 agent（codex / zcode）是 GUI App，MCP 在 App 内配置，本仓库不覆盖（见 `agents/README.md`）。
 
 ## pi 格式（pi-mcp-adapter，标准 `mcpServers`，放 `~/.config/mcp/mcp.json`）
 

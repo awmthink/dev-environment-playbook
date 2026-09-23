@@ -17,7 +17,7 @@
 | Shell | macOS zsh · Linux server bash | 登录 shell 属平台基础设施层：server bash 零依赖、救援 / single-user 可用；macOS zsh 取补全 / 历史。substance（PATH / 编辑器 / 别名）共享于 `configs/shell/env.sh`，两端 rc 仅薄壳；脚本走 shebang 与登录 shell 解耦 |
 | 提示符 | Starship | 跨 shell（zsh/bash）统一、自动显示 git/语言版本上下文；替代手写 prompt 与 oh-my-zsh 主题 |
 | 编辑器 | Zed（GUI 主力）· Neovim（terminal 主力） | Zed 不带 agent、只做编辑；Neovim 用于终端 / 远程服务器场景 |
-| Coding agent | CLI：opencode · pi；App：codex · zcode · cursor | CLI 管终端 / 远程服务器场景，App 管 GUI 集成场景（GUI 内配置，playbook 只登记不管理）；编辑仍由 Zed（纯 editor）负责，职责分离 |
+| Coding agent | CLI：opencode · pi；App：codex · zcode | CLI 管终端 / 远程服务器场景，App 管 GUI 集成场景（GUI 内配置，playbook 只登记不管理）；编辑仍由 Zed（纯 editor）负责，职责分离 |
 | 终端 | Ghostty（macOS 主力）· iTerm2（备选） | Ghostty：GPU(Metal) 渲染流畅、原生 macOS、配置简洁、内置 Aura 主题；iTerm2：成熟稳定作备选 |
 | Node 包管理 | pnpm（via corepack） | 快、省磁盘、严格；通过 node 自带 corepack 安装，不单独 brew install |
 | Python 包管理 | uv | 极快，统一 toolchain |

@@ -5,7 +5,7 @@
 ## 为什么用
 终端原生、SSH 友好；macOS + Linux 服务器一份配置跨平台一致（纯 nvim 0.11+ 原生、0 插件、无外部依赖）。系统 vim 在新机器（macOS 自带 9.1 +clipboard）尚可，但在 CentOS 8 等老服务器常是 vim 8.0 / `-clipboard`，体验落后——nvim 预编译二进制一条命令装好，`init.lua` 复制即用，是性价比最高的「跨平台统一编辑器」。
 
-> **不做代码导航**：终端里主要是快改配置 / 写 commit message / 扫一眼文件；仔细读代码、分析函数关系等已交给 agent（opencode / pi / codex / zcode / cursor），比手按 `gd`/`gr` 更高效。LSP server 仍会装，但仅供 **Zed** 使用（见 `lsp.md`）。
+> **不做代码导航**：终端里主要是快改配置 / 写 commit message / 扫一眼文件；仔细读代码、分析函数关系等已交给 agent（opencode / pi / codex / zcode），比手按 `gd`/`gr` 更高效。LSP server 仍会装，但仅供 **Zed** 使用（见 `lsp.md`）。
 
 ## 最低版本要求
 - **>= 0.11**（当前 0.12.4）。0.11+ 才有原生 LSP / treesitter API。

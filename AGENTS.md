@@ -1,6 +1,6 @@
 # AGENTS.md — Agent 操作手册
 
-> 任何 coding agent（opencode / pi / codex / zcode / cursor 等）打开本仓库时，**请先完整阅读本文件**，再执行任何环境配置或同步任务。
+> 任何 coding agent（opencode / pi / codex / zcode 等）打开本仓库时，**请先完整阅读本文件**，再执行任何环境配置或同步任务。
 
 本仓库是一个 **agent-readable playbook**：它不直接同步 dotfiles，而是记录「我想要什么样的开发环境 + 为什么 + 关键版本 / 偏好」。你的职责是读取这些记录，结合**当前运行平台**，生成 / 调整对应的配置并完成安装。
 

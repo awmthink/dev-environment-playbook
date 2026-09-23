@@ -21,7 +21,6 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 |-------|----------|------|
 | Codex (OpenAI) | App 内配置（playbook 不覆盖） | `codex.md` |
 | Zcode | App 内配置（playbook 不覆盖） | `zcode.md` |
-| Cursor | App 内配置（playbook 不覆盖） | `cursor.md` |
 
 > 分工思路：CLI 类覆盖终端 / 远程服务器场景，App 类覆盖 GUI 集成场景；编辑器仍由 Zed（纯 editor，见 `profile.md`）负责，agent 与 editor 职责分离。**App 类的配置在 GUI 内完成、不落配置文件，playbook 只登记分类、不管理配置**（迁移靠各自 App 的账号同步 / 手动设置）。
 
@@ -33,21 +32,20 @@ coding agent 本身也是开发工具，也需要被管理。这里记录我用�
 | opencode | `~/.config/opencode/AGENTS.md` → 软链 |
 | Pi | `~/.pi/agent/AGENTS.md` → 软链（另自动读各级目录 AGENTS.md） |
 | Codex | `~/.codex/AGENTS.md` → 软链 |
-| Zcode | 待确认 |
-| Cursor | 待确认（全局规则走 GUI，见 `cursor.md`） |
+| Zcode | `~/.zcode/AGENTS.md` → 软链 |
 
 ## 共享：MCP servers
 > 多个 agent 共用的 MCP server 集中定义在 `configs/mcp/`（opencode 的 `mcp` 字段 + pi 的标准 `mcpServers` 两种格式 + server 清单）。各 agent 从自己配置文件读，key 统一走环境变量（`ZAI_CODING_CN_API_KEY`），放 `~/.config/shell/secrets.env`。
 
 ## 环境对齐必检清单
 
-> 通用「检查 / 同步环境」任务必须覆盖本清单（不只是 `tools/`）。**CLI 类 + 共享实体必检；App 类（codex / zcode / cursor）配置在 GUI 内、playbook 只登记，不检查配置内容**（可选只验版本，如 `codex --version`）。逐项按对应卡片（`opencode.md` / `pi.md`）的「验证」段执行；共享实体按本表检查。
+> 通用「检查 / 同步环境」任务必须覆盖本清单（不只是 `tools/`）。**CLI 类 + 共享实体必检；App 类（codex / zcode）配置在 GUI 内、playbook 只登记，不检查配置内容**（可选只验版本，如 `codex --version`）。逐项按对应卡片（`opencode.md` / `pi.md`）的「验证」段执行；共享实体按本表检查。
 
 | 项 | 检测点 | 命令 |
 |----|--------|------|
 | opencode | 本体 / provider / MCP | `opencode.md` 验证段（`--version`、`auth list`、`mcp list` 等） |
 | pi | 本体 / 扩展 / MCP | `pi.md` 验证段（`--version`、`pi list`、pi 内 `/mcp`） |
-| 全局指令软链 | opencode / pi / codex 的读取位置 → `~/.agents/AGENTS.md` | `ls -l ~/.config/opencode/AGENTS.md ~/.pi/agent/AGENTS.md ~/.codex/AGENTS.md` |
+| 全局指令软链 | opencode / pi / codex / zcode 的读取位置 → `~/.agents/AGENTS.md` | `ls -l ~/.config/opencode/AGENTS.md ~/.pi/agent/AGENTS.md ~/.codex/AGENTS.md ~/.zcode/AGENTS.md` |
 | secrets.env | 存在、0600、含 agent 所需 key（如 `ZAI_CODING_CN_API_KEY`，值不外显） | `stat -c %a ~/.config/shell/secrets.env`（Linux，期望 600；macOS 用 `stat -f %Lp`）；`grep -c 'ZAI_CODING_CN_API_KEY' ~/.config/shell/secrets.env`（期望 ≥1） |
 | pi MCP 配置 | `~/.config/mcp/mcp.json`（mcpServers 格式、`${VAR}` 插值） | `test -f ~/.config/mcp/mcp.json && echo ok` |
 | skills 共享目录 | `~/.agents/skills/`（opencode / pi 共用，若使用） | `test -d ~/.agents/skills && echo ok` |
