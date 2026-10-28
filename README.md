@@ -75,3 +75,7 @@
 ## 为什么不是 dotfiles 仓库？
 
 传统 dotfiles 仓库（chezmoi / yadm / stow）想做「跨平台同步」，但平台差异让 sync 很脆弱。本项目换思路：**只记录意图，把落地交给当前平台的 agent**；并且把 agent 本身也当成需要管理的开发工具。
+
+## License
+
+[MIT](LICENSE)
