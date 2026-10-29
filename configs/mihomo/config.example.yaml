@@ -1,0 +1,68 @@
+# mihomo 配置模板（脱敏）——真实文件 ~/.config/mihomo/config.yaml，权限 600，不入仓库
+# 出口只有两类：① 订阅连接（proxy-providers 自动更新）② 自定义扩展节点（proxies 手动追加）
+# 落地时替换占位符：
+#   __SUB_URL__        订阅链接（含 token，放 ~/.config/mihomo/subscription.url 之类的本地文件）
+#   __SECRET__         API 密钥：openssl rand -hex 16
+#   __NODE_*__         自定义节点的地址与凭据（无凭据的类型删掉 username/password 即可）
+
+mixed-port: 7890          # 本地 HTTP+SOCKS5 代理入口（mixed 同端口双协议）
+allow-lan: false          # 仅本机可用；远程访问面板/代理走 SSH 隧道
+mode: rule
+log-level: info
+unified-delay: true
+
+external-controller: 127.0.0.1:9090   # API/面板端口，仅本机监听
+secret: "__SECRET__"
+external-ui: ui
+profile:
+  store-selected: true   # 记住面板上手动选的节点
+
+geodata-mode: false      # GEOIP 走 metadb（体积小、更新快）
+
+proxy-providers:
+  sub:
+    type: http
+    url: "__SUB_URL__"
+    interval: 86400      # 订阅每日自动更新
+    path: ./providers/sub.yaml
+    exclude-filter: 防失联   # 剔除订阅里的公告/占位节点，避免测速组误选
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+
+# 自定义扩展节点：手动追加、不经订阅的出口（由 render.py 从 proxy.env 的 MIHOMO_NODE_URL 渲染，
+# 支持 http/socks5 代理 URL；ss/vmess/trojan 等复杂类型直接在此手写、不经过渲染）
+proxies:
+  - name: 自有节点
+    type: __NODE_TYPE__
+    server: __NODE_HOST__
+    port: __NODE_PORT__
+    username: "__NODE_USER__"
+    password: "__NODE_PASSWORD__"
+
+proxy-groups:
+  - name: PROXY            # 手动选择：订阅节点 + 策略入口
+    type: select
+    proxies: [自动选择, 故障转移, 自有节点]
+    use: [sub]
+  - name: 自动选择          # 定时测速挑最快，仅订阅节点——自定义节点不参与自动测速，
+    type: url-test         # 避免流量被自动路由到需要手动管控的出口（如内网/审计相关）
+    use: [sub]
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50          # 延迟差超阈值才切换，防抖
+  - name: 故障转移          # 订阅全挂时回落自定义节点（单入口机场的必需兜底）
+    type: fallback
+    proxies: [自动选择, 自有节点]
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+
+rules:
+  # 内网地址一律直连，no-resolve 避免无谓 DNS 查询
+  - GEOIP,private,DIRECT,no-resolve
+  # 国内域名与 IP 直连 —— 分流核心
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT
+  # 其余全部走出口组
+  - MATCH,PROXY

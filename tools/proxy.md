@@ -10,10 +10,14 @@
 
 ## 版本与安装策略
 
-**多版本需求：不适用**（配置类）。代理客户端本身（如 clash / mihomo / surge）若需要，可单独建 `tools/<client>.md`。
+**多版本需求：不适用**（配置类）。代理客户端统一用 mihomo（见 `mihomo.md`），`proxy_on` 的后端就是它的本地入口 `127.0.0.1:7890`。
 
 ## 配置思路
 **地址放本地**：`~/.config/shell/proxy.env`（仓库外、不入版本管理），shell 启动时 `source`——但**只定义变量与开关函数，不导出**（代理默认关闭，避免无谓流量/泄漏），需要时 `proxy_on`。
+
+**两级出口**（客户端与分流规则见 `mihomo.md`）：
+- 默认：`proxy_on` → 本地 mihomo（国内/内网直连，境外走订阅节点，节点全挂自动回落自定义节点）
+- 应急：`MIHOMO_NODE_URL`（自定义节点）可直接 `curl -x "$MIHOMO_NODE_URL"` 手动使用
 
 需要统一处理的环境变量：
 - `HTTP_PROXY` / `HTTPS_PROXY` / `ALL_PROXY` / `NO_PROXY`（小写同名也设一份，部分工具只认小写）
@@ -28,12 +32,14 @@
 提供**开 / 关代理脚本**（`proxy_on` / `proxy_off`），只改当前 shell 环境变量，幂等。
 
 ## 参考
+- `mihomo.md`（代理客户端本体：安装、分流规则、出口组）
 - `configs/shell/proxy.env.example`（脱敏模板，可提交）
 - `~/.config/shell/proxy.env`（真实地址，**本地、不提交**）
 
 ## 验证
 ```sh
 source ~/.config/shell/proxy.env && proxy_on
-curl -I https://www.google.com   # 期望：能连通
-echo "$HTTP_PROXY"               # 期望：非空
+curl -sI --max-time 15 https://www.google.com | head -1   # 期望：HTTP/2 200（经 mihomo 节点/兜底）
+curl -s -o /dev/null -w '%{http_code}\n' https://www.baidu.com   # 期望：200（规则直连）
+echo "$HTTP_PROXY"               # 期望：http://127.0.0.1:7890
 ```
