@@ -13,7 +13,7 @@
 
 | 平台 | 方式 |
 |------|------|
-| macOS | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local、无 sudo）；或 `brew install anomalyco/tap/opencode-v2`——两者都推荐 |
+| macOS | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local、无 sudo）。brew tap `anomalyco/tap` 的 formula 名是 `opencode`（无 `-v2` 后缀），且 2026-11 实测仍停在 v1 线（1.19.5）——v2 目前只有官方脚本一条路 |
 | Linux | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local，无 sudo） |
 
 > **不用 `npm install -g @opencode/cli`**：npm 包靠 postinstall 选平台二进制，但跟随当前 node 版本（本机 node 归 mise，见 `tools/node.md`），mise 升级 node 主版本时全局包不自动迁移、会丢失。官方脚本与 brew 都是独立二进制、与 node 解耦。
