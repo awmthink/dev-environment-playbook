@@ -19,6 +19,17 @@ profile:
 
 geodata-mode: false      # GEOIP 走 metadb（体积小、更新快）
 
+# DNS：目标域名解析走国内 DNS；节点入口域名（CNAME 链 + IP 轮转型，公共/系统 DNS 常给死 IP，
+# 表现为节点全“假死”）必须用机场订阅 dns 段提供的专用 DoH（proxy-server-nameserver）。
+# render.py 自动从 providers/sub.yaml（mihomo 每日自动刷新的订阅缓存）提取继承；
+# 订阅自带的 rules/groups 仍全部丢弃，分流以本配置为准
+dns:
+  enable: true
+  ipv6: true
+  default-nameserver: [223.5.5.5, 119.29.29.29]
+  nameserver: [223.5.5.5, 119.29.29.29]
+  proxy-server-nameserver:__PROXY_SERVER_NS__
+
 proxy-providers:
   sub:
     type: http

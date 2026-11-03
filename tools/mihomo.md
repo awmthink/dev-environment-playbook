@@ -27,6 +27,8 @@
 - geodata：`geoip.metadb` + `geosite.dat`（MetaCubeX/meta-rules-dat，`releases/latest`）
 - 面板：metacubexd（`codeload.github.com/MetaCubeX/metacubexd/zip/refs/heads/gh-pages` 解压为 `ui/`）
 
+macOS 注意：brew services 的服务单元以 `-d /opt/homebrew/etc/mihomo` 为配置目录，而真实配置在 `~/.config/mihomo/`（跨平台统一）——用软链对齐：`mv /opt/homebrew/etc/mihomo{,.default} && ln -s ~/.config/mihomo /opt/homebrew/etc/mihomo`；重启用 `brew services restart mihomo`（render.py 的 `--restart` 已按平台分派）。
+
 Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-linger`（退出登录不中断），见 `configs/mihomo/mihomo.service`。
 
 ## 配置思路
@@ -35,7 +37,7 @@ Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-l
 
 - **只监听 127.0.0.1**（mixed-port 7890、external-controller 9090）：远程机器访问面板走 SSH 隧道（`ssh -L 9090:127.0.0.1:9090`），不暴露局域网
 - **出口只有两类，声明集中在 `proxy.env` 两个变量**：① `MIHOMO_SUB_URL` 订阅连接（`proxy-providers`，每日自动更新）② `MIHOMO_NODE_URL` 自定义扩展节点（http/socks5 代理 URL 形式）。落地时用 `configs/mihomo/render.py` 渲染出 `config.yaml`（幂等，复用已有 secret）；ss/vmess 等复杂节点类型直接改 `config.yaml`
-- **订阅经 `proxy-providers` 引入，只取 `proxies` 段**：订阅自带的 rules/groups/dns 全部丢弃——分流规则以自己的 config 为准，不受订阅方模板绑架
+- **订阅经 `proxy-providers` 引入，只取 `proxies` 段**：订阅自带的 rules/groups 全部丢弃（分流规则以自己的 config 为准，不受订阅方模板绑架）；唯一例外是 dns 段的 `proxy-server-nameserver` 必须继承（见下方已知坑），render.py 自动从订阅缓存提取
 - **规则四条**：内网直连（`GEOIP,private,DIRECT,no-resolve`）→ `GEOSITE,cn` 直连 → `GEOIP,CN` 直连 → `MATCH` 走出口组
 - **组结构**：`PROXY`(select) 聚合 [ `自动选择`(url-test，仅订阅节点)、`故障转移`(fallback → 自定义节点)、全部出口 ]；**自定义节点不进自动测速组**——出口需手动管控的场景（如内网代理），不该被测速自动选中
 - `store-selected: true`：记住面板手动选择，重启不丢
@@ -45,6 +47,7 @@ Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-l
 
 - 机场订阅多为灰产，节点常共用单台入口机（所有区域域名解析同一 IP）——入口一挂全部节点同时失效，**fallback 兜底是必需品**，不是可选项
 - REST API 对中文节点名的 `/proxies/{name}/delay` 路由会 404；批量测速用 `/group/{name}/delay`
+- **机场入口域名多为 CNAME 链 + IP 轮转型**（如 `xxx.kunlun02dns.com` → 轮转 A 记录）：系统/公共 DNS 拿到的常是死 IP，表现为**全部节点“假死”**（TCP 连接超时、测速 0 通过），但订阅服务器本身可达、订阅能正常拉取——排查时先绕开代理直连节点入口 IP 验证。解法：继承订阅 dns 段的 `proxy-server-nameserver`（机场专用 DoH，只有它实时知道活入口），render.py 自动从 `providers/sub.yaml` 提取；机场若轮换 DoH 端点，重跑 `render.py --restart` 即恢复
 - HTTP 代理型自定义节点通常仅放行标准端口的 CONNECT → 不能作为链式上游去连订阅节点（节点只能直连）
 
 ## 参考
@@ -58,7 +61,8 @@ Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-l
 
 ```sh
 mihomo -v                            # 期望：>= v1.19
-systemctl --user is-active mihomo    # 期望：active
+systemctl --user is-active mihomo    # 期望：active（Linux）
+brew services list | grep mihomo     # 期望：started（macOS）
 curl -sx http://127.0.0.1:7890 -o /dev/null -w '%{http_code}\n' https://www.baidu.com     # 期望：200（规则直连）
 curl -sx http://127.0.0.1:7890 -o /dev/null -w '%{http_code}\n' --max-time 15 \
      https://www.google.com/generate_204   # 期望：204（走订阅节点；节点全挂时经 fallback 走自定义节点）
