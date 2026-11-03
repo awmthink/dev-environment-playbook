@@ -15,6 +15,8 @@
 ## 配置思路
 **地址放本地**：`~/.config/shell/proxy.env`（仓库外、不入版本管理），shell 启动时 `source`——但**只定义变量与开关函数，不导出**（代理默认关闭，避免无谓流量/泄漏），需要时 `proxy_on`。
 
+本机 macOS 选择 shell 层也常开（rc 在 source 后直接 `proxy_on`，机器特定决策）：mihomo 分流引擎在，常开 ≠ 全走节点（国内仍直连）；代价是终端工具链与 mihomo 单点绑定，停用 mihomo 前先 `proxy_off`（GUI 层再 `proxy_sys_off`）。
+
 **两级出口**（客户端与分流规则见 `mihomo.md`）：
 - 默认：`proxy_on` → 本地 mihomo（国内/内网直连，境外走订阅节点，节点全挂自动回落自定义节点）
 - 应急：`MIHOMO_NODE_URL`（自定义节点）可直接 `curl -x "$MIHOMO_NODE_URL"` 手动使用
