@@ -13,14 +13,14 @@
 
 | 平台 | 方式 |
 |------|------|
-| macOS | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local、无 sudo）。brew tap `anomalyco/tap` 的 formula 名是 `opencode`（无 `-v2` 后缀），且 2026-11 实测仍停在 v1 线（1.19.5）——v2 目前只有官方脚本一条路 |
+| macOS | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local、无 sudo）；或 `brew install anomalyco/tap/opencode-v2`——两者都推荐（本机用 brew，升级与其它 brew 工具统一）。tap 首次安装需过 Homebrew 第三方 tap 信任门：`brew trust --formula anomalyco/tap/opencode-v2`；tap 早期只有 v1 线的 `opencode` formula，`opencode-v2` 是 2026-11 才出现的，装不到时先 `brew update` 再查 |
 | Linux | 官方脚本 `curl -fsSL https://opencode.ai/v2/install \| bash`（装到 `~/.opencode/bin/`，user-local，无 sudo） |
 
 > **不用 `npm install -g @opencode/cli`**：npm 包靠 postinstall 选平台二进制，但跟随当前 node 版本（本机 node 归 mise，见 `tools/node.md`），mise 升级 node 主版本时全局包不自动迁移、会丢失。官方脚本与 brew 都是独立二进制、与 node 解耦。
 
 > shell 钩子：官方脚本安装需要把 `$HOME/.opencode/bin` 前置进 PATH（本机放 `~/.config/shell/env.sh`，两端 bash/zsh 共享 substance；机器特定，不入 configs 模板）；brew 安装则无需任何钩子。
 
-> 升级：`opencode upgrade`（或重跑官方脚本）；后台 server 升级后需手动重启服务。
+> 升级：`opencode upgrade`（或重跑官方脚本 / `brew upgrade`）；后台 server 升级后需手动重启服务（`opencode service restart`）。
 
 ## 配置位置
 - 全局配置：`~/.config/opencode/opencode.json(c)`（**不是 `~/.opencode/`**——那是安装目录）
