@@ -22,6 +22,8 @@
 需要统一处理的环境变量：
 - `HTTP_PROXY` / `HTTPS_PROXY` / `ALL_PROXY` / `NO_PROXY`（小写同名也设一份，部分工具只认小写）
 
+**系统代理（GUI app，仅 macOS）**：`proxy_on` 只改 shell 环境变量，GUI app（浏览器 / 豆包等）走的是 macOS 系统代理——GUI 客户端（ClashX 等）会自动设置，裸 mihomo **不会**，迁移后必须手动补上，否则 GUI app 全部直连。用 `proxy_sys_on` / `proxy_sys_off`（proxy.env 提供）管理：设置持久（跨重启，networksetup 层面）；**停用 mihomo 服务前先 `proxy_sys_off`**，否则走系统代理的 app 全部断连（国内流量也发往死端口）。
+
 各工具的代理要点：
 - **git**：`git config --global http.proxy / https.proxy` 或走环境变量
 - **pnpm / npm**：`.npmrc` 的 `proxy` / `https-proxy`
@@ -42,4 +44,5 @@ source ~/.config/shell/proxy.env && proxy_on
 curl -sI --max-time 15 https://www.google.com | head -1   # 期望：HTTP/2 200（经 mihomo 节点/兜底）
 curl -s -o /dev/null -w '%{http_code}\n' https://www.baidu.com   # 期望：200（规则直连）
 echo "$HTTP_PROXY"               # 期望：http://127.0.0.1:7890
+scutil --proxy | grep HTTPEnable   # 期望：HTTPEnable : 1（GUI app 走 mihomo；proxy_sys_on 后）
 ```
