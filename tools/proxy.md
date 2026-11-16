@@ -19,7 +19,7 @@
 
 **两级出口**（客户端与分流规则见 `mihomo.md`）：
 - 默认：`proxy_on` → 本地 mihomo（国内/内网直连，境外走订阅节点，节点全挂自动回落自定义节点）
-- 应急：`MIHOMO_NODE_URL`（自定义节点）可直接 `curl -x "$MIHOMO_NODE_URL"` 手动使用
+- 应急：`MIHOMO_NODE_URLS`（自定义节点，空格分隔多个）可直接 `curl -x` 手动使用，取首个：`curl -x "${MIHOMO_NODE_URLS%% *}"`
 
 需要统一处理的环境变量：
 - `HTTP_PROXY` / `HTTPS_PROXY` / `ALL_PROXY` / `NO_PROXY`（小写同名也设一份，部分工具只认小写）

@@ -36,10 +36,11 @@ Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-l
 （模板：`configs/mihomo/config.example.yaml`，脱敏占位符）
 
 - **只监听 127.0.0.1**（mixed-port 7890、external-controller 9090）：远程机器访问面板走 SSH 隧道（`ssh -L 9090:127.0.0.1:9090`），不暴露局域网
-- **出口只有两类，声明集中在 `proxy.env` 两个变量**：① `MIHOMO_SUB_URL` 订阅连接（`proxy-providers`，每日自动更新）② `MIHOMO_NODE_URL` 自定义扩展节点（http/socks5 代理 URL 形式）。落地时用 `configs/mihomo/render.py` 渲染出 `config.yaml`（幂等，复用已有 secret）；ss/vmess 等复杂节点类型直接改 `config.yaml`
+- **出口只有两类，声明集中在 `proxy.env` 两个变量**：① `MIHOMO_SUB_URL` 订阅连接（`proxy-providers`，每日自动更新）② `MIHOMO_NODE_URLS` 自定义扩展节点（空格分隔多个 http/socks5 代理 URL，列表顺序即故障转移优先级）。落地时用 `configs/mihomo/render.py` 渲染出 `config.yaml`（幂等，复用已有 secret）；ss/vmess 等复杂节点类型直接改 `config.yaml`
 - **订阅经 `proxy-providers` 引入，只取 `proxies` 段**：订阅自带的 rules/groups 全部丢弃（分流规则以自己的 config 为准，不受订阅方模板绑架）；唯一例外是 dns 段的 `proxy-server-nameserver` 必须继承（见下方已知坑），render.py 自动从订阅缓存提取
+- **规则首条恒为订阅服务器 DIRECT**（render.py 从 `MIHOMO_SUB_URL` 自动生成，IP 出 `IP-CIDR`、域名出 `DOMAIN-SUFFIX`）：订阅拉取若落到 `MATCH→PROXY`，订阅节点全挂时连订阅都拉不到，死锁无法自愈（见下方已知坑）
 - **规则四条**：内网直连（`GEOIP,private,DIRECT,no-resolve`）→ `GEOSITE,cn` 直连 → `GEOIP,CN` 直连 → `MATCH` 走出口组
-- **组结构**：`PROXY`(select) 聚合 [ `自动选择`(url-test，仅订阅节点)、`故障转移`(fallback → 自定义节点)、全部出口 ]；**自定义节点不进自动测速组**——出口需手动管控的场景（如内网代理），不该被测速自动选中
+- **组结构**：`PROXY`(select) 聚合 [ `自动选择`(url-test，仅订阅节点)、`故障转移`(fallback → 自定义节点)、全部出口 ]；**自定义节点不进自动测速组**——出口需手动管控的场景（如内网代理），不该被测速自动选中。`故障转移` 里自定义节点按声明顺序排列，首节点优先
 - `store-selected: true`：记住面板手动选择，重启不丢
 - **订阅 URL / 节点凭据绝不进仓库**；真实 config.yaml 权限 600
 
@@ -47,13 +48,15 @@ Linux 下用 systemd 用户服务常驻（无 sudo 依赖）+ `loginctl enable-l
 
 - 机场订阅多为灰产，节点常共用单台入口机（所有区域域名解析同一 IP）——入口一挂全部节点同时失效，**fallback 兜底是必需品**，不是可选项
 - REST API 对中文节点名的 `/proxies/{name}/delay` 路由会 404；批量测速用 `/group/{name}/delay`
-- **机场入口域名多为 CNAME 链 + IP 轮转型**（如 `xxx.kunlun02dns.com` → 轮转 A 记录）：系统/公共 DNS 拿到的常是死 IP，表现为**全部节点“假死”**（TCP 连接超时、测速 0 通过），但订阅服务器本身可达、订阅能正常拉取——排查时先绕开代理直连节点入口 IP 验证。解法：继承订阅 dns 段的 `proxy-server-nameserver`（机场专用 DoH，只有它实时知道活入口），render.py 自动从 `providers/sub.yaml` 提取；机场若轮换 DoH 端点，重跑 `render.py --restart` 即恢复
+- **机场入口域名多为 CNAME 链 + IP 轮转型**（如 `xxx.kunlun02dns.com` → 轮转 A 记录）：系统/公共 DNS 拿到的常是死 IP，表现为**全部节点“假死”**（TCP 连接超时、测速 0 通过），但订阅服务器本身可达、订阅能正常拉取。排查红线：**验证节点存活必须用机场专用 DoH 解析出的 IP 直测 TCP**——拿系统/公共 DNS 给的 IP 去测，测的正是那个死 IP，必然失败，会误判成“节点全挂”（实际实测：同一域名公共 DNS 给 16.163.138.229（死）、机场 DoH 给 43.207.55.249（活））。解法：继承订阅 dns 段的 `proxy-server-nameserver`（机场专用 DoH，只有它实时知道活入口），render.py 自动从 `providers/sub.yaml` 提取；机场若轮换 DoH 端点，重跑 `render.py --restart` 即恢复。注意落地机部署落后于本仓库修复时会复现此坑，先确认 `config.yaml` 的 dns 段已含 `proxy-server-nameserver`
 - HTTP 代理型自定义节点通常仅放行标准端口的 CONNECT → 不能作为链式上游去连订阅节点（节点只能直连）
+- **订阅拉取死锁**：订阅服务器 IP/域名若不直连，拉取会命中 `MATCH→PROXY` 走出口组——平时相安无事，但订阅节点全挂的那天起订阅也拉不到（日志特征：`sub pull error: ... EOF`，且拉取流量反复对订阅服务器报 403/超时），新节点永远进不来。解法：rules 首条固定订阅服务器 DIRECT，render.py 从订阅 URL 自动生成，换订阅自动跟随；实测试订阅拉取本身是直连可达的（机场订阅服务器不封直连）
+- **节点“假死”与订阅“拉不到”要分开诊断**：前者 DNS/入口问题（见上条 proxy-server-nameserver 坑），后者死锁（见上条）——共同表象都是“境外不通”，先看 `journalctl --user -u mihomo | grep -E 'sub pull|EOF|403'` 分辨
 
 ## 参考
 
 - `configs/mihomo/config.example.yaml`（脱敏配置模板，render.py 的输入）
-- `configs/mihomo/render.py`（从 proxy.env 的 `MIHOMO_SUB_URL` / `MIHOMO_NODE_URL` 渲染 config.yaml）
+- `configs/mihomo/render.py`（从 proxy.env 的 `MIHOMO_SUB_URL` / `MIHOMO_NODE_URLS` 渲染 config.yaml；订阅服务器 DIRECT 规则与入口 DoH 同样自动提取）
 - `configs/mihomo/mihomo.service`（systemd 用户服务单元）
 - `~/.config/mihomo/`（真实配置，**本地、不提交**）
 
@@ -66,4 +69,6 @@ brew services list | grep mihomo     # 期望：started（macOS）
 curl -sx http://127.0.0.1:7890 -o /dev/null -w '%{http_code}\n' https://www.baidu.com     # 期望：200（规则直连）
 curl -sx http://127.0.0.1:7890 -o /dev/null -w '%{http_code}\n' --max-time 15 \
      https://www.google.com/generate_204   # 期望：204（走订阅节点；节点全挂时经 fallback 走自定义节点）
+systemctl --user status mihomo --no-pager | grep -E 'sub pull.*EOF|err code: 403' \
+     && echo '订阅拉取异常（疑似死锁）' || echo '订阅拉取正常'   # 死锁检查（Linux；macOS 换 brew services output/-f 日志）
 ```
